@@ -50,6 +50,29 @@ if (osTicket::is_ie())
     <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/select2.min.css">
     <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/rtl.css"/>
     <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/translatable.css"/>
+    <?php
+    // Modern UI switcher — respects: URL param > staff preference > system config
+    $useModernUI = $cfg->isModernUiEnabled();
+    if (isset($_GET['ui'])) {
+        if ($_GET['ui'] == 'modern') {
+            $useModernUI = true;
+            setcookie('ost_modern_ui', '1', time() + 86400 * 365, '/');
+        } elseif ($_GET['ui'] == 'classic') {
+            $useModernUI = false;
+            setcookie('ost_modern_ui', '0', time() + 86400 * 365, '/');
+        }
+    } elseif (isset($_COOKIE['ost_modern_ui'])) {
+        $useModernUI = $_COOKIE['ost_modern_ui'] == '1';
+    } elseif (isset($thisstaff) && $thisstaff->modern_ui) {
+        if ($thisstaff->modern_ui == 'modern')
+            $useModernUI = true;
+        elseif ($thisstaff->modern_ui == 'classic')
+            $useModernUI = false;
+    }
+    if ($useModernUI) { ?>
+    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/tokens.css" media="all">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/scp.css" media="all">
+    <?php } ?>
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="<?php echo ROOT_PATH ?>images/oscar-favicon-32x32.png" sizes="32x32" />
     <link rel="icon" type="image/png" href="<?php echo ROOT_PATH ?>images/oscar-favicon-16x16.png" sizes="16x16" />

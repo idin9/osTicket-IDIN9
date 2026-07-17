@@ -99,6 +99,7 @@ implements AuthenticatedUser, EmailContact, TemplateVariable, Searchable {
                         'reply_redirect' => 'Ticket',
                         'img_att_view' => 'download',
                         'editor_spacing' => 'double',
+                        'modern_ui' => '',
                         ));
             $this->_config = $_config->getInfo();
         }
@@ -896,7 +897,8 @@ implements AuthenticatedUser, EmailContact, TemplateVariable, Searchable {
                     'default_ticket_queue_id' => $vars['default_ticket_queue_id'],
                     'reply_redirect' => ($vars['reply_redirect'] == 'Queue') ? 'Queue' : 'Ticket',
                     'img_att_view' => ($vars['img_att_view'] == 'inline') ? 'inline' : 'download',
-                    'editor_spacing' => ($vars['editor_spacing'] == 'double') ? 'double' : 'single'
+                    'editor_spacing' => ($vars['editor_spacing'] == 'double') ? 'double' : 'single',
+                    'modern_ui' => (isset($vars['modern_ui']) && $vars['modern_ui'] == 'modern') ? 'modern' : ((isset($vars['modern_ui']) && $vars['modern_ui'] == 'classic') ? 'classic' : ''),
                     )
                 );
         $this->_config = $_config->getInfo();

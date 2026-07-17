@@ -258,6 +258,7 @@ class OsticketConfig extends Config {
         'files_req_auth' => 1,
         'force_https' => '',
         'allow_external_images' => 0,
+        'modern_ui' => false,
     );
 
     function __construct($section=null) {
@@ -860,6 +861,10 @@ class OsticketConfig extends Config {
         return ($this->get('enable_auto_cron'));
     }
 
+    function isModernUiEnabled() {
+        return $this->get('modern_ui');
+    }
+
     function isEmailPollingEnabled() {
         return ($this->get('enable_mail_polling'));
     }
@@ -1348,6 +1353,7 @@ class OsticketConfig extends Config {
             'embedded_domain_whitelist' => Format::sanitize($vars['embedded_domain_whitelist']),
             'acl' => Format::sanitize($vars['acl']),
             'acl_backend' => Format::sanitize((int) $vars['acl_backend']) ?: 0,
+            'modern_ui' => isset($vars['modern_ui']) ? 1 : 0,
         ));
     }
 

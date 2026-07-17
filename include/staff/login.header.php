@@ -9,6 +9,17 @@ header("Content-Security-Policy: frame-ancestors ".$cfg->getAllowIframes()."; sc
     <meta http-equiv="refresh" content="7200" />
     <title>osTicket :: <?php echo __('Agent Login'); ?></title>
     <link rel="stylesheet" href="css/login.css" type="text/css" />
+    <?php
+    $useModernUI = $cfg->isModernUiEnabled();
+    if (isset($_GET['ui'])) {
+        if ($_GET['ui'] == 'modern') $useModernUI = true;
+        elseif ($_GET['ui'] == 'classic') $useModernUI = false;
+    } elseif (isset($_COOKIE['ost_modern_ui']))
+        $useModernUI = $_COOKIE['ost_modern_ui'] == '1';
+    if ($useModernUI) { ?>
+    <link rel="stylesheet" href="css/modern/tokens.css" type="text/css" />
+    <link rel="stylesheet" href="css/modern/login.css" type="text/css" />
+    <?php } ?>
     <link type="text/css" rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/font-awesome.min.css">
     <meta name="robots" content="noindex" />
     <meta http-equiv="cache-control" content="no-cache" />

@@ -396,6 +396,24 @@ if (($bks=Staff2FABackend::allRegistered())) {
                 <div class="error"><?php echo $errors['editor_spacing']; ?></div>
             </td>
         </tr>
+        <tr>
+            <td><?php echo __('UI Mode'); ?>:
+                <div class="faded"><?php echo __('Override the system UI setting. Choose Modern for the new interface or Classic for the original.');?></div>
+            </td>
+            <td>
+                <select name="modern_ui">
+                  <?php
+                  $uiMode = $staff->modern_ui ?: $cfg->isModernUiEnabled();
+                  $options=array(''=>__('System Default'),'modern'=>__('Modern UI'),'classic'=>__('Classic UI'));
+                  foreach($options as $key=>$opt) {
+                      echo sprintf('<option value="%s" %s>%s</option>',
+                                $key,($staff->modern_ui==$key)?'selected="selected"':'',$opt);
+                  }
+                  ?>
+                </select>
+                <div class="error"><?php echo $errors['modern_ui']; ?></div>
+            </td>
+        </tr>
       </tbody>
       <tbody>
         <tr class="header">

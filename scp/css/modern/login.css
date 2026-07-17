@@ -1,0 +1,80 @@
+/* ============================================================
+   osTicket Modern UI — Login Stylesheet
+   v1.18.4.01 — Phase 0 (scaffold)
+   ============================================================ */
+
+html, body {
+  background: var(--surface-1);
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+#loginBody {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--surface-2), var(--surface-1));
+}
+
+#loginBox {
+  background: var(--surface-0);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: var(--space-8);
+  width: 100%;
+  max-width: 420px;
+}
+
+#loginBox h1 {
+  color: var(--text-primary);
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-6);
+  text-align: center;
+}
+
+#loginBox input[type="text"],
+#loginBox input[type="password"] {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  box-sizing: border-box;
+  margin-bottom: var(--space-4);
+  transition: border-color var(--transition);
+}
+
+#loginBox input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--input-focus-ring);
+}
+
+#loginBox input[type="submit"] {
+  width: 100%;
+  padding: var(--space-3) var(--space-5);
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+#loginBox input[type="submit"]:hover {
+  background: var(--accent-hover);
+}
+
+#loginBox input[type="submit"]:active {
+  transform: translateY(1px);
+}

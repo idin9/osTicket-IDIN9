@@ -1,0 +1,101 @@
+/* ============================================================
+   osTicket Modern UI — SCP Stylesheet
+   v1.18.4.01 — Phase 0 (scaffold)
+   ============================================================
+   Import tokens first, then override old scp.css patterns.
+   Built progressively — each section replaces a block of the
+   original 3779-line scp.css.
+   ============================================================ */
+
+/* Reset & Base */
+html, body {
+  background: var(--surface-1);
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  margin: 0;
+  padding: 0;
+}
+
+/* Container */
+#container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+#header {
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  padding: var(--space-3) var(--space-5);
+  display: flex;
+  align-items: center;
+  min-height: 56px;
+}
+
+/* Navigation */
+#nav {
+  background: var(--nav-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+#nav li a {
+  color: var(--text-secondary);
+}
+
+#nav li.active a,
+#nav li a:hover {
+  color: var(--nav-active);
+}
+
+/* Sub Navigation */
+#sub_nav {
+  background: var(--subnav-bg);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Content */
+#content {
+  background: var(--surface-0);
+  padding: var(--space-6);
+}
+
+/* Tables */
+table.list {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.list th {
+  background: var(--table-header-bg);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+table.list td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-primary);
+}
+
+table.list tr:hover td {
+  background: var(--table-row-hover);
+}
+
+/* Links */
+a, .link {
+  color: var(--text-link);
+}
+
+a:hover {
+  color: var(--accent-hover);
+}
+
+/* TODO: Phase 1+ will progressively fill in buttons, forms,
+   dialogs, thread entries, status badges, and responsive
+   breakpoints. */

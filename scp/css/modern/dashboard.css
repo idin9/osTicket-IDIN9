@@ -1,0 +1,43 @@
+/* ============================================================
+   osTicket Modern UI — Dashboard Stylesheet
+   v1.18.4.01 — Phase 0 (scaffold)
+   ============================================================ */
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.dashboard-stat-card {
+  background: var(--surface-0);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+}
+
+.dashboard-stat-card .label {
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--space-2);
+}
+
+.dashboard-stat-card .value {
+  color: var(--text-primary);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+}
+
+/* Chart placeholders */
+.dashboard-chart {
+  background: var(--surface-0);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-6);
+}

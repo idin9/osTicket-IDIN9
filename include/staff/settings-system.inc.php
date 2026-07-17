@@ -142,6 +142,15 @@ $gmtime = Misc::gmtime();
             </td>
         </tr>
         <tr>
+            <td><?php echo __('Modern UI'); ?>:</td>
+            <td>
+                <input type="checkbox" name="modern_ui" <?php
+                echo $config['modern_ui'] ? 'checked="checked"' : ''; ?>>
+                <?php echo __('Enable modern responsive interface with dark mode support.'); ?>
+                <i class="help-tip icon-question-sign" href="#modern_ui"></i>
+            </td>
+        </tr>
+        <tr>
             <td><?php echo __('Allow System iFrame'); ?>:</td>
             <td><input type="text" size="40" name="allow_iframes" value="<?php echo $config['allow_iframes']; ?>"
                     placeholder="eg. https://domain.tld, *.domain.tld">

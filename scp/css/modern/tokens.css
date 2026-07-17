@@ -1,0 +1,143 @@
+/* ============================================================
+   osTicket Modern UI — Design Tokens
+   v1.18.4.01 — Phase 0
+   ============================================================
+   Light + dark mode via CSS custom properties.
+   Preferences: prefers-color-scheme with manual toggle support.
+   ============================================================ */
+
+/* ---- Base Scale ---- */
+:root {
+  --text-base: 15px;
+  --text-sm: 13px;
+  --text-xs: 11px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 28px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 10px;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
+
+  --transition: 150ms ease;
+}
+
+/* ---- Light Theme ---- */
+:root,
+[data-theme="light"] {
+  --surface-0: #ffffff;
+  --surface-1: #f8fafc;
+  --surface-2: #f1f5f9;
+  --surface-3: #e2e8f0;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --text-link: #2563eb;
+
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-subtle: #eff6ff;
+
+  --success: #059669;
+  --success-subtle: #ecfdf5;
+  --warning: #d97706;
+  --warning-subtle: #fffbeb;
+  --danger: #dc2626;
+  --danger-subtle: #fef2f2;
+  --info: #0891b2;
+  --info-subtle: #ecfeff;
+
+  --header-bg: #ffffff;
+  --header-border: #e2e8f0;
+  --nav-bg: #f8fafc;
+  --nav-active: #2563eb;
+  --subnav-bg: #f1f5f9;
+
+  --table-header-bg: #f8fafc;
+  --table-row-hover: #f1f5f9;
+  --table-stripe: #f8fafc;
+
+  --thread-message: #dbeafe;
+  --thread-response: #fef3c7;
+  --thread-note: #fef9c3;
+  --thread-system: #f1f5f9;
+
+  --input-bg: #ffffff;
+  --input-border: #e2e8f0;
+  --input-focus-ring: #93c5fd;
+
+  --dialog-overlay: rgba(15, 23, 42, 0.4);
+}
+
+/* ---- Dark Theme ---- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-0: #0f172a;
+    --surface-1: #1e293b;
+    --surface-2: #334155;
+    --surface-3: #475569;
+
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-tertiary: #64748b;
+    --text-link: #60a5fa;
+
+    --border: #334155;
+    --border-light: #1e293b;
+
+    --accent: #3b82f6;
+    --accent-hover: #60a5fa;
+    --accent-subtle: #1e3a5f;
+
+    --success: #34d399;
+    --success-subtle: #064e3b;
+    --warning: #fbbf24;
+    --warning-subtle: #78350f;
+    --danger: #f87171;
+    --danger-subtle: #7f1d1d;
+    --info: #22d3ee;
+    --info-subtle: #164e63;
+
+    --header-bg: #1e293b;
+    --header-border: #334155;
+    --nav-bg: #0f172a;
+    --nav-active: #3b82f6;
+    --subnav-bg: #1e293b;
+
+    --table-header-bg: #1e293b;
+    --table-row-hover: #334155;
+    --table-stripe: #1e293b;
+
+    --thread-message: #1e3a5f;
+    --thread-response: #78350f;
+    --thread-note: #713f12;
+    --thread-system: #1e293b;
+
+    --input-bg: #1e293b;
+    --input-border: #475569;
+    --input-focus-ring: #3b82f6;
+
+    --dialog-overlay: rgba(0, 0, 0, 0.6);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow: 0 1px 3px rgba(0,0,0,0.4);
+    --shadow-lg: 0 4px 12px rgba(0,0,0,0.5);
+  }
+}
