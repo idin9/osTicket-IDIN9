@@ -72,6 +72,7 @@ if (osTicket::is_ie())
     if ($useModernUI) { ?>
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/tokens.css" media="all">
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/scp.css" media="all">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/dashboard.css" media="all">
     <?php } ?>
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="<?php echo ROOT_PATH ?>images/oscar-favicon-32x32.png" sizes="32x32" />

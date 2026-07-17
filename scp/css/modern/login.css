@@ -1,8 +1,3 @@
-/* ============================================================
-   osTicket Modern UI — Login Stylesheet
-   v1.18.4.01 — Phase 0 (scaffold)
-   ============================================================ */
-
 html, body {
   background: var(--surface-1);
   color: var(--text-primary);
@@ -62,7 +57,7 @@ html, body {
   width: 100%;
   padding: var(--space-3) var(--space-5);
   background: var(--accent);
-  color: #fff;
+  color: #ffffff;
   border: none;
   border-radius: var(--radius);
   font-size: var(--text-base);
@@ -73,6 +68,11 @@ html, body {
 
 #loginBox input[type="submit"]:hover {
   background: var(--accent-hover);
+}
+
+#loginBox input[type="submit"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 #loginBox input[type="submit"]:active {
