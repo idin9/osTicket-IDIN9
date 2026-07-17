@@ -31,6 +31,17 @@ Requirements
     Zend OPcache, phar, xml, xml-dom, and zip extensions for PHP
   * APCu module enabled and configured for PHP
 
+### API Update Prerequisites
+If you are upgrading from a version before the API update/reply endpoints were added,
+run the migration script to add the new columns:
+
+```sql
+-- Replace %TABLE_PREFIX% with your table prefix (default: ost_)
+mysql -u root -p your_database < setup/scripts/migrate-api-update-v1.sql
+```
+
+For API usage documentation, see [api/README.md](api/README.md).
+
 Deployment
 ----------
 osTicket now supports bleeding-edge installations. The easiest way to

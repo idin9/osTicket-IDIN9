@@ -77,6 +77,20 @@ class API {
         return ($this->ht['can_exec_cron']);
     }
 
+    function canUpdateTickets() {
+        return ($this->ht['can_update_tickets']);
+    }
+
+    function getStaffId() {
+        return ($this->ht['staff_id']);
+    }
+
+    function getStaff() {
+        if (!($id = $this->getStaffId()))
+            return null;
+        return Staff::lookup($id);
+    }
+
     function update($vars, &$errors) {
 
         if(!API::save($this->getId(), $vars, $errors))
@@ -132,6 +146,8 @@ class API {
             .',isactive='.db_input($vars['isactive'])
             .',can_create_tickets='.db_input($vars['can_create_tickets'])
             .',can_exec_cron='.db_input($vars['can_exec_cron'])
+            .',can_update_tickets='.db_input($vars['can_update_tickets'])
+            .',staff_id='.db_input($vars['staff_id'] ?: 0)
             .',notes='.db_input(Format::sanitize($vars['notes']));
 
         if($id) {

@@ -133,6 +133,57 @@ class TicketApiController extends ApiController {
 
     }
 
+    function update($id, $format) {
+
+        if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())
+            return $this->exerr(401, __('API key not authorized'));
+
+        if (!($ticket = Ticket::lookup((int) $id)))
+            return $this->exerr(404, __('Ticket not found'));
+
+        global $thisstaff;
+        $thisstaff = $key->getStaff();
+        if (!$thisstaff)
+            return $this->exerr(401,
+                __('API key must be associated with a staff member to update tickets'));
+
+        $data = $this->getRequest($format, false);
+
+        $errors = array();
+        if ($ticket->update($data, $errors))
+            $this->response(200, $ticket->getNumber());
+        else
+            $this->exerr(400, Format::array_implode("\n", "\n", $errors));
+    }
+
+    function postReply($id, $format) {
+
+        if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())
+            return $this->exerr(401, __('API key not authorized'));
+
+        if (!($ticket = Ticket::lookup((int) $id)))
+            return $this->exerr(404, __('Ticket not found'));
+
+        global $thisstaff;
+        $thisstaff = $key->getStaff();
+        if (!$thisstaff)
+            return $this->exerr(401,
+                __('API key must be associated with a staff member to post replies'));
+
+        $data = $this->getRequest($format);
+
+        if (!isset($data['message']) || !$data['message'])
+            return $this->exerr(400, __('Message content is required'));
+
+        $data['response'] = $data['message'];
+
+        $errors = array();
+        if ($ticket->postReply($data, $errors))
+            $this->response(201, $ticket->getNumber());
+        else
+            $this->exerr(400, Format::array_implode("\n", "\n", $errors));
+    }
+
     /* private helper functions */
 
     function createTicket($data, $source = 'API') {
