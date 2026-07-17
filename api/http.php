@@ -17,7 +17,7 @@ require 'api.inc.php';
 # Include the main api urls
 require_once INCLUDE_DIR."class.dispatcher.php";
 $dispatcher = patterns('',
-        url_get("^/tickets$", array('api.tickets.php:TicketApiController','list')),
+        url_get("^/tickets$", array('api.tickets.php:TicketApiController','listTickets')),
         url_post("^/tickets\.(?P<format>xml|json|email)$", array('api.tickets.php:TicketApiController','create')),
         url_get("^/tickets/(?P<id>[A-Za-z0-9\-]+)\.(?P<format>xml|json)$", array('api.tickets.php:TicketApiController','read')),
         url_post("^/tickets/(?P<id>[A-Za-z0-9\-]+)\.(?P<format>xml|json)$", array('api.tickets.php:TicketApiController','update')),
