@@ -1,10 +1,11 @@
-.dashboard-stats {
+#content .dashboard-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--space-4);
   margin-bottom: var(--space-6);
 }
 
+#content .dashboard-stats .dashboard-stat-card,
 .dashboard-stat-card {
   background: var(--surface-0);
   border: 1px solid var(--border);
@@ -13,6 +14,7 @@
   box-shadow: var(--shadow-sm);
 }
 
+#content .dashboard-stats .label,
 .dashboard-stat-card .label {
   color: var(--text-secondary);
   font-size: var(--text-sm);
@@ -21,6 +23,7 @@
   margin-bottom: var(--space-2);
 }
 
+#content .dashboard-stats .value,
 .dashboard-stat-card .value {
   color: var(--text-primary);
   font-size: var(--text-2xl);
@@ -36,7 +39,6 @@
   margin-bottom: var(--space-6);
 }
 
-/* --- Loading skeleton for dashboard cards --- */
 .dashboard-stat-card.skeleton-card .value.skeleton {
   display: inline-block;
   width: 60%;
@@ -50,7 +52,6 @@
   height: 0.8em;
 }
 
-/* --- Empty state for dashboard --- */
 .dashboard-empty {
   text-align: center;
   padding: var(--space-12) var(--space-6);

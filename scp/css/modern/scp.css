@@ -1,4 +1,3 @@
-/* --- Reset & Base ----------------------------------------- */
 html, body {
   background: var(--surface-1);
   color: var(--text-primary);
@@ -8,58 +7,149 @@ html, body {
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
-/* --- Fluid Container (from idin9 pattern) ---------------- */
 #container {
   width: 95%;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 20px;
 }
 
-/* --- Header ---------------------------------------------- */
 #header {
   background: var(--header-bg);
+  border: none;
   border-bottom: 1px solid var(--header-border);
+  border-left: none;
+  border-right: none;
   padding: var(--space-3) var(--space-5);
   display: flex;
   align-items: center;
   min-height: 56px;
+  height: auto;
 }
 
-/* --- Navigation ------------------------------------------ */
+#header p#info {
+  max-width: 630px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-4);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+#logo {
+  max-width: 400px;
+  height: auto;
+  padding: var(--space-1) 0;
+}
+
+#logo img {
+  max-height: 50px;
+  max-width: 300px;
+}
+
+#nav, #sub_nav {
+  height: auto;
+  line-height: normal;
+  padding: 0 var(--space-5);
+  border-left: none;
+  border-right: none;
+  white-space: normal;
+}
+
 #nav {
   background: var(--nav-bg);
+  border-top: none;
   border-bottom: 1px solid var(--border);
+  padding-top: 0;
+  z-index: 200;
+  display: flex;
+}
+
+#nav .active, #nav .inactive {
+  display: inline-flex;
+  min-width: auto;
+  height: auto;
+  border-radius: 0;
+  border: none;
+}
+
+#nav li.active,
+#nav li.inactive:hover {
+  box-shadow: none;
+  border-color: transparent;
 }
 
 #nav li a {
+  display: block;
+  padding: var(--space-3) var(--space-4);
   color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
 }
 
 #nav li.active a,
 #nav li a:hover {
   color: var(--nav-active);
+  border-bottom-color: var(--nav-active);
 }
 
-/* --- Sub Navigation -------------------------------------- */
+#nav li.inactive > ul {
+  width: 230px;
+  background: var(--surface-0);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+}
+
 #sub_nav {
   background: var(--subnav-bg);
   border-bottom: 1px solid var(--border);
+  padding: 0 var(--space-5);
+  display: flex;
 }
 
-/* --- Content --------------------------------------------- */
+#sub_nav > li > a {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  border-radius: var(--radius);
+  background: none;
+}
+
+#sub_nav > li > a:hover,
+#sub_nav > li > a.active {
+  background: var(--surface-0);
+  color: var(--text-primary);
+}
+
 #content {
   background: var(--surface-0);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-bottom: none;
   padding: var(--space-6);
 }
 
-/* ==========================================================
-   BUTTONS — WCAG AA compliant (white text on #1d4ed8)
-   ========================================================== */
+#footer {
+  clear: both;
+  padding: var(--space-4);
+  text-align: center;
+  font-size: 0.9em;
+  color: var(--text-tertiary);
+}
+
 .button,
 input[type="submit"],
 input[type="button"],
 button,
-.action-button {
+.action-button,
+a.action-button,
+span.action-button {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
@@ -78,11 +168,11 @@ button,
 .button:hover,
 input[type="submit"]:hover,
 input[type="button"]:hover,
-button:hover {
+button:hover,
+.action-button:hover {
   box-shadow: var(--shadow-sm);
 }
 
-/* Primary */
 input[type="submit"],
 button[type="submit"],
 .button,
@@ -109,7 +199,6 @@ button:focus-visible,
   outline-offset: 2px;
 }
 
-/* Danger */
 .red.button {
   background: var(--danger);
   color: #ffffff;
@@ -121,7 +210,16 @@ button:focus-visible,
   border-color: #b91c1c;
 }
 
-/* White / outline */
+.dark.button {
+  background: var(--surface-2);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+
+.dark.button:hover {
+  background: var(--surface-3);
+}
+
 .white.button,
 .link.button,
 .action-button {
@@ -138,18 +236,15 @@ button:focus-visible,
   border-color: var(--text-link);
 }
 
-/* Disabled */
 .button:disabled,
 input[type="submit"]:disabled,
-button:disabled {
+button:disabled,
+.action-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   box-shadow: none;
 }
 
-/* ==========================================================
-   FORMS — Inputs, Selects, Textareas
-   ========================================================== */
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -171,6 +266,10 @@ select {
   line-height: 1.5;
   transition: border-color var(--transition), box-shadow var(--transition);
   box-sizing: border-box;
+}
+
+select {
+  max-width: none;
 }
 
 input:focus,
@@ -196,17 +295,14 @@ select.error:focus {
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
 }
 
-/* Labels */
 label {
   color: var(--text-primary);
   font-weight: 500;
 }
 
-/* ==========================================================
-   INLINE FORM ERRORS
-   ========================================================== */
 .form_table .error,
-span.error {
+span.error,
+li.error {
   color: var(--danger);
   font-size: var(--text-sm);
   font-weight: 500;
@@ -214,15 +310,21 @@ span.error {
 
 #bar.error,
 .error-banner {
-  background: var(--danger-subtle);
+  background: var(--danger-subtle) !important;
   color: var(--danger);
   border: 1px solid var(--danger);
+  border-radius: var(--radius);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
 }
 
 .warning-banner {
   background: var(--warning-subtle);
   color: var(--warning);
   border: 1px solid var(--warning);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-4);
 }
 
 .message.bar.warning {
@@ -231,16 +333,67 @@ span.error {
   border: 1px solid var(--warning);
 }
 
-/* ==========================================================
-   TABLES
-   ========================================================== */
-/* Desktop: standard table */
-table.list {
-  width: 100%;
-  border-collapse: collapse;
+#msg_notice {
+  background: var(--success-subtle);
+  color: var(--success);
+  border: 1px solid var(--success);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-4);
 }
 
-table.list th {
+#msg_warning {
+  background: var(--warning-subtle);
+  color: var(--warning);
+  border: 1px solid var(--warning);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-4);
+}
+
+#msg_error {
+  background: var(--danger-subtle);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  margin-bottom: var(--space-4);
+}
+
+#error_bar, #warning_bar, #notice_bar {
+  border-radius: var(--radius);
+  margin-bottom: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+}
+
+#error_bar {
+  background: var(--danger-subtle);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+#warning_bar {
+  background: var(--warning-subtle);
+  color: var(--warning);
+  border: 1px solid var(--warning);
+}
+
+#notice_bar {
+  background: var(--success-subtle);
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+table[border],
+table.list {
+  background: transparent;
+  width: 100% !important;
+  max-width: none;
+  border-collapse: collapse;
+  margin: var(--space-2) 0;
+}
+
+table.list thead th {
   background: var(--table-header-bg);
   color: var(--text-secondary);
   font-weight: 600;
@@ -249,25 +402,131 @@ table.list th {
   letter-spacing: 0.05em;
   padding: var(--space-3) var(--space-4);
   text-align: left;
+  border-bottom: 2px solid var(--border);
+}
+
+table.list tbody td {
+  background: var(--surface-0);
+  color: var(--text-primary);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-light);
+}
+
+table.list tbody tr:nth-child(2n+1) td {
+  background: var(--table-stripe);
+}
+
+table.list tbody tr:hover td {
+  background: var(--table-row-hover) !important;
+}
+
+.ticket_info {
+  background: var(--surface-0) !important;
+  width: 100% !important;
+  max-width: none;
+  border-collapse: collapse;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.ticket_info th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: var(--space-2) var(--space-4);
+  background: var(--table-header-bg);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.ticket_info td {
+  color: var(--text-primary);
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.tixTitle {
+  padding: 0 var(--space-2);
+}
+
+.tixTitle h3 {
+  color: var(--text-primary);
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+
+.has_bottom_border {
+  padding-bottom: var(--space-3);
+  border-bottom: 2px solid var(--border);
+}
+
+.form_table {
+  border-left: none;
+  border-right: none;
+  width: 100% !important;
+}
+
+.form_table thead th,
+.form_table th,
+div.section-break {
+  background: var(--table-header-bg);
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  padding: var(--space-3) var(--space-4);
+}
+
+#basic_search {
+  background: var(--surface-2);
+  margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-6)) var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
+}
+
+.sticky.bar {
+  background: var(--surface-0);
   border-bottom: 1px solid var(--border);
 }
 
-table.list td {
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--border-light);
-  color: var(--text-primary);
+.sticky.bar.opaque {
+  background: var(--surface-0);
 }
 
-table.list tr:hover td {
-  background: var(--table-row-hover);
+.sticky.bar.fixed {
+  position: fixed;
+  width: 100% !important;
+  max-width: 1200px;
+  box-shadow: var(--shadow);
+  padding: var(--space-2) var(--space-5);
+  box-sizing: border-box;
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 500;
+  top: 0;
 }
 
-/* ==========================================================
-   DIALOG / MODAL
-   ========================================================== */
+.sticky.bar .content {
+  margin: auto;
+  width: auto !important;
+  max-width: none;
+}
+
+.configureQ {
+  display: flex;
+  align-items: center;
+  float: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+
 .dialog,
+.ui-dialog,
 #popup,
-.ui-dialog {
+#alert {
   background: var(--surface-0);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -279,6 +538,7 @@ table.list tr:hover td {
 .ui-dialog .ui-dialog-titlebar-close {
   color: var(--text-tertiary);
   font-size: var(--text-xl);
+  text-decoration: none;
 }
 
 .dialog a.close:hover,
@@ -286,20 +546,22 @@ table.list tr:hover td {
   color: var(--text-primary);
 }
 
-/* Overlay */
+.dialog.size-xl {
+  width: auto !important;
+  max-width: 95vw;
+}
+
 #overlay,
 .ui-widget-overlay {
   background: var(--dialog-overlay) !important;
 }
 
-/* ==========================================================
-   THREAD ENTRIES
-   ========================================================== */
 .thread-entry {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   margin-bottom: var(--space-4);
   overflow: hidden;
+  background: var(--surface-0);
 }
 
 .thread-entry .header {
@@ -312,11 +574,9 @@ table.list tr:hover td {
 
 .thread-entry .body {
   padding: var(--space-4);
+  color: var(--text-primary);
 }
 
-/* ==========================================================
-   STATUS BADGES / TICKET STATUS
-   ========================================================== */
 .ticket-status,
 .status-badge {
   display: inline-flex;
@@ -347,28 +607,14 @@ table.list tr:hover td {
   color: var(--info);
 }
 
-/* ==========================================================
-   STICKY BAR
-   ========================================================== */
-.sticky.bar.fixed {
-  right: 0;
-  padding-right: 60px;
-}
-
-.sticky.bar .content {
-  width: auto !important;
-}
-
-/* ==========================================================
-   FAQ & CONTENT WIDTH OVERRIDES
-   ========================================================== */
 .faq-content {
   width: 100%;
 }
 
-/* ==========================================================
-   EMPTY STATE
-   ========================================================== */
+.jb-overflowmenu {
+  width: auto;
+}
+
 .empty-state {
   text-align: center;
   padding: var(--space-12) var(--space-6);
@@ -394,9 +640,6 @@ table.list tr:hover td {
   margin: 0 auto var(--space-6);
 }
 
-/* ==========================================================
-   LOADING SKELETON
-   ========================================================== */
 @keyframes skeleton-shimmer {
   0% { background-position: -200px 0; }
   100% { background-position: calc(200px + 100%) 0; }
@@ -456,9 +699,50 @@ table.list tr:hover td {
   flex: 1;
 }
 
-/* ==========================================================
-   LINKS
-   ========================================================== */
+.tip_box {
+  display: block;
+  height: auto;
+  position: absolute;
+  z-index: 10;
+}
+
+.tip_content {
+  min-height: auto;
+  min-width: auto;
+  border: 1px solid var(--border);
+  background: var(--surface-0);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  position: absolute;
+  padding: var(--space-2);
+}
+
+.tip_menu li a {
+  color: var(--text-primary);
+  padding: var(--space-2) var(--space-3);
+  display: block;
+}
+
+.tip_menu li a:hover {
+  background: var(--table-row-hover);
+}
+
+.pull-right {
+  float: right;
+}
+
+.pull-left {
+  float: left;
+}
+
+.flush-right {
+  text-align: right;
+}
+
+.flush-left {
+  text-align: left;
+}
+
 a, .link {
   color: var(--text-link);
   text-decoration: none;
@@ -475,9 +759,6 @@ a:focus-visible {
   border-radius: 2px;
 }
 
-/* ==========================================================
-   ARIA accessibility helpers
-   ========================================================== */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -499,9 +780,6 @@ a:focus-visible {
   cursor: progress;
 }
 
-/* ==========================================================
-   MOBILE RESPONSIVE
-   ========================================================== */
 @media (max-width: 768px) {
   #container {
     width: 100%;
@@ -515,23 +793,48 @@ a:focus-visible {
   #header {
     padding: var(--space-2) var(--space-3);
     flex-wrap: wrap;
+    min-height: 48px;
   }
 
-  /* Table → Card view */
+  #nav, #sub_nav {
+    padding: 0 var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  #nav li a {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .sticky.bar.fixed {
+    width: 100% !important;
+    max-width: 100vw;
+    left: 0;
+    transform: none;
+    padding: var(--space-2) var(--space-3);
+  }
+
   table.list,
   table.list thead,
   table.list tbody,
   table.list th,
   table.list td,
-  table.list tr {
+  table.list tr,
+  .ticket_info,
+  .ticket_info thead,
+  .ticket_info tbody,
+  .ticket_info th,
+  .ticket_info td,
+  .ticket_info tr {
     display: block;
   }
 
-  table.list thead {
+  table.list thead,
+  .ticket_info thead {
     display: none;
   }
 
-  table.list tr {
+  table.list tr,
+  .ticket_info tr {
     margin-bottom: var(--space-4);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -540,7 +843,8 @@ a:focus-visible {
     box-shadow: var(--shadow-sm);
   }
 
-  table.list td {
+  table.list td,
+  .ticket_info td {
     padding: var(--space-1) 0;
     border: none;
     text-align: left;
@@ -557,17 +861,21 @@ a:focus-visible {
     margin-bottom: 2px;
   }
 
-  table.list td:last-child {
+  table.list td:last-child,
+  .ticket_info td:last-child {
     border-bottom: none;
   }
 
-  /* Buttons stack full-width */
   .button,
   input[type="submit"],
   input[type="button"],
   button {
     width: 100%;
     justify-content: center;
+  }
+
+  .dialog.size-xl {
+    width: 95vw !important;
   }
 }
 
