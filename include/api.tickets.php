@@ -58,6 +58,7 @@ class TicketApiController extends ApiController {
                 $supported = array_merge($supported, [
                     'duedate', 'slaId', 'staffId',
                     'note', 'status_id', 'title',
+                    'note_status_id', 'reply_status_id',
                 ]);
                 break;
         }
