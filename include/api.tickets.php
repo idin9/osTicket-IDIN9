@@ -134,6 +134,33 @@ class TicketApiController extends ApiController {
 
     }
 
+    function listTickets() {
+
+        if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())
+            return $this->exerr(401, __('API key not authorized'));
+
+        $tickets = Ticket::objects()
+            ->exclude(array(
+                'status__state' => 'closed',
+            ))
+            ->order_by('-created');
+
+        $results = array();
+        foreach ($tickets as $t) {
+            $status = $t->getStatus();
+            $results[] = array(
+                'number' => $t->getNumber(),
+                'subject' => $t->getSubject(),
+                'due_date' => $t->getDueDate(),
+                'status' => $status ? $status->getName() : '',
+            );
+        }
+
+        $data = array('tickets' => $results, 'count' => count($results));
+        Http::response(200, json_encode($data, JSON_PRETTY_PRINT), 'application/json');
+        exit();
+    }
+
     function read($id, $format) {
 
         if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())

@@ -256,6 +256,46 @@ Reads a ticket's details and original message. Returns `403 Forbidden` if the ti
 
 ---
 
+### 6. List Non-Closed Tickets
+
+```
+GET /api/tickets
+```
+
+Lists all non-closed tickets with their number, subject, status, and due date. Returns JSON only.
+
+**Response:** `200 OK` — Returns ticket array
+
+```json
+{
+  "count": 2,
+  "tickets": [
+    {
+      "number": "202407-0042",
+      "subject": "Cannot access email server after upgrade",
+      "due_date": "2026-07-25 00:00:00",
+      "status": "Open"
+    },
+    {
+      "number": "202407-0041",
+      "subject": "Request for new VPN credentials",
+      "due_date": null,
+      "status": "Open"
+    }
+  ]
+}
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `count` | int | Total number of tickets returned |
+| `tickets[].number` | string | Ticket number |
+| `tickets[].subject` | string | Ticket subject |
+| `tickets[].due_date` | string/null | Due date (nullable) |
+| `tickets[].status` | string | Status name |
+
+---
+
 ## Error Responses
 
 | Code | Meaning |
