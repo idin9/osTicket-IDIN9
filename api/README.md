@@ -1,4 +1,4 @@
-# osTicket API Usage (v1.18.4.01)
+# osTicket API Usage (v1.18.4.02)
 
 ## Authentication
 
@@ -8,10 +8,19 @@ All API requests require an `X-API-Key` header with a valid API key registered i
 
 API keys must have the following permissions enabled:
 - `can_create_tickets` — Create new tickets
-- `can_update_tickets` — Update existing tickets and post replies
+- `can_update_tickets` — Update existing tickets, post replies, and post internal notes
 - `can_exec_cron` — Execute cron tasks
 
-For ticket updates and replies, the API key **must be associated with a staff member** (set `staff_id` on the key record).
+For ticket updates, replies, and internal notes, the API key **must be associated with a staff member** via the **Mapped Staff** dropdown in the admin panel (`Admin Panel → Manage → API Keys → Edit`).
+
+### Admin GUI
+
+When editing an API key in the admin panel:
+
+1. **Can Update Tickets** checkbox — grants permission to call `update`, `reply`, and `note` endpoints
+2. **Mapped Staff** dropdown — selects which staff member the API acts as (required for update/reply/note endpoints)
+
+Both are available on the **Add** and **Edit** API Key forms.
 
 ### Migration for Existing Installations
 
@@ -68,10 +77,12 @@ POST /api/tickets.(xml|json)
 ### 2. Update Ticket
 
 ```
-POST /api/tickets/<id>.(xml|json)
+POST /api/tickets/<number>.(xml|json)
 ```
 
-Updates ticket metadata (topic, SLA, due date, source, assigned user).
+Updates ticket metadata (topic, SLA, due date, source, status).
+
+**Note:** `<number>` is the visible ticket number (e.g. `201234`), not the internal database ID.
 
 **Request body (JSON):**
 ```json
@@ -81,7 +92,8 @@ Updates ticket metadata (topic, SLA, due date, source, assigned user).
   "duedate": "2026-12-31",
   "source": "Phone",
   "user_id": 5,
-  "note": "Updated via API"
+  "note": "Updated via API",
+  "status_id": 3
 }
 ```
 
@@ -92,7 +104,8 @@ Updates ticket metadata (topic, SLA, due date, source, assigned user).
 | `duedate` | string | No | Due date (YYYY-MM-DD) |
 | `source` | string | No | Ticket source |
 | `user_id` | int | No | Assign ticket to user |
-| `note` | string | No | Internal note |
+| `note` | string | No | Internal change note |
+| `status_id` | int | No | New ticket status ID (e.g. 2=Open, 3=Closed) |
 
 **Response:** `200 OK` — Returns ticket number
 ```
@@ -105,10 +118,12 @@ Updates ticket metadata (topic, SLA, due date, source, assigned user).
 ### 3. Post Reply to Ticket
 
 ```
-POST /api/tickets/<id>/reply.(xml|json)
+POST /api/tickets/<number>/reply.(xml|json)
 ```
 
 Posts an agent response to an existing ticket.
+
+**Note:** `<number>` is the visible ticket number (e.g. `201234`), not the internal database ID.
 
 **Request body (JSON):**
 ```json
@@ -137,7 +152,44 @@ Posts an agent response to an existing ticket.
 
 ---
 
-## Error Responses
+### 4. Post Internal Note
+
+```
+POST /api/tickets/<number>/note.(xml|json)
+```
+
+Posts an internal note to an existing ticket. Optionally changes ticket status at the same time via `note_status_id`.
+
+**Note:** `<number>` is the visible ticket number (e.g. `201234`), not the internal database ID.
+
+**Request body (JSON):**
+```json
+{
+  "note": "data:text/plain,Investigated the issue — root cause identified",
+  "title": "Investigation notes",
+  "note_status_id": 3,
+  "attachments": [
+    {
+      "debug.log": "data:text/plain;base64,RG9udCB0ZWxsIG15IGJvc3M="
+    }
+  ]
+}
+```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `note` | string | Yes | Note body in RFC 2397 format |
+| `title` | string | No | Note title |
+| `note_status_id` | int | No | New ticket status ID (e.g. 2=Open, 3=Closed) |
+| `attachments` | array | No | File attachments |
+
+**Response:** `201 Created` — Returns ticket number
+```
+201
+201234
+```
+
+---
 
 | Code | Meaning |
 |---|---|
@@ -153,5 +205,5 @@ Posts an agent response to an existing ticket.
 ## Prerequisites
 
 1. Run the migration SQL script (`setup/scripts/migrate-api-update-v1.sql`) on existing installations
-2. Associate API keys with staff members (`staff_id` column) for update and reply endpoints
-3. Enable `can_update_tickets` on API keys that need update/reply access
+2. Associate API keys with staff members (via the **Mapped Staff** dropdown in `Admin Panel → Manage → API Keys → Edit`)
+3. Enable **Can Update Tickets** on API keys that need update/reply/note access

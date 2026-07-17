@@ -102,6 +102,33 @@ $info=Format::htmlchars(($errors && $_POST)?$_POST:$info, true);
             </td>
         </tr>
         <tr>
+            <td colspan=2 style="padding-left:5px">
+                <label>
+                    <input type="checkbox" name="can_update_tickets" value="1" <?php echo $info['can_update_tickets']?'checked="checked"':''; ?> >
+                    <?php echo __('Can Update Tickets <em>(Update, Reply, Internal Note)</em>');?>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td width="150">
+                <?php echo __('Mapped Staff');?>:
+            </td>
+            <td>
+                <span>
+                <select name="staff_id">
+                    <option value="0">&mdash; <?php echo __('None');?> &mdash;</option>
+<?php               if (($members=Staff::getStaffMembers())) {
+                        foreach ($members as $id=>$name){
+                            $selected = ($info['staff_id']==$id)?'selected="selected"':'';
+                            echo sprintf('<option value="%d" %s>%s</option>',$id,$selected,$name);
+                        }
+                    } ?>
+                </select>
+                &nbsp;<span class="error"><?php echo $errors['staff_id']; ?></span>
+                </span>
+            </td>
+        </tr>
+        <tr>
             <th colspan="2">
                 <em><strong><?php echo __('Internal Notes');?></strong>: <?php echo __("Be liberal, they're internal");?></em>
             </th>

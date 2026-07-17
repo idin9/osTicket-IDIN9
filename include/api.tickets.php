@@ -56,7 +56,8 @@ class TicketApiController extends ApiController {
             case 'json':
             case 'xml':
                 $supported = array_merge($supported, [
-                    'duedate', 'slaId', 'staffId'
+                    'duedate', 'slaId', 'staffId',
+                    'note', 'status_id', 'title',
                 ]);
                 break;
         }
@@ -138,7 +139,7 @@ class TicketApiController extends ApiController {
         if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())
             return $this->exerr(401, __('API key not authorized'));
 
-        if (!($ticket = Ticket::lookup((int) $id)))
+        if (!($ticket = Ticket::lookupByNumber($id)))
             return $this->exerr(404, __('Ticket not found'));
 
         global $thisstaff;
@@ -150,10 +151,17 @@ class TicketApiController extends ApiController {
         $data = $this->getRequest($format, false);
 
         $errors = array();
-        if ($ticket->update($data, $errors))
+        if ($ticket->update($data, $errors)) {
+            if (isset($data['status_id'])
+                && ($status = TicketStatus::lookup($data['status_id']))
+            ) {
+                $status_errors = array();
+                $ticket->setStatus($status, '', $status_errors);
+            }
             $this->response(200, $ticket->getNumber());
-        else
+        } else {
             $this->exerr(400, Format::array_implode("\n", "\n", $errors));
+        }
     }
 
     function postReply($id, $format) {
@@ -161,7 +169,7 @@ class TicketApiController extends ApiController {
         if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())
             return $this->exerr(401, __('API key not authorized'));
 
-        if (!($ticket = Ticket::lookup((int) $id)))
+        if (!($ticket = Ticket::lookupByNumber($id)))
             return $this->exerr(404, __('Ticket not found'));
 
         global $thisstaff;
@@ -179,6 +187,32 @@ class TicketApiController extends ApiController {
 
         $errors = array();
         if ($ticket->postReply($data, $errors))
+            $this->response(201, $ticket->getNumber());
+        else
+            $this->exerr(400, Format::array_implode("\n", "\n", $errors));
+    }
+
+    function postNote($id, $format) {
+
+        if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())
+            return $this->exerr(401, __('API key not authorized'));
+
+        if (!($ticket = Ticket::lookupByNumber($id)))
+            return $this->exerr(404, __('Ticket not found'));
+
+        global $thisstaff;
+        $thisstaff = $key->getStaff();
+        if (!$thisstaff)
+            return $this->exerr(401,
+                __('API key must be associated with a staff member to post internal notes'));
+
+        $data = $this->getRequest($format);
+
+        if (!isset($data['note']) || !$data['note'])
+            return $this->exerr(400, __('Note content is required'));
+
+        $errors = array();
+        if ($ticket->postNote($data, $errors, $thisstaff))
             $this->response(201, $ticket->getNumber());
         else
             $this->exerr(400, Format::array_implode("\n", "\n", $errors));

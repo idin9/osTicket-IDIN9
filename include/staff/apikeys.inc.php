@@ -2,8 +2,8 @@
 if(!defined('OSTADMININC') || !$thisstaff->isAdmin()) die('Access Denied');
 
 $qs = array();
-$sql='SELECT * FROM '.API_KEY_TABLE.' WHERE 1';
-$sortOptions=array('key'=>'apikey','status'=>'isactive','ip'=>'ipaddr','date'=>'created','created'=>'created','updated'=>'updated');
+$sql='SELECT k.*, s.firstname, s.lastname FROM '.API_KEY_TABLE.' k LEFT JOIN '.STAFF_TABLE.' s ON k.staff_id = s.staff_id WHERE 1';
+$sortOptions=array('key'=>'apikey','status'=>'isactive','ip'=>'ipaddr','staff'=>'staff_id','date'=>'created','created'=>'created','updated'=>'updated');
 $orderWays=array('DESC'=>'DESC','ASC'=>'ASC');
 $sort=($_REQUEST['sort'] && $sortOptions[strtolower($_REQUEST['sort'])])?strtolower($_REQUEST['sort']):'key';
 //Sorting options...
@@ -85,9 +85,10 @@ else
     <thead>
         <tr>
             <th width="4%">&nbsp;</th>
-            <th width="46%"><a <?php echo $key_sort; ?> href="apikeys.php?<?php echo $qstr; ?>&sort=key"><?php echo __('API Key');?></a></th>
-            <th width="12%"><a <?php echo $ip_sort; ?> href="apikeys.php?<?php echo $qstr; ?>&sort=ip"><?php echo __('IP Address');?></a></th>
+            <th width="32%"><a <?php echo $key_sort; ?> href="apikeys.php?<?php echo $qstr; ?>&sort=key"><?php echo __('API Key');?></a></th>
+            <th width="10%"><a <?php echo $ip_sort; ?> href="apikeys.php?<?php echo $qstr; ?>&sort=ip"><?php echo __('IP Address');?></a></th>
             <th width="8%"><a  <?php echo $status_sort; ?> href="apikeys.php?<?php echo $qstr; ?>&sort=status"><?php echo __('Status');?></a></th>
+            <th width="16%"><a  <?php echo $staff_sort; ?> href="apikeys.php?<?php echo $qstr; ?>&sort=staff"><?php echo __('Mapped Staff');?></a></th>
             <th width="10%" nowrap><a  <?php echo $date_sort; ?>href="apikeys.php?<?php echo $qstr; ?>&sort=date"><?php echo __('Date Added');?></a></th>
             <th width="20%" nowrap><a  <?php echo $updated_sort; ?>href="apikeys.php?<?php echo $qstr; ?>&sort=updated"><?php echo __('Last Updated');?></a></th>
         </tr>
@@ -111,6 +112,7 @@ else
                 </a></td>
                 <td><?php echo $row['ipaddr']; ?></td>
                 <td><?php echo $row['isactive']?__('Active'):'<b>'.__('Disabled').'</b>'; ?></td>
+                <td><?php echo ($row['staff_id'] && $row['firstname']) ? sprintf('%s %s', Format::htmlchars($row['firstname']), Format::htmlchars($row['lastname'])) : '&mdash;'; ?></td>
                 <td>&nbsp;<?php echo Format::date($row['created']); ?></td>
                 <td>&nbsp;<?php echo Format::datetime($row['updated']); ?></td>
             </tr>
