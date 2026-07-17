@@ -191,11 +191,78 @@ Posts an internal note to an existing ticket. Optionally changes ticket status a
 
 ---
 
+### 5. Read Ticket
+
+```
+GET /api/tickets/<number>.(xml|json)
+```
+
+Reads a ticket's details and original message. Returns `403 Forbidden` if the ticket is closed.
+
+**Note:** `<number>` is the visible ticket number (e.g. `201234`), not the internal database ID.
+
+**Response:** `200 OK` — Returns ticket details
+
+**JSON:**
+```json
+{
+  "number": "202407-0042",
+  "subject": "Cannot access email server after upgrade",
+  "status": {
+    "id": 2,
+    "name": "Open",
+    "state": "open"
+  },
+  "created": "2026-07-16 09:42:00",
+  "original_message": {
+    "body": "Hi, I can't access the company email since this morning's upgrade.",
+    "date": "2026-07-16 09:42:00",
+    "poster": "Jane Doe"
+  }
+}
+```
+
+**XML:**
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<ticket>
+  <number>202407-0042</number>
+  <subject>Cannot access email server after upgrade</subject>
+  <status>
+    <id>2</id>
+    <name>Open</name>
+    <state>open</state>
+  </status>
+  <created>2026-07-16 09:42:00</created>
+  <original_message>
+    <body>Hi, I can't access the company email since this morning's upgrade.</body>
+    <date>2026-07-16 09:42:00</date>
+    <poster>Jane Doe</poster>
+  </original_message>
+</ticket>
+```
+
+| Field | Type | Description |
+|---|---|---|
+| `number` | string | Ticket number |
+| `subject` | string | Ticket subject |
+| `status.id` | int | Status ID |
+| `status.name` | string | Status name |
+| `status.state` | string | Status state (open, closed, etc.) |
+| `created` | string | Ticket creation date |
+| `original_message.body` | string | Original message body |
+| `original_message.date` | string | Message creation date |
+| `original_message.poster` | string | Message author |
+
+---
+
+## Error Responses
+
 | Code | Meaning |
 |---|---|
 | 400 | Bad request — invalid or missing data |
 | 401 | Unauthorized — missing/invalid API key or insufficient permissions |
-| 403 | Forbidden — key lacks required permission |
+| 403 | Forbidden — key lacks required permission, or ticket is closed (GET endpoint) |
 | 404 | Ticket not found |
 | 415 | Unsupported content type |
 | 500 | Internal server error |
@@ -206,4 +273,4 @@ Posts an internal note to an existing ticket. Optionally changes ticket status a
 
 1. Run the migration SQL script (`setup/scripts/migrate-api-update-v1.sql`) on existing installations
 2. Associate API keys with staff members (via the **Mapped Staff** dropdown in `Admin Panel → Manage → API Keys → Edit`)
-3. Enable **Can Update Tickets** on API keys that need update/reply/note access
+3. Enable **Can Update Tickets** on API keys that need update/reply/note/read access

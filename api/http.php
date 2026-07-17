@@ -18,6 +18,7 @@ require 'api.inc.php';
 require_once INCLUDE_DIR."class.dispatcher.php";
 $dispatcher = patterns('',
         url_post("^/tickets\.(?P<format>xml|json|email)$", array('api.tickets.php:TicketApiController','create')),
+        url_get("^/tickets/(?P<id>[A-Za-z0-9\-]+)\.(?P<format>xml|json)$", array('api.tickets.php:TicketApiController','read')),
         url_post("^/tickets/(?P<id>[A-Za-z0-9\-]+)\.(?P<format>xml|json)$", array('api.tickets.php:TicketApiController','update')),
         url_post("^/tickets/(?P<id>[A-Za-z0-9\-]+)/reply\.(?P<format>xml|json)$", array('api.tickets.php:TicketApiController','postReply')),
         url_post("^/tickets/(?P<id>[A-Za-z0-9\-]+)/note\.(?P<format>xml|json)$", array('api.tickets.php:TicketApiController','postNote')),

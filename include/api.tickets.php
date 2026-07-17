@@ -134,6 +134,56 @@ class TicketApiController extends ApiController {
 
     }
 
+    function read($id, $format) {
+
+        if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())
+            return $this->exerr(401, __('API key not authorized'));
+
+        if (!($ticket = Ticket::lookupByNumber($id)))
+            return $this->exerr(404, __('Ticket not found'));
+
+        if ($ticket->isClosed())
+            return $this->exerr(403, __('Ticket is closed'));
+
+        $status = $ticket->getStatus();
+        $original = null;
+        if ($ticket->getThread()) {
+            $entry = $ticket->getThread()->entries->filter(array(
+                'type' => MessageThreadEntry::ENTRY_TYPE,
+                'flags__hasbit' => ThreadEntry::FLAG_ORIGINAL_MESSAGE,
+            ))->order_by('id')->first();
+            if ($entry) {
+                $original = array(
+                    'body' => (string) $entry->getBody(),
+                    'date' => $entry->getCreateDate(),
+                    'poster' => $entry->getPoster(),
+                );
+            }
+        }
+
+        $data = array(
+            'number' => $ticket->getNumber(),
+            'subject' => $ticket->getSubject(),
+            'status' => array(
+                'id' => $status ? $status->getId() : null,
+                'name' => $status ? $status->getName() : null,
+                'state' => $ticket->getState(),
+            ),
+            'created' => $ticket->getCreateDate(),
+            'original_message' => $original,
+        );
+
+        if ($format === 'json') {
+            Http::response(200, json_encode($data, JSON_PRETTY_PRINT), 'application/json');
+        } elseif ($format === 'xml') {
+            $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n<ticket>\n";
+            $xml .= $this->arrayToXml($data, 1);
+            $xml .= '</ticket>';
+            Http::response(200, $xml, 'text/xml');
+        }
+        exit();
+    }
+
     function update($id, $format) {
 
         if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())
@@ -315,6 +365,22 @@ class TicketApiController extends ApiController {
                 throw $err;
             }
         }
+    }
+
+    private function arrayToXml($data, $depth=0) {
+        $xml = '';
+        $indent = str_repeat('  ', $depth + 1);
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $xml .= $indent . "<{$key}>\n";
+                $xml .= $this->arrayToXml($value, $depth + 1);
+                $xml .= $indent . "</{$key}>\n";
+            } else {
+                $escaped = htmlspecialchars((string) $value, ENT_QUOTES | ENT_XML1, 'UTF-8');
+                $xml .= $indent . "<{$key}>{$escaped}</{$key}>\n";
+            }
+        }
+        return $xml;
     }
 }
 
