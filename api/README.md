@@ -13,9 +13,15 @@ API keys must have the following permissions enabled:
 
 For ticket updates, replies, and internal notes, the API key **must be associated with a staff member** via the **Mapped Staff** dropdown in the admin panel (`Admin Panel → Manage → API Keys → Edit`).
 
-### IP Filtering
+### IP Restriction
 
-Each API key has an **Enable IP Restriction** toggle (enabled by default). When enabled, the key will only work from the configured IP address. When disabled, the key will accept requests from any IP address.
+Each API key is bound to an IP address or CIDR range. The key will only accept requests from that source.
+
+| Format | Example | Description |
+|---|---|---|
+| Single IP | `192.168.1.100` | Exact IP match |
+| CIDR | `172.16.0.0/16` | Subnet range |
+| Any | `0.0.0.0/0` | Accept all IPs |
 
 ### Admin GUI
 

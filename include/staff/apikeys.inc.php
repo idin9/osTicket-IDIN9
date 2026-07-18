@@ -81,13 +81,12 @@ else
  <?php csrf_token(); ?>
  <input type="hidden" name="do" value="mass_process" >
 <input type="hidden" id="action" name="a" value="" >
-    <table class="list" border="0" cellspacing="1" cellpadding="0" width="940">
+ <table class="list" border="0" cellspacing="1" cellpadding="0" width="940">
     <thead>
         <tr>
             <th width="4%">&nbsp;</th>
-            <th width="30%"><a <?php echo $key_sort; ?> href="apikeys.php?<?php echo $qstr; ?>&sort=key"><?php echo __('API Key');?></a></th>
+            <th width="32%"><a <?php echo $key_sort; ?> href="apikeys.php?<?php echo $qstr; ?>&sort=key"><?php echo __('API Key');?></a></th>
             <th width="10%"><a <?php echo $ip_sort; ?> href="apikeys.php?<?php echo $qstr; ?>&sort=ip"><?php echo __('IP Address');?></a></th>
-            <th width="8%"><?php echo __('IP Filter');?></th>
             <th width="8%"><a  <?php echo $status_sort; ?> href="apikeys.php?<?php echo $qstr; ?>&sort=status"><?php echo __('Status');?></a></th>
             <th width="16%"><a  <?php echo $staff_sort; ?> href="apikeys.php?<?php echo $qstr; ?>&sort=staff"><?php echo __('Mapped Staff');?></a></th>
             <th width="10%" nowrap><a  <?php echo $date_sort; ?>href="apikeys.php?<?php echo $qstr; ?>&sort=date"><?php echo __('Date Added');?></a></th>
@@ -112,7 +111,6 @@ else
                     <?php echo Format::shroud(Format::htmlchars($row['apikey']), 12, 26); ?>
                 </a></td>
                 <td><?php echo $row['ipaddr']; ?></td>
-                <td><?php echo $row['enable_ip_filter'] ? __('On') : __('Off'); ?></td>
                 <td><?php echo $row['isactive']?__('Active'):'<b>'.__('Disabled').'</b>'; ?></td>
                 <td><?php echo ($row['staff_id'] && $row['firstname']) ? sprintf('%s %s', Format::htmlchars($row['firstname']), Format::htmlchars($row['lastname'])) : '&mdash;'; ?></td>
                 <td>&nbsp;<?php echo Format::date($row['created']); ?></td>
@@ -123,7 +121,7 @@ else
         endif; ?>
     <tfoot>
      <tr>
-        <td colspan="8">
+        <td colspan="7">
             <?php if($res && $num){ ?>
             <?php echo __('Select');?>:&nbsp;
             <a id="selectAll" href="#ckb"><?php echo __('All');?></a>&nbsp;&nbsp;

@@ -218,7 +218,17 @@ class Validator {
     }
 
     static function is_ip($ip, &$error='') {
-        return filter_var(trim($ip), FILTER_VALIDATE_IP) !== false;
+        $ip = trim($ip);
+        // Accept CIDR notation (e.g. 172.16.0.0/16, 0.0.0.0/0)
+        if (strpos($ip, '/') !== false) {
+            list($addr, $mask) = explode('/', $ip, 2);
+            if (!filter_var($addr, FILTER_VALIDATE_IP))
+                return false;
+            if (!is_numeric($mask) || (int)$mask < 0 || (int)$mask > 128)
+                return false;
+            return true;
+        }
+        return filter_var($ip, FILTER_VALIDATE_IP) !== false;
     }
 
     static function is_username($username, &$error='') {

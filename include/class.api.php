@@ -69,10 +69,6 @@ class API {
         return ($this->ht['isactive']);
     }
 
-    function isIPFilterEnabled() {
-        return ($this->ht['enable_ip_filter'] ?? 1);
-    }
-
     function canCreateTickets() {
         return ($this->ht['can_create_tickets']);
     }
@@ -141,17 +137,13 @@ class API {
 
     static function save($id, $vars, &$errors) {
 
-        if (!$id) {
-            $ipFilterEnabled = !isset($vars['enable_ip_filter']) || $vars['enable_ip_filter'];
-            if ($ipFilterEnabled && (!$vars['ipaddr'] || !Validator::is_ip($vars['ipaddr'])))
-                $errors['ipaddr'] = __('Valid IP is required');
-        }
+        if(!$id && (!$vars['ipaddr'] || !Validator::is_ip($vars['ipaddr'])))
+            $errors['ipaddr'] = __('Valid IP is required');
 
         if($errors) return false;
 
         $sql=' updated=NOW() '
             .',isactive='.db_input($vars['isactive'])
-            .',enable_ip_filter='.db_input($vars['enable_ip_filter'] ?? 1)
             .',can_create_tickets='.db_input($vars['can_create_tickets'])
             .',can_exec_cron='.db_input($vars['can_exec_cron'])
             .',can_update_tickets='.db_input($vars['can_update_tickets'])
@@ -169,7 +161,7 @@ class API {
         } else {
             $sql='INSERT INTO '.API_KEY_TABLE.' SET '.$sql
                 .',created=NOW() '
-                .',ipaddr='.db_input($vars['ipaddr'] ?: '')
+                .',ipaddr='.db_input($vars['ipaddr'])
                 .',apikey='.db_input(strtoupper(Misc::randCode(48, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')));
 
             if(db_query($sql) && ($id=db_insert_id()))
@@ -217,12 +209,50 @@ class ApiController extends Controller {
         return $_SERVER['HTTP_X_API_KEY'];
     }
 
+    /**
+     * Check if an IP address is within a CIDR range.
+     */
+    protected function ipInCidr($ip, $cidr) {
+        if (strpos($cidr, '/') === false)
+            return $ip === $cidr;
+
+        list($subnet, $mask) = explode('/', $cidr, 2);
+        $mask = (int) $mask;
+
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)
+                && filter_var($subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+            $ip = ip2long($ip);
+            $subnet = ip2long($subnet);
+            $mask = -1 << (32 - $mask) & 0xFFFFFFFF;
+            return ($ip & $mask) === ($subnet & $mask);
+        }
+
+        // IPv6
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
+                && filter_var($subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            $ip = inet_pton($ip);
+            $subnet = inet_pton($subnet);
+            $bytes = intdiv($mask, 8);
+            $bits = $mask % 8;
+            if ($bytes && substr($ip, 0, $bytes) !== substr($subnet, 0, $bytes))
+                return false;
+            if (!$bits)
+                return true;
+            $ipByte = ord($ip[$bytes]);
+            $subByte = ord($subnet[$bytes]);
+            $maskByte = (0xFF << (8 - $bits)) & 0xFF;
+            return ($ipByte & $maskByte) === ($subByte & $maskByte);
+        }
+
+        return false;
+    }
+
     function requireApiKey() {
         if (!($key=$this->getKey()))
             return $this->exerr(401, __('Valid API key required'));
         elseif (!$key->isActive())
             return $this->exerr(401, __('API key not found/active or source IP not authorized'));
-        elseif ($key->isIPFilterEnabled() && $key->getIPAddr() != $this->getRemoteAddr())
+        elseif (!$this->ipInCidr($this->getRemoteAddr(), $key->getIPAddr()))
             return $this->exerr(401, __('API key not found/active or source IP not authorized'));
 
         return $key;
