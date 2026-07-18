@@ -306,6 +306,47 @@ Lists all non-closed tickets with their number, subject, status, and due date. R
 
 ---
 
+### 7. Merge Duplicate Tickets
+
+```
+POST /api/tickets/<number>/merge.(xml|json)
+```
+
+Merges one or more duplicate tickets into the specified target ticket. The target ticket becomes the parent, and the specified tickets become children. This is useful for monitoring tools that create periodic alerts for the same issue.
+
+**Note:** `<number>` is the visible ticket number (e.g. `201234`), not the internal database ID.
+
+**Request body (JSON):**
+```json
+{
+  "tids": ["202407-0042", "202407-0041"],
+  "merge_type": "combine",
+  "child_status_id": 3,
+  "parent_status_id": 2,
+  "participants": "all",
+  "delete_child": false,
+  "move_tasks": true
+}
+```
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `tids` | array | Yes | Array of ticket numbers to merge as children |
+| `merge_type` | string | No | `combine` (merge content) or `visual` (link only). Default: `combine` |
+| `child_status_id` | int | No | Status ID to set on child tickets (default: 3 = Closed) |
+| `parent_status_id` | int | No | Status ID to set on parent ticket (default: 0 = unchanged) |
+| `participants` | string | No | `all` to include all collaborators, `none` to exclude. Default: `all` |
+| `delete_child` | bool | No | Delete child tickets after merge. Default: `false` |
+| `move_tasks` | bool | No | Move tasks from children to parent. Default: `true` |
+
+**Response:** `200 OK` — Returns parent ticket number
+```
+200
+202407-0043
+```
+
+---
+
 ## Error Responses
 
 | Code | Meaning |

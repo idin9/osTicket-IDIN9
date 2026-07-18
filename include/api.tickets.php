@@ -59,6 +59,7 @@ class TicketApiController extends ApiController {
                     'duedate', 'slaId', 'staffId',
                     'note', 'status_id', 'title',
                     'note_status_id', 'reply_status_id',
+                    'tids', 'childStatusId', 'parentStatusId', 'combine', 'delete-child', 'move-tasks', 'participants',
                 ]);
                 break;
         }
@@ -294,6 +295,62 @@ class TicketApiController extends ApiController {
             $this->response(201, $ticket->getNumber());
         else
             $this->exerr(400, Format::array_implode("\n", "\n", $errors));
+    }
+
+    function postMerge($id, $format) {
+
+        if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())
+            return $this->exerr(401, __('API key not authorized'));
+
+        if (!($ticket = Ticket::lookupByNumber($id)))
+            return $this->exerr(404, __('Ticket not found'));
+
+        global $thisstaff;
+        $thisstaff = $key->getStaff();
+        if (!$thisstaff)
+            return $this->exerr(401,
+                __('API key must be associated with a staff member to merge tickets'));
+
+        $data = $this->getRequest($format);
+
+        if (!isset($data['tids']) || !is_array($data['tids']) || empty($data['tids']))
+            return $this->exerr(400, __('At least one ticket ID is required for merge'));
+
+        // The parent ticket is the one being merged INTO (the target)
+        // The tids are the child tickets to merge
+        $childTickets = array();
+        foreach ($data['tids'] as $tid) {
+            if ($child = Ticket::lookupByNumber($tid)) {
+                if ($child->getId() == $ticket->getId())
+                    continue; // skip self
+                $childTickets[] = $child;
+            }
+        }
+
+        if (empty($childTickets))
+            return $this->exerr(400, __('No valid tickets to merge'));
+
+        // Prepare merge options
+        $options = array(
+            'tids' => array_map(function($t) { return $t->getId(); }, $childTickets),
+            'parentId' => $ticket->getId(),
+            'mergeType' => $data['merge_type'] ?? 'combine',
+            'combine' => ($data['merge_type'] ?? 'combine') === 'combine',
+            'childStatusId' => $data['child_status_id'] ?? 3, // closed by default
+            'parentStatusId' => $data['parent_status_id'] ?? 0,
+            'participants' => $data['participants'] ?? 'all',
+            'delete-child' => isset($data['delete_child']) ? (bool)$data['delete_child'] : false,
+            'move-tasks' => isset($data['move_tasks']) ? (bool)$data['move_tasks'] : true,
+        );
+
+        // Call the merge function
+        $result = Ticket::merge($options);
+
+        if ($result === false) {
+            return $this->exerr(400, __('Unable to merge tickets'));
+        }
+
+        $this->response(200, $ticket->getNumber());
     }
 
     /* private helper functions */
