@@ -69,6 +69,10 @@ class API {
         return ($this->ht['isactive']);
     }
 
+    function isIPFilterEnabled() {
+        return ($this->ht['enable_ip_filter'] ?? 1);
+    }
+
     function canCreateTickets() {
         return ($this->ht['can_create_tickets']);
     }
@@ -137,13 +141,17 @@ class API {
 
     static function save($id, $vars, &$errors) {
 
-        if(!$id && (!$vars['ipaddr'] || !Validator::is_ip($vars['ipaddr'])))
-            $errors['ipaddr'] = __('Valid IP is required');
+        if (!$id) {
+            $ipFilterEnabled = !isset($vars['enable_ip_filter']) || $vars['enable_ip_filter'];
+            if ($ipFilterEnabled && (!$vars['ipaddr'] || !Validator::is_ip($vars['ipaddr'])))
+                $errors['ipaddr'] = __('Valid IP is required');
+        }
 
         if($errors) return false;
 
         $sql=' updated=NOW() '
             .',isactive='.db_input($vars['isactive'])
+            .',enable_ip_filter='.db_input($vars['enable_ip_filter'] ?? 1)
             .',can_create_tickets='.db_input($vars['can_create_tickets'])
             .',can_exec_cron='.db_input($vars['can_exec_cron'])
             .',can_update_tickets='.db_input($vars['can_update_tickets'])
@@ -161,7 +169,7 @@ class API {
         } else {
             $sql='INSERT INTO '.API_KEY_TABLE.' SET '.$sql
                 .',created=NOW() '
-                .',ipaddr='.db_input($vars['ipaddr'])
+                .',ipaddr='.db_input($vars['ipaddr'] ?: '')
                 .',apikey='.db_input(strtoupper(Misc::randCode(48, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')));
 
             if(db_query($sql) && ($id=db_insert_id()))
@@ -210,22 +218,23 @@ class ApiController extends Controller {
     }
 
     function requireApiKey() {
-        // Require a valid API key sent as X-API-Key HTTP header
-        // see getApiKey method.
         if (!($key=$this->getKey()))
             return $this->exerr(401, __('Valid API key required'));
-        elseif (!$key->isActive() || $key->getIPAddr() != $this->getRemoteAddr())
+        elseif (!$key->isActive())
+            return $this->exerr(401, __('API key not found/active or source IP not authorized'));
+        elseif ($key->isIPFilterEnabled() && $key->getIPAddr() != $this->getRemoteAddr())
             return $this->exerr(401, __('API key not found/active or source IP not authorized'));
 
         return $key;
     }
 
     function getKey() {
-        // Lookup record using sent API Key && IP Addr
-        if (!$this->key
-                && ($key=$this->getApiKey())
-                && ($ip=$this->getRemoteAddr()))
-            $this->key = API::lookupByKey($key, $ip);
+        if (!$this->key && ($key=$this->getApiKey())) {
+            if ($ip=$this->getRemoteAddr())
+                $this->key = API::lookupByKey($key, $ip);
+            if (!$this->key)
+                $this->key = API::lookupByKey($key);
+        }
 
         return $this->key;
     }

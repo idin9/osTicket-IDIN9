@@ -13,6 +13,10 @@ API keys must have the following permissions enabled:
 
 For ticket updates, replies, and internal notes, the API key **must be associated with a staff member** via the **Mapped Staff** dropdown in the admin panel (`Admin Panel → Manage → API Keys → Edit`).
 
+### IP Filtering
+
+Each API key has an **Enable IP Restriction** toggle (enabled by default). When enabled, the key will only work from the configured IP address. When disabled, the key will accept requests from any IP address.
+
 ### Admin GUI
 
 When editing an API key in the admin panel:

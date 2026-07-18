@@ -4,6 +4,7 @@ CREATE TABLE `%TABLE_PREFIX%api_key` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `isactive` tinyint(1) NOT NULL default '1',
   `ipaddr` varchar(64) NOT NULL,
+  `enable_ip_filter` tinyint(1) unsigned NOT NULL default '1',
   `apikey` varchar(255) NOT NULL,
   `can_create_tickets` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '1',
   `can_exec_cron` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '1',

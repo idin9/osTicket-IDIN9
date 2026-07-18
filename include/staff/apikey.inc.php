@@ -61,6 +61,18 @@ $info=Format::htmlchars(($errors && $_POST)?$_POST:$info, true);
         </tr>
         <tr>
             <td width="150">
+                <?php echo __('IP Filter');?>:
+            </td>
+            <td>
+                <label>
+                    <input type="checkbox" name="enable_ip_filter" value="1" <?php echo ($info['enable_ip_filter']??1)?'checked="checked"':''; ?>>
+                    <?php echo __('Enable IP restriction');?>
+                </label>
+                <i class="help-tip icon-question-sign" href="#enable_ip_filter"></i>
+            </td>
+        </tr>
+        <tr>
+            <td width="150">
                 <?php echo __('API Key');?>:
             </td>
             <td><?php echo $api->getKey(); ?> &nbsp;</td>
@@ -77,6 +89,18 @@ $info=Format::htmlchars(($errors && $_POST)?$_POST:$info, true);
                 &nbsp;<span class="error">*&nbsp;<?php echo $errors['ipaddr']; ?></span>
                 <i class="help-tip icon-question-sign" href="#ip_addr"></i>
                 </span>
+            </td>
+        </tr>
+        <tr>
+            <td width="150">
+                <?php echo __('IP Filter');?>:
+            </td>
+            <td>
+                <label>
+                    <input type="checkbox" name="enable_ip_filter" value="1" <?php echo ($info['enable_ip_filter']??1)?'checked="checked"':''; ?>>
+                    <?php echo __('Enable IP restriction');?>
+                </label>
+                <i class="help-tip icon-question-sign" href="#enable_ip_filter"></i>
             </td>
         </tr>
         <?php } ?>
