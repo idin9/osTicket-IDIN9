@@ -1,170 +1,166 @@
-#ticketForm, #clientLogin {
-  div {
-    clear: both;
-    padding: 3px 0;
-    overflow: hidden;
+/* Ticket Forms - New Ticket, Client Login */
 
-    label {
-      display: block;
-      width: 140px;
-      float: left;
-    }
-
-    label.required {
-        font-weight: bold;
-        text-align: left;
-    }
-
-    input, textarea {
-      width: auto;
-      border: 1px solid #aaa;
-      background: #fff;
-      margin-right: 10px;
-      display: block;
-      float: left;
-    }
-
-    input[type=file] {
-      border: 0;
-    }
-
-    select {
-      display: block;
-      float: left;
-    }
-    div.captchaRow {
-      line-height: 31px;
-
-      input {
-        position: relative;
-        top: 6px;
-      }
-    }
-
-  }
-
-  td, div {
-    textarea {
-      width: 600px;
-    }
-
-    em {
-      color: #777;
-    }
-
-    .captcha {
-      width: 88px;
-      height: 31px;
-      background: #000;
-      display: block;
-      float: left;
-      margin-right: 20px;
-    }
-
-    label.inline {
-      width: auto;
-      padding: 0 10px;
-    }
-  }
-
-  div.error {
-    input {
-      border: 1px solid #a00;
-    }
-    label {
-      color: #a00;
-    }
-  }
+#ticketForm div.clear,
+#clientLogin div.clear {
+  clear: both;
+  padding: 3px 0;
+  overflow: hidden;
 }
 
-#ticketTable {
-  th {
-    width: 160px;
-    font-weight: normal;
-    text-align: left;
-  }
-  th.required, td.required {
-    font-weight: bold;
-    text-align: left;
-  }
+#ticketForm div label,
+#clientLogin div label {
+  display: block;
 }
 
+label.required,
+span.required {
+  font-weight: bold;
+}
+
+#ticketForm div label.required,
+#clientLogin div label.required {
+  text-align: left;
+}
+
+#ticketForm div input,
+#clientLogin div input,
+#ticketForm div textarea,
+#clientLogin div textarea {
+  width: auto;
+  border: 1px solid #aaa;
+  background: #fff;
+  display: block;
+}
+
+#ticketForm div input[type=file],
+#clientLogin div input[type=file] {
+  border: 0;
+}
+
+#ticketForm div select,
+#clientLogin div select {
+  display: block;
+  float: left;
+}
+
+#ticketForm div div.captchaRow,
+#clientLogin div div.captchaRow {
+  line-height: 31px;
+}
+
+#ticketForm div div.captchaRow input,
+#clientLogin div div.captchaRow input {
+  position: relative;
+  top: 6px;
+}
+
+#ticketForm > table {
+  table-layout: fixed;
+}
+
+#ticketForm > table td {
+  width: 160px;
+}
+
+#ticketForm > table td + td {
+  width: auto;
+}
+
+#ticketForm td textarea,
+#clientLogin td textarea,
+#ticketForm div textarea,
+#clientLogin div textarea {
+  width: 600px;
+}
+
+#ticketForm td em,
+#clientLogin td em,
+#ticketForm div em,
+#clientLogin div em {
+  color: #777;
+}
+
+#ticketForm td .captcha,
+#clientLogin td .captcha,
+#ticketForm div .captcha,
+#clientLogin div .captcha {
+  width: 88px;
+  height: 31px;
+  background: #000;
+  display: block;
+  float: left;
+  margin-right: 20px;
+}
+
+#ticketForm td label.inline,
+#clientLogin td label.inline,
+#ticketForm div label.inline,
+#clientLogin div label.inline {
+  width: auto;
+  padding: 0 10px;
+}
+
+#ticketForm div.error input,
+#clientLogin div.error input {
+  border: 1px solid #a00;
+}
+
+#ticketForm div.error label,
+#clientLogin div.error label {
+  color: #a00;
+}
+
+/* Client Login */
 #clientLogin {
-  width: 400px;
+  display: block;
   margin-top: 20px;
-  padding: 10px 100px 10px 10px;
+  padding: 20px;
   border: 1px solid #ccc;
-  background: url('../images/lock.png?1319655200') 440px 50% no-repeat #f6f6f6;
-
-  p {
-    clear: both;
-    text-align: center;
-  }
-
-  strong {
-    font-size: 11px;
-    color: #d00;
-    display: block;
-    padding-left: 140px;
-  }
-
-  #email {
-    width: 250px;
-    margin-right: 0;
-  }
-
-  #ticketno {
-    width: 120px;
-    margin-right: 0;
-  }
+  border-radius: 5px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  background: url('../images/lock.png') 95% 50% no-repeat #f6f6f6;
 }
 
-#reply {
-  margin-top: 20px;
-  padding: 10px 5px;
-  background: #f9f9f9;
-  border: 1px solid #ccc;
-
-  h2 {
-    margin-bottom: 10px;
-  }
-
-  table {
-    width: 800px;
-
-    td {
-      vertical-align: top;
-    }
-  }
-
-  textarea {
-    width: 628px !important;
-  }
-
-  input[type=text], #response_options textarea {
-    border: 1px solid #aaa;
-    background: #fff;
-  }
-
-  .attachments .uploads div {
-    display: inline-block;
-    padding-right: 20px;
-  }
-  .file {
-    display: inline-block;
-    padding-left: 20px;
-    margin-right: 20px;
-    background: url('../images/icons/file.gif') 0 50% no-repeat;
-  }
+.rtl #clientLogin {
+  background-position: 5% 50%;
 }
 
-.uploads {
-  display:inline-block;
-  padding-right:20px;
+#clientLogin .instructions {
+  display: table-cell;
+  padding-left: 2em;
+  padding-right: 90px;
+}
 
-  label {
-    padding:3px;
-    padding-right:10px;
-    width: auto !important
-  }
+.rtl #clientLogin .instructions {
+  padding-left: 0;
+  padding-right: 0;
+  padding-right: 2em;
+  padding-left: 90px;
+}
+
+#clientLogin p {
+  clear: both;
+}
+
+#clientLogin strong {
+  font-size: 11px;
+  color: #d00;
+  display: block;
+}
+
+#clientLogin #email,
+#clientLogin #ticketno {
+  margin-right: 0;
+}
+
+#clientLogin input[type=text],
+#clientLogin input[type=password] {
+  padding: 5px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+#clientLogin input[type=submit] {
+  padding: 3px 10px;
+  border-radius: 4px;
 }
