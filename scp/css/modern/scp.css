@@ -1540,9 +1540,90 @@ button:active {
   .ticket-property-card,
   table.list tbody tr,
   #pjax-container > #content,
-  .skeleton {
+    .skeleton {
     animation: none !important;
     transition: none !important;
     transform: none !important;
+  }
+}
+
+/* ================= Dark mode: catch-all overrides ================= */
+/* Classic scp.css hardcodes many background: #fff / color: #000 on panes
+ * that the modern CSS doesn't explicitly target. This block catches them
+ * so every pane is readable in dark mode.
+ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    html, body, #container, #header, #subheader,
+    #content, #footer, .has_more,
+    #ticketTable, #ticketTable table,
+    div.sticky.bar, .sticky.bar.opaque,
+    .dialog, .ui-dialog,
+    .dialog fieldset, .dialog fieldset input,
+    #overlay, .ui-widget-overlay,
+    .warning-banner,
+    .infoTable, .infoTable th,
+    .ticket_info, .custom-data,
+    .custom-data th, .custom-data td,
+    ul.tabs.clean li.active,
+    #response_options, #response_options input, #response_options textarea,
+    #reply,
+    td .richtext, .richtext, .richtext-body,
+    .popup,
+    select[multiple], select, input, textarea, button,
+    .action-button {
+      background-color: var(--surface-0) !important;
+      background: var(--surface-0) !important;
+    }
+
+    html, body, #container, #header, #subheader,
+    #content, #footer, .has_more,
+    #ticketTable, #ticketTable table,
+    #ticketTable th, #ticketTable td, #ticketTable th a,
+    div.sticky.bar, div.sticky.bar h2,
+    .dialog, .ui-dialog,
+    .dialog fieldset, .dialog fieldset input,
+    .warning-banner,
+    .faded, .muted, .small,
+    .infoTable th,
+    .ticket_info th, .ticket_info td,
+    .custom-data th, .custom-data td,
+    ul.tabs.clean li.active, ul.tabs.clean li.active a,
+    #response_options, #response_options input, #response_options textarea,
+    #reply, #reply h2,
+    td .richtext, .richtext, .richtext-body,
+    .popup, .popup h2,
+    .tooltip,
+    select[multiple],
+    span.error,
+    .thread-entry .header .title,
+    .thread-entry .thread-body {
+      color: var(--text-primary) !important;
+    }
+
+    .faded, .muted, td .faded,
+    span.nohighlight,
+    .thread-event .description,
+    .action-button, .action-button span, .action-button a {
+      color: var(--text-secondary) !important;
+    }
+
+    .dialog, .ui-dialog,
+    .dialog fieldset, .dialog fieldset input,
+    #response_options, #response_options input, #response_options textarea,
+    #reply, td .richtext, .richtext,
+    select, input, textarea, .popup,
+    .sticky.bar, .sticky.bar.opaque {
+      border-color: var(--border) !important;
+    }
+
+    #ticketTable tr.alt td,
+    #ticketTable tbody tr:nth-child(2n+1) td {
+      background: var(--table-stripe) !important;
+    }
+
+    #ticketTable tbody tr:hover td {
+      background: var(--table-row-hover) !important;
+    }
   }
 }

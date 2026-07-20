@@ -8,6 +8,7 @@ All API requests require an `X-API-Key` header with a valid API key registered i
 
 API keys must have the following permissions enabled:
 - `can_create_tickets` — Create new tickets
+- `can_read_tickets` — Read tickets and list non-closed tickets
 - `can_update_tickets` — Update existing tickets, post replies, and post internal notes
 - `can_exec_cron` — Execute cron tasks
 
@@ -27,20 +28,27 @@ Each API key is bound to an IP address or CIDR range. The key will only accept r
 
 When editing an API key in the admin panel:
 
-1. **Can Update Tickets** checkbox — grants permission to call `update`, `reply`, and `note` endpoints
-2. **Mapped Staff** dropdown — selects which staff member the API acts as (required for update/reply/note endpoints)
+1. **Can Read Tickets** checkbox — grants permission to call `read` and `list` endpoints
+2. **Can Update Tickets** checkbox — grants permission to call `update`, `reply`, and `note` endpoints
+3. **Mapped Staff** dropdown — selects which staff member the API acts as (required for update/reply/note endpoints)
 
-Both are available on the **Add** and **Edit** API Key forms.
+Both checkboxes and the staff dropdown are available on the **Add** and **Edit** API Key forms.
 
 ### Migration for Existing Installations
 
-Run the migration script to add the new columns to existing installations:
+Run the migration scripts in order to add the new columns to existing installations:
 
 ```sql
 -- File: setup/scripts/migrate-api-update-v1.sql
 ALTER TABLE `%TABLE_PREFIX%api_key`
   ADD COLUMN `can_update_tickets` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `can_exec_cron`,
   ADD COLUMN `staff_id` int(10) unsigned NOT NULL DEFAULT '0' AFTER `can_update_tickets`;
+```
+
+```sql
+-- File: setup/scripts/migrate-api-read-v2.sql
+ALTER TABLE `%TABLE_PREFIX%api_key`
+  ADD COLUMN `can_read_tickets` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `can_update_tickets`;
 ```
 
 Replace `%TABLE_PREFIX%` with your actual table prefix (default is `ost_`).
@@ -362,6 +370,9 @@ Merges one or more duplicate tickets into the specified target ticket. The targe
 
 ## Prerequisites
 
-1. Run the migration SQL script (`setup/scripts/migrate-api-update-v1.sql`) on existing installations
+1. Run the migration SQL scripts on existing installations:
+   - `setup/scripts/migrate-api-update-v1.sql`
+   - `setup/scripts/migrate-api-read-v2.sql`
 2. Associate API keys with staff members (via the **Mapped Staff** dropdown in `Admin Panel → Manage → API Keys → Edit`)
-3. Enable **Can Update Tickets** on API keys that need update/reply/note/read access
+3. Enable **Can Read Tickets** on API keys that need read/list access
+4. Enable **Can Update Tickets** on API keys that need update/reply/note access

@@ -138,7 +138,7 @@ class TicketApiController extends ApiController {
 
     function listTickets() {
 
-        if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())
+        if (!($key = $this->requireApiKey()) || !$key->canReadTickets())
             return $this->exerr(401, __('API key not authorized'));
 
         $tickets = Ticket::objects()
@@ -165,7 +165,7 @@ class TicketApiController extends ApiController {
 
     function read($id, $format) {
 
-        if (!($key = $this->requireApiKey()) || !$key->canUpdateTickets())
+        if (!($key = $this->requireApiKey()) || !$key->canReadTickets())
             return $this->exerr(401, __('API key not authorized'));
 
         if (!($ticket = Ticket::lookupByNumber($id)))

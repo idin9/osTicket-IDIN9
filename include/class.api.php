@@ -77,6 +77,10 @@ class API {
         return ($this->ht['can_exec_cron']);
     }
 
+    function canReadTickets() {
+        return ($this->ht['can_read_tickets']);
+    }
+
     function canUpdateTickets() {
         return ($this->ht['can_update_tickets']);
     }
@@ -146,6 +150,7 @@ class API {
             .',isactive='.db_input($vars['isactive'])
             .',can_create_tickets='.db_input($vars['can_create_tickets'])
             .',can_exec_cron='.db_input($vars['can_exec_cron'])
+            .',can_read_tickets='.db_input($vars['can_read_tickets'])
             .',can_update_tickets='.db_input($vars['can_update_tickets'])
             .',staff_id='.db_input($vars['staff_id'] ?: 0)
             .',notes='.db_input(Format::sanitize($vars['notes']));

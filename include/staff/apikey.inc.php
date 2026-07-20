@@ -104,6 +104,14 @@ $info=Format::htmlchars(($errors && $_POST)?$_POST:$info, true);
         <tr>
             <td colspan=2 style="padding-left:5px">
                 <label>
+                    <input type="checkbox" name="can_read_tickets" value="1" <?php echo $info['can_read_tickets']?'checked="checked"':''; ?> >
+                    <?php echo __('Can Read Tickets <em>(Read, List Non-Closed)</em>');?>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan=2 style="padding-left:5px">
+                <label>
                     <input type="checkbox" name="can_update_tickets" value="1" <?php echo $info['can_update_tickets']?'checked="checked"':''; ?> >
                     <?php echo __('Can Update Tickets <em>(Update, Reply, Internal Note)</em>');?>
                 </label>
