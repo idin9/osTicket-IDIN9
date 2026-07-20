@@ -193,16 +193,18 @@ html, body {
 
 #sub_nav {
   display: flex !important;
-  flex-wrap: wrap !important;
-  gap: var(--space-1) !important;
-  padding: var(--space-2) var(--space-5) !important;
-  background: var(--subnav-bg) !important;
-  border-bottom: 1px solid var(--border) !important;
+  flex-direction: column !important;
+  padding: var(--space-2) 0 !important;
+  background: var(--surface-0) !important;
+  border: 1px solid var(--border) !important;
+  border-top: none !important;
+  box-shadow: var(--shadow-sm) !important;
+  min-width: 200px !important;
 }
 
 #sub_nav > li,
 #sub_nav .active {
-  display: inline-flex !important;
+  display: block !important;
   border: none !important;
   background: transparent !important;
   padding: 0 !important;
@@ -211,23 +213,25 @@ html, body {
 
 #sub_nav > li > a,
 #sub_nav a {
-  display: inline-flex !important;
+  display: flex !important;
   align-items: center !important;
-  min-height: var(--target-aa) !important;
-  padding: var(--space-1) var(--space-3) !important;
+  min-height: var(--target-min) !important;
+  padding: var(--space-2) var(--space-4) !important;
   font-size: var(--text-sm) !important;
   font-weight: 500 !important;
   color: var(--text-secondary) !important;
-  border-radius: var(--radius-full) !important;
+  border-radius: 0 !important;
   background: transparent !important;
   border: none !important;
+  border-left: 3px solid transparent !important;
   box-shadow: none !important;
   text-decoration: none !important;
+  transition: background var(--transition), color var(--transition), border-color var(--transition) !important;
 }
 
 #sub_nav > li > a:hover,
 #sub_nav a:hover {
-  background: var(--surface-2) !important;
+  background: var(--table-row-hover) !important;
   color: var(--text-primary) !important;
 }
 
@@ -237,7 +241,8 @@ html, body {
   background: var(--accent-subtle) !important;
   color: var(--accent) !important;
   font-weight: 600 !important;
-  box-shadow: var(--shadow-sm) !important;
+  border-left-color: var(--accent) !important;
+  box-shadow: none !important;
 }
 
 #content {
@@ -939,7 +944,7 @@ a:focus-visible {
     min-height: 48px;
   }
 
-  #nav, #sub_nav {
+  #nav {
     padding: 0 var(--space-3);
     flex-wrap: wrap;
   }
