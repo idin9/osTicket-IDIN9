@@ -1,30 +1,60 @@
 /* Ticket Forms — Miller's Law chunking, Fitts's Law 44px targets */
 
 /* Form sections (chunked per Miller's Law: ≤ 5 groups) */
-#ticketForm > tbody,
-#ticketForm > tbody > tr {
+#ticketForm tbody {
   display: block;
-}
-
-#ticketForm > tbody {
   margin-bottom: var(--space-5);
+  background: var(--surface-0);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: var(--space-4);
-  background: var(--surface-1);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
 
-#ticketForm > tbody > tr > td {
-  padding: var(--space-1) 0;
+#ticketForm tbody tr {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid var(--border-light);
+}
+#ticketForm tbody tr:last-child {
+  border-bottom: none;
+}
+
+#ticketForm tbody tr td {
+  padding: var(--space-3) var(--space-4);
   display: block;
-  width: 100% !important;
 }
 
-#ticketForm > tbody > tr > td:first-child {
-  font-weight: 500;
+#ticketForm tbody tr td:first-child {
+  width: 25% !important;
+  font-weight: 600;
   color: var(--text-secondary);
   font-size: var(--text-sm);
-  padding-bottom: 0;
+}
+
+#ticketForm tbody tr td:nth-child(2) {
+  width: 75% !important;
+  flex: 1;
+  min-width: 0; /* Prevent flex overflow */
+}
+
+/* Labels */
+label.required,
+span.required {
+  font-weight: 600;
+}
+#ticketForm div label,
+#clientLogin div label {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+#ticketForm div label.required,
+#clientLogin div label.required {
+  text-align: left;
 }
 
 /* Inputs — Fitts's Law: 44px min touch target */
@@ -73,6 +103,7 @@
   min-height: auto;
 }
 
+/* CAPTCHA */
 #ticketForm div div.captchaRow,
 #clientLogin div div.captchaRow {
   line-height: 31px;
@@ -83,31 +114,6 @@
   top: 6px;
 }
 
-/* Labels */
-label.required,
-span.required {
-  font-weight: 600;
-}
-#ticketForm div label,
-#clientLogin div label {
-  display: block;
-  margin-bottom: var(--space-1);
-  font-size: var(--text-sm);
-}
-#ticketForm div label.required,
-#clientLogin div label.required {
-  text-align: left;
-}
-
-#ticketForm td em,
-#clientLogin td em,
-#ticketForm div em,
-#clientLogin div em {
-  color: var(--text-tertiary);
-  font-size: var(--text-sm);
-}
-
-/* CAPTCHA */
 #ticketForm td .captcha,
 #clientLogin td .captcha,
 #ticketForm div .captcha,
@@ -132,6 +138,15 @@ span.required {
   color: var(--danger);
 }
 
+/* Help text */
+#ticketForm td em,
+#clientLogin td em,
+#ticketForm div em,
+#clientLogin div em {
+  color: var(--text-tertiary);
+  font-size: var(--text-sm);
+}
+
 /* Inline hints */
 #ticketForm td label.inline,
 #clientLogin td label.inline,
@@ -144,12 +159,31 @@ span.required {
 /* Client Login box (check ticket status / sign in) */
 #clientLogin {
   display: block;
-  margin-top: var(--space-5);
-  padding: var(--space-5);
+  margin: var(--space-5) auto 0;
+  padding: var(--space-6);
   border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface-1);
-  max-width: 480px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-0);
+  box-shadow: var(--shadow-sm);
+  max-width: 520px;
+}
+
+#clientLogin > div[style*="display:table-row"] {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+
+#clientLogin .login-box {
+  flex: 1;
+  min-width: 280px;
+  box-shadow: none;
+  padding: 0;
+}
+#clientLogin .login-box + div[style*="display:table-cell"] {
+  padding-left: var(--space-5);
+  border-left: 1px solid var(--border);
 }
 
 #clientLogin .instructions {
@@ -186,27 +220,67 @@ span.required {
   min-height: var(--target-min);
   padding: var(--space-2) var(--space-6);
   border-radius: var(--radius);
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+#clientLogin input[type="submit"]:hover {
+  background: var(--accent-hover);
 }
 
-/* Action buttons area */
+
+/* Redactor editor improvements */
+.redactor-box {
+  border: 1px solid var(--input-border) !important;
+  border-radius: var(--radius) !important;
+  background: var(--input-bg) !important;
+  overflow: hidden;
+  box-shadow: none !important;
+  margin-bottom: 0 !important;
+}
+.redactor-toolbar {
+  background: var(--surface-1) !important;
+  border-bottom: 1px solid var(--border) !important;
+  box-shadow: none !important;
+}
+.redactor-editor {
+  background: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  padding: var(--space-3) !important;
+  font-family: inherit !important;
+}
+.redactor-editor:focus {
+  outline: none;
+}
+.redactor-box.redactor-focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--input-focus-ring) !important;
+}
+
+/* Form action buttons area */
+
 .buttons {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
   justify-content: center;
-  margin-top: var(--space-4);
+  margin-top: var(--space-6);
 
   input[type="submit"],
   input[type="button"],
   input[type="reset"] {
     min-height: var(--target-min);
-    padding: var(--space-2) var(--space-5);
+    min-width: 120px;
+    padding: var(--space-2) var(--space-6);
     border-radius: var(--radius);
     font-size: var(--text-base);
     cursor: pointer;
     font-family: inherit;
-    font-weight: 500;
-    transition: background var(--transition), opacity var(--transition);
+    font-weight: 600;
+    transition: background var(--transition), box-shadow var(--transition);
   }
 
   input[type="submit"] {
@@ -218,30 +292,28 @@ span.required {
 
   input[type="reset"],
   input[type="button"] {
-    background: var(--surface-1);
+    background: var(--surface-0);
     color: var(--text-secondary);
     border: 1px solid var(--border);
   }
   input[type="reset"]:hover,
   input[type="button"]:hover {
-    background: var(--surface-2);
+    background: var(--surface-1);
     color: var(--text-primary);
   }
 }
 
-/* Dynamic form improvements */
+/* Dynamic form */
 #dynamic-form .form-header {
   font-weight: 600;
   font-size: var(--text-base);
   margin-bottom: var(--space-3);
   color: var(--text-primary);
 }
-
 #ticketForm .form-header b {
   font-weight: 600;
 }
 
-/* Security images */
 img.captcha {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -249,12 +321,33 @@ img.captcha {
 
 /* Responsive */
 @media (max-width: 768px) {
-  #ticketForm > tbody {
-    padding: var(--space-3);
+  #ticketForm tbody tr {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #ticketForm tbody tr td:first-child,
+  #ticketForm tbody tr td:nth-child(2) {
+    width: 100% !important;
+  }
+  #ticketForm tbody tr td:first-child {
+    padding-bottom: 0;
+  }
+  #ticketForm tbody tr td {
+    padding: var(--space-2) var(--space-3);
   }
 
   #clientLogin {
     max-width: 100%;
+  }
+
+  #clientLogin > div[style*="display:table-row"] {
+    flex-direction: column;
+  }
+  #clientLogin .login-box + div[style*="display:table-cell"] {
+    padding-left: 0;
+    padding-top: var(--space-4);
+    border-left: none;
+    border-top: 1px solid var(--border);
   }
 
   .buttons {
