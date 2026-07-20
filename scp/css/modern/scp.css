@@ -1302,7 +1302,7 @@ a:focus-visible {
 
 /* Skip link — visible on focus (WCAG 2.4.1) */
 #skip-link {
-  position: absolute;
+  position: fixed;
   z-index: 9999;
 }
 #skip-link a {
@@ -1324,7 +1324,7 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
-/* Nav toggle button (mobile hamburger) */
+/* Nav toggle button (mobile hamburger) — hidden on desktop */
 .nav-toggle {
   display: none;
   align-items: center;
@@ -1424,6 +1424,209 @@ a:focus-visible {
   /* Make nav position relative for absolute positioning of dropdown */
   nav[aria-label="Main navigation"] {
     position: relative;
+  }
+}
+
+/* ==========================================================================
+   Desktop sidebar layout — fixed left sidebar (min-width: 769px only)
+   ========================================================================== */
+@media (min-width: 769px) {
+  /* Full-width container with sidebar gap */
+  #container {
+    max-width: none !important;
+    width: 100% !important;
+    padding-left: 220px !important;
+    margin: 0 !important;
+    background: var(--surface-0) !important;
+  }
+
+  /* Hide hamburger on desktop */
+  .nav-toggle {
+    display: none !important;
+  }
+
+  /* Main nav — fixed left sidebar (scrollable) */
+  nav[aria-label="Main navigation"] {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 220px !important;
+    height: 100vh !important;
+    background: #bdccdb !important;
+    z-index: 900 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+  }
+
+  /* Sub-nav wrapper — also fixed in sidebar */
+  nav[aria-label="Main navigation"] + nav {
+    position: fixed !important;
+    left: 0 !important;
+    top: auto !important;
+    bottom: 0 !important;
+    width: 220px !important;
+    background: #bdccdb !important;
+    z-index: 901 !important;
+    overflow-y: auto !important;
+    max-height: 50vh !important;
+  }
+
+  /* Give main nav bottom room so sub-nav doesn't overlap */
+  nav[aria-label="Main navigation"] {
+    padding-bottom: 120px !important;
+  }
+
+  /* Nav items — vertical stacked */
+  #nav {
+    display: flex !important;
+    flex-direction: column !important;
+    background: transparent !important;
+    padding: var(--space-2) 0 !important;
+    gap: 0 !important;
+    border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+  }
+
+  #nav > li,
+  #nav .active,
+  #nav .inactive {
+    display: block !important;
+    position: static !important;
+    margin: 0 !important;
+  }
+
+  #nav > li > a,
+  #nav .inactive a,
+  #nav .active a {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 40px !important;
+    padding: var(--space-2) var(--space-4) !important;
+    font-size: var(--text-sm) !important;
+    font-weight: 500 !important;
+    color: #2c3e50 !important;
+    text-decoration: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-left: 3px solid transparent !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    transition: background 120ms ease, border-color 120ms ease !important;
+  }
+
+  #nav > li > a:hover,
+  #nav .inactive a:hover {
+    background: rgba(0,0,0,0.06) !important;
+    color: #1a2332 !important;
+  }
+
+  #nav > li.active > a,
+  #nav .active a {
+    background: rgba(255,255,255,0.35) !important;
+    border-left-color: var(--nav-active) !important;
+    color: #1a2332 !important;
+    font-weight: 600 !important;
+  }
+
+  /* Remove the desktop tab bottom mask */
+  #nav > li.active > a::after,
+  #nav .active a::after {
+    display: none !important;
+  }
+
+  /* Sub-nav — in sidebar, below main nav */
+  #sub_nav {
+    display: flex !important;
+    flex-direction: column !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    min-width: auto !important;
+    padding: var(--space-2) 0 !important;
+  }
+
+  #sub_nav > li,
+  #sub_nav .active {
+    display: block !important;
+  }
+
+  #sub_nav > li > a,
+  #sub_nav a {
+    display: flex !important;
+    align-items: center !important;
+    min-height: 36px !important;
+    padding: var(--space-1) var(--space-4) var(--space-1) var(--space-5) !important;
+    font-size: var(--text-sm) !important;
+    font-weight: 400 !important;
+    color: #3d5166 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-left: 3px solid transparent !important;
+    background: transparent !important;
+    text-decoration: none !important;
+    transition: background 120ms ease !important;
+  }
+
+  #sub_nav > li > a:hover,
+  #sub_nav a:hover {
+    background: rgba(0,0,0,0.05) !important;
+    color: #1a2332 !important;
+  }
+
+  #sub_nav > li.active > a,
+  #sub_nav > li > a.active,
+  #sub_nav a.active {
+    background: rgba(255,255,255,0.25) !important;
+    color: var(--accent) !important;
+    font-weight: 600 !important;
+    border-left-color: var(--accent) !important;
+  }
+
+  /* Top-level nav dropdowns — expanded inline in sidebar */
+  #nav li.inactive > ul {
+    position: static !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: auto !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 0 var(--space-1) 0 !important;
+  }
+
+  #nav li.inactive > ul > li {
+    display: block !important;
+  }
+
+  #nav li.inactive > ul > li > a {
+    display: flex !important;
+    padding: var(--space-1) var(--space-4) var(--space-1) var(--space-6) !important;
+    min-height: 32px !important;
+    font-size: var(--text-sm) !important;
+    font-weight: 400 !important;
+    color: #4a6178 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+
+  #nav li.inactive > ul > li > a:hover {
+    background: rgba(0,0,0,0.04) !important;
+    color: #1a2332 !important;
+  }
+
+  /* Hide the header logo (relocated to sidebar) */
+  #header #logo {
+    display: none !important;
+  }
+
+  /* Keep header clean in content area */
+  #header {
+    padding: var(--space-3) var(--space-5) !important;
+    border: none !important;
+    border-bottom: 1px solid var(--border) !important;
   }
 }
 
