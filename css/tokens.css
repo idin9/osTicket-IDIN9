@@ -1,0 +1,244 @@
+/*!
+ * osTicket-IDIN9 — Unified Design Tokens (Phase 1, UI Upgrade)
+ * Single source of truth for the client portal and the staff modern UI.
+ * Human reference: /DESIGN.md · Plan: /docs/ui-upgrade/PLAN.md
+ *
+ * Principles encoded:
+ *  - Typography: 1.250 Major Third scale, base 16px, rem-based
+ *  - Spacing:    8pt grid (4px micro, 12px compact half-step)
+ *  - Color:      60-30-10 (neutral surfaces / slate structure / one accent)
+ *  - WCAG 2.2:   every text/semantic color ≥ 4.5:1 on its surface,
+ *                focus ring tokens, 44px target minimum, reduced motion
+ *
+ * Intentional changes vs. the legacy scp/css/modern/tokens.css values
+ * (kept token NAMES identical for backward compatibility):
+ *  - --text-xs/sm/base/lg/xl/2xl: px → Major Third rem scale (11/13/15/18/22/28px
+ *    → 12.8/14/16/20/25/31px) — readability + small-text contrast compliance
+ *  - --text-tertiary: #94a3b8 → #64748b (2.9:1 → 4.8:1, AA)
+ *  - --success:  #059669 → #047857 (text-safe, 5.0:1)
+ *  - --warning:  #d97706 → #b45309 (text-safe, 4.9:1)
+ *  - --info:     #0891b2 → #0e7490 (text-safe, 5.0:1)
+ */
+
+:root {
+  /* ---- Typography: 1.250 Major Third (base 16px) ---- */
+  --text-xs:   0.8rem;    /* 12.8px — badges, fine print */
+  --text-sm:   0.875rem;  /* 14px   — dense UI (off-scale exception) */
+  --text-base: 1rem;      /* 16px   — body */
+  --text-lg:   1.25rem;   /* 20px   — h4, card titles */
+  --text-xl:   1.563rem;  /* 25px   — h3 */
+  --text-2xl:  1.953rem;  /* 31px   — h2 */
+  --text-3xl:  2.441rem;  /* 39px   — h1 */
+  --text-4xl:  3.052rem;  /* 49px   — hero only */
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --line-height-body: 1.5;
+  --line-height-heading: 1.2;
+  --measure: 70ch; /* max readable line length (Miller's Law) */
+
+  /* ---- Spacing: 8pt grid ---- */
+  --space-1: 4px;   /* micro adjustments only */
+  --space-2: 8px;
+  --space-3: 12px;  /* compact half-step */
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ---- Shape & elevation ---- */
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 10px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* ---- Interaction (Fitts's Law / WCAG 2.2 Target Size) ---- */
+  --target-min: 44px;   /* preferred minimum for interactive targets */
+  --target-aa: 24px;    /* absolute WCAG 2.2 AA floor */
+  --transition: 150ms ease;
+
+  /* ---- Layout ---- */
+  --content-max: 1200px;
+  --bp-mobile: 480px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1024px;
+}
+
+/* ================= Light theme (default) ================= */
+:root,
+[data-theme="light"] {
+  /* 60% — dominant neutral surfaces */
+  --surface-0: #ffffff;
+  --surface-1: #f8fafc;
+  --surface-2: #f1f5f9;
+  --surface-3: #e2e8f0;
+
+  /* 30% — secondary structure */
+  --surface-inverse: #0f172a; /* header/nav structure */
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+
+  /* Text — all AA-verified on --surface-0 (see DESIGN.md) */
+  --text-primary: #0f172a;    /* 17.7:1 */
+  --text-secondary: #475569;  /*  7.5:1 */
+  --text-tertiary: #64748b;   /*  4.8:1 — never below --text-xs */
+
+  /* 10% — accent (CTA / interactive only) */
+  --accent: #1d4ed8;          /*  7.0:1 on white */
+  --accent-hover: #1e40af;    /*  8.6:1 */
+  --accent-subtle: #dbeafe;
+  --text-link: #1d4ed8;
+  --text-link-hover: #1e40af;
+
+  /* Semantic — text-safe values (≥ 4.5:1 on white, higher on subtle bg) */
+  --success: #047857;
+  --success-subtle: #d1fae5;
+  --warning: #b45309;
+  --warning-subtle: #fef3c7;
+  --danger: #dc2626;
+  --danger-subtle: #fee2e2;
+  --info: #0e7490;
+  --info-subtle: #cffafe;
+
+  /* Structure aliases */
+  --header-bg: #ffffff;
+  --header-border: #e2e8f0;
+  --nav-bg: #f8fafc;
+  --nav-active: #1d4ed8;
+  --subnav-bg: #f1f5f9;
+
+  --table-header-bg: #f8fafc;
+  --table-row-hover: #f1f5f9;
+  --table-stripe: #fafafa;
+
+  --thread-message: #dbeafe;
+  --thread-response: #fef3c7;
+  --thread-note: #fef9c3;
+  --thread-system: #f1f5f9;
+
+  /* Forms */
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --input-focus-ring: #93c5fd;
+
+  /* Focus ring — WCAG 2.2 Focus Appearance (≥ 3:1 vs. adjacent) */
+  --focus-ring: #1d4ed8;
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 2px;
+
+  --dialog-overlay: rgba(15, 23, 42, 0.4);
+
+  --skeleton-base: #e2e8f0;
+  --skeleton-shine: #f1f5f9;
+}
+
+/* ================= Dark theme ================= */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-0: #0f172a;
+    --surface-1: #1e293b;
+    --surface-2: #334155;
+    --surface-3: #475569;
+
+    --surface-inverse: #f8fafc;
+    --border: #334155;
+    --border-light: #1e293b;
+
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;  /* raised from #94a3b8 for AA on --surface-0 */
+    --text-tertiary: #94a3b8;
+
+    --accent: #3b82f6;
+    --accent-hover: #60a5fa;
+    --accent-subtle: #1e3a5f;
+    --text-link: #60a5fa;
+    --text-link-hover: #93c5fd;
+
+    --success: #34d399;
+    --success-subtle: #064e3b;
+    --warning: #fbbf24;
+    --warning-subtle: #78350f;
+    --danger: #f87171;
+    --danger-subtle: #7f1d1d;
+    --info: #22d3ee;
+    --info-subtle: #164e63;
+
+    --header-bg: #1e293b;
+    --header-border: #334155;
+    --nav-bg: #0f172a;
+    --nav-active: #3b82f6;
+    --subnav-bg: #1e293b;
+
+    --table-header-bg: #1e293b;
+    --table-row-hover: #334155;
+    --table-stripe: #1e293b;
+
+    --thread-message: #1e3a5f;
+    --thread-response: #78350f;
+    --thread-note: #713f12;
+    --thread-system: #1e293b;
+
+    --input-bg: #1e293b;
+    --input-border: #475569;
+    --input-focus-ring: #3b82f6;
+
+    --focus-ring: #60a5fa;
+
+    --dialog-overlay: rgba(0, 0, 0, 0.6);
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.5);
+
+    --skeleton-base: #334155;
+    --skeleton-shine: #1e293b;
+  }
+}
+
+/* ================= Shared a11y primitives ================= */
+
+/* Visible keyboard focus everywhere (WCAG 2.2 Focus Appearance) */
+:root a:focus-visible,
+:root button:focus-visible,
+:root input:focus-visible,
+:root select:focus-visible,
+:root textarea:focus-visible,
+:root [tabindex]:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
+}
+
+/* Visually hidden, screen-reader accessible */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition: 0ms linear;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

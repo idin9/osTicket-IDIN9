@@ -3,10 +3,11 @@ if($nav && ($tabs=$nav->getTabs()) && is_array($tabs)){
     foreach($tabs as $name =>$tab) {
         if ($tab['href'][0] != '/')
             $tab['href'] = ROOT_PATH . 'scp/' . $tab['href'];
-        echo sprintf('<li class="%s %s"><a href="%s">%s</a>',
+        $ariaCurrent = isset($tab['active']) ? ' aria-current="page"' : '';
+        echo sprintf('<li class="%s %s"><a href="%s"%s>%s</a>',
             isset($tab['active']) ? 'active':'inactive',
             @$tab['class'] ?: '',
-            $tab['href'],$tab['desc']);
+            $tab['href'], $ariaCurrent, $tab['desc']);
         if(!isset($tab['active']) && ($subnav=$nav->getSubMenu($name))){
             echo "<ul>\n";
             foreach($subnav as $k => $item) {

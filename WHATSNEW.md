@@ -1,3 +1,43 @@
+osTicket v1.18.4.14 — Modern UX/UI Upgrade
+===========================================
+
+### Modern Theme
+* CLIENT: The public portal has been fully modernized — responsive layout (mobile/tablet/desktop
+  breakpoints at 480/768/1024px), 8pt grid spacing, token-driven components, and a Z-pattern
+  landing page with 44px touch targets (Fitts's Law) and reduced-choice CTAs (Hick's Law).
+* CLIENT: Typography updated to a 1.250 Major Third scale (12.8px–49px), body 16px/1.5,
+  links underlined by default for platform predictability (Jakob's Law).
+* CLIENT: New ticket form sections are chunked into ≤ 5 labeled groups (Miller's Law);
+  all inputs have 44px minimum height and focus rings.
+* CLIENT: Ticket tables degrade to stacked cards at ≤ 768px using `data-label` attributes.
+* STAFF: Modern UI layer (`scp/css/modern/`) extended with inbox-style ticket queues,
+  overflow action menus, F-pattern ticket summary header, property card grids, dialog
+  entrance animations, and semantic dashboard chart colors.
+* STAFF: Navigation now includes a mobile hamburger toggle with collapsible dropdown.
+
+### Accessibility (WCAG 2.2)
+* LANDMARKS: Both client and staff templates now use semantic HTML5 landmarks
+  (`<header>`, `<nav>`, `<main>`, `<footer>`) with skip-to-content links.
+* SCREEN READERS: `role="alert"` on error/warning messages, `role="status"` on notices,
+  `aria-current="page"` on active staff nav items, `aria-label` on all navigation elements.
+* FOCUS: Visible `:focus-visible` rings on all interactive elements via token layer.
+* COLOR: Status is never conveyed by color alone — badges include icons + text labels.
+* KEYBOARD: Focus-visible rings applied globally; dialog focus-trap patterns in place.
+* MOTION: All animations respect `prefers-reduced-motion`; micro-interactions capped at
+  150ms via `--transition` token.
+
+### Design System
+* Unified design token system (`/css/tokens.css`) consumed by both client portal and
+  staff modern UI — single source of truth for typography, spacing (8pt grid), color
+  (60-30-10 palette with AA-verified contrast), shape, elevation, and motion.
+* DESIGN.md — machine-actionable design system reference at project root.
+* Staff modern UI toggle order: URL param (`?ui=modern|classic`) > cookie > staff
+  preference > system configuration (admin panel checkbox).
+* Classic UI remains fully functional and selectable for rollback.
+
+### Development
+* Bumped MAJOR_VERSION to 1.18.4.14.
+
 osTicket v1.18.4
 ================
 ### Security

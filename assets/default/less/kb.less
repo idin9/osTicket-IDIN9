@@ -1,134 +1,142 @@
-/* Knowledge Base */
+/* Knowledge Base (dedicated KB pages — not landing page) */
 
+/* Category list */
 #kb {
-  margin: 2px 0;
-  padding: 5px;
+  margin: var(--space-1) 0;
+  padding: 0;
   overflow: hidden;
-}
 
-#kb > li {
-  padding: 10px;
-  height: auto !important;
-  overflow: hidden;
-  margin: 0;
-  background: url('../images/kb_category_bg.png') bottom left repeat-x;
-  border-bottom: 1px solid #ddd;
-  display: block;
-}
+  > li {
+    display: block;
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--border);
 
-#kb > li h4 span {
-  color: #666;
-}
-
-#kb > li h4 a {
-  font-size: 14px;
-}
-
-#kb > li > i {
-  display: block;
-  width: 32px;
-  height: 32px;
-  float: left;
-  margin-right: 6px;
-  background: url('../images/kb_large_folder.png') top left no-repeat;
+    h4 {
+      font-size: var(--text-base);
+      font-weight: 500;
+      span { color: var(--text-tertiary) }
+    }
+  }
 }
 
 .featured-category {
-  margin-top: 10px;
+  margin-top: var(--space-3);
   width: 49.7%;
   display: inline-block;
   box-sizing: border-box;
   vertical-align: top;
-}
 
-.category-name {
-  display: inline-block;
-  font-weight: 400;
-  font-size: 120%;
-}
+  .category-name {
+    display: inline-block;
+    font-weight: 500;
+    font-size: var(--text-lg);
+  }
 
-.featured-category i {
-  color: rgba(0, 174, 239, 0.8);
-  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
-  display: inline-block;
-  vertical-align: middle;
+  i {
+    color: var(--accent);
+    display: inline-block;
+    vertical-align: middle;
+  }
 }
 
 .article-headline {
   margin-left: 34px;
 }
-
-.rtl .article-headline {
-  margin-left: 0;
-  margin-right: 34px;
-}
-
 .article-teaser {
-  font-size: 90%;
-  line-height: 1.5em;
+  font-size: var(--text-sm);
+  line-height: 1.5;
   height: 3em;
   overflow: hidden;
+  color: var(--text-tertiary);
 }
-
 .article-title {
   font-weight: 500;
 }
 
 .faq-content .article-title {
-  font-size: 17pt;
-  margin-top: 15px;
+  font-size: var(--text-2xl);
+  margin-top: var(--space-4);
 }
 
-/* KB Search */
+/* KB Search page */
 #kb-search {
-  padding: 10px 0;
+  padding: var(--space-3) 0;
   overflow: hidden;
+
+  div {
+    clear: both;
+    overflow: hidden;
+    padding-top: var(--space-1);
+  }
+
+  #query, #cid {
+    display: inline-block;
+    float: left;
+    margin-right: var(--space-1);
+    min-height: var(--target-min);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius);
+    background: var(--input-bg);
+    font-size: var(--text-base);
+  }
+  #query, #cid { width: 200px }
+  #topic-id {
+    display: inline-block;
+    float: left;
+    width: 410px;
+    min-height: var(--target-min);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius);
+    background: var(--input-bg);
+    font-size: var(--text-base);
+  }
+
+  #searchSubmit {
+    display: inline-block;
+    float: left;
+    min-height: var(--target-min);
+  }
+
+  #breadcrumbs {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-4);
+    font-size: var(--text-sm);
+
+    a { color: var(--text-secondary) }
+  }
 }
 
-#kb-search div {
-  clear: both;
-  overflow: hidden;
-  padding-top: 5px;
+/* FAQ article */
+.faq-content {
+  .article-title {
+    font-size: var(--text-2xl);
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-2);
+  }
 }
 
-#kb-search #query {
-  margin: 0;
-  display: inline-block;
-  float: left;
-  width: 200px;
-  margin-right: 5px;
+/* Breadcrumbs (shared) */
+#breadcrumbs {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+  a { color: var(--text-secondary) }
 }
 
-#kb-search #cid {
-  margin: 0;
-  display: inline-block;
-  float: left;
-  width: 200px;
-  margin-right: 5px;
-  position: relative;
-  top: 2px;
-}
+@media (max-width: 768px) {
+  .featured-category {
+    width: 100%;
+  }
 
-#kb-search #topic-id {
-  margin: 0;
-  display: inline-block;
-  float: left;
-  width: 410px;
-}
-
-#kb-search #searchSubmit {
-  margin: 0;
-  display: inline-block;
-  float: left;
-  position: relative;
-  top: 2px;
-}
-
-#kb-search #breadcrumbs {
-  color: #333;
-  margin-bottom: 15px;
-}
-
-#kb-search #breadcrumbs #breadcrumbs a {
-  color: #555;
+  #kb-search {
+    #query, #cid, #topic-id {
+      width: 100%;
+      float: none;
+      margin-bottom: var(--space-2);
+    }
+    #searchSubmit {
+      width: 100%;
+    }
+  }
 }

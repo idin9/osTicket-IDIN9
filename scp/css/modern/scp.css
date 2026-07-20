@@ -11,6 +11,7 @@ html, body {
   width: 95%;
   max-width: 1200px;
   margin: 0 auto 20px;
+  position: relative;
 }
 
 #header {
@@ -890,5 +891,433 @@ a:focus-visible {
 
   .empty-state {
     padding: var(--space-8) var(--space-4);
+  }
+}
+
+/* ==========================================================================
+   Phase 3 — Queue enhancements (inbox-style, overflow actions)
+   ========================================================================== */
+
+/* Subject emphasis in ticket queue */
+.queue-subject {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.queue-subject a {
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.queue-subject a:hover {
+  color: var(--text-link);
+  text-decoration: underline;
+}
+
+/* Unread / new indicator */
+.queue-row.unread .queue-subject a {
+  font-weight: 700;
+}
+.queue-row.unread .queue-subject::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  margin-right: var(--space-2);
+  vertical-align: middle;
+}
+
+/* Overflow action menu (Hick's Law — collapse actions) */
+.overflow-menu {
+  position: relative;
+  display: inline-flex;
+}
+.overflow-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--target-aa);
+  height: var(--target-aa);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.overflow-menu-trigger:hover {
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+.overflow-menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  min-width: 160px;
+  background: var(--surface-0);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  padding: var(--space-1) 0;
+  display: none;
+}
+.overflow-menu.open .overflow-menu-dropdown {
+  display: block;
+}
+.overflow-menu-dropdown a {
+  display: block;
+  padding: var(--space-2) var(--space-4);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+}
+.overflow-menu-dropdown a:hover {
+  background: var(--table-row-hover);
+  color: var(--text-link);
+}
+
+/* Status badge improvements */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-full);
+}
+.status-badge i {
+  font-size: 0.9em;
+}
+
+/* Pagination — modern */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  justify-content: center;
+  margin: var(--space-6) 0;
+}
+.pagination a,
+.pagination strong,
+.pagination span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--target-aa);
+  height: var(--target-aa);
+  padding: 0 var(--space-2);
+  font-size: var(--text-sm);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--text-secondary);
+  transition: background var(--transition);
+}
+.pagination a:hover {
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+.pagination strong {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Phase 3 — Ticket view card layout (F-pattern)
+   ========================================================================== */
+
+/* Summary header strip — F-pattern: number, status, assignee, SLA on top scan line */
+.ticket-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  margin-bottom: var(--space-5);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.ticket-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ticket-summary-label {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+}
+.ticket-summary-value {
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.ticket-summary-value.ticket-number {
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Ticket properties as card grid (replaces infoTable) */
+.ticket-properties {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+.ticket-property-card {
+  background: var(--surface-0);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+.ticket-property-card h3 {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--border-light);
+}
+.ticket-property-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-1) 0;
+  font-size: var(--text-sm);
+}
+.ticket-property-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.ticket-property-value {
+  color: var(--text-primary);
+  text-align: right;
+}
+
+/* ==========================================================================
+   Phase 3 — Navigation sidebar + mobile toggle
+   ========================================================================== */
+
+/* Skip link — visible on focus (WCAG 2.4.1) */
+#skip-link {
+  position: absolute;
+  z-index: 9999;
+}
+#skip-link a {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--accent);
+  color: #fff;
+  padding: var(--space-2) var(--space-4);
+  text-decoration: none;
+  font-size: var(--text-base);
+  font-weight: 600;
+  border-radius: 0 0 var(--radius) 0;
+  z-index: 9999;
+}
+#skip-link a:focus {
+  left: 0;
+  outline: 2px solid var(--focus-ring, #fff);
+  outline-offset: 2px;
+}
+
+/* Nav toggle button (mobile hamburger) */
+.nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--target-min);
+  height: var(--target-min);
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-size: var(--text-xl);
+  cursor: pointer;
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  z-index: 300;
+  border-radius: var(--radius);
+  transition: background var(--transition);
+}
+.nav-toggle:hover {
+  background: var(--surface-2);
+}
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Mobile bottom navigation bar */
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  nav[aria-label="Main navigation"] ul#nav {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background: var(--surface-0);
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 200;
+    padding: var(--space-2) 0;
+  }
+  nav[aria-label="Main navigation"] ul#nav.open {
+    display: flex;
+  }
+  nav[aria-label="Main navigation"] ul#nav li {
+    width: 100%;
+  }
+  nav[aria-label="Main navigation"] ul#nav li a {
+    display: block;
+    padding: var(--space-3) var(--space-4);
+    border-bottom: none;
+  }
+  nav[aria-label="Main navigation"] ul#nav li.active a,
+  nav[aria-label="Main navigation"] ul#nav li a:hover {
+    border-bottom: none;
+    background: var(--accent-subtle);
+  }
+
+  /* Make nav position relative for absolute positioning of dropdown */
+  nav[aria-label="Main navigation"] {
+    position: relative;
+  }
+}
+
+/* ==========================================================================
+   Phase 3 — Dialog enhancements (focus trap + transitions)
+   ========================================================================== */
+
+.dialog,
+.ui-dialog,
+#popup,
+#alert {
+  animation: dialog-enter var(--transition) ease-out;
+}
+@keyframes dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Dialog overlay transition */
+#overlay,
+.ui-widget-overlay {
+  animation: overlay-fade var(--transition) ease-out;
+}
+@keyframes overlay-fade {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+
+/* Dialog focus trap indicator */
+.ui-dialog:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: var(--radius-lg);
+}
+
+/* ==========================================================================
+   Phase 3 — Dashboard chart tokens
+   ========================================================================== */
+
+.dashboard-chart .chart-color-1 { color: var(--accent) }
+.dashboard-chart .chart-color-2 { color: var(--success) }
+.dashboard-chart .chart-color-3 { color: var(--warning) }
+.dashboard-chart .chart-color-4 { color: var(--danger) }
+.dashboard-chart .chart-color-5 { color: var(--info) }
+
+/* ==========================================================================
+   Phase 4 — Accessibility hardening
+   ========================================================================== */
+
+/* Ensure all form inputs have proper sizing */
+input[type="checkbox"],
+input[type="radio"] {
+  min-height: 20px;
+  min-width: 20px;
+}
+
+/* Status not conveyed by color alone */
+.status-badge i,
+.ticket-status i {
+  margin-right: var(--space-1);
+}
+
+/* ==========================================================================
+   Phase 5 — Motion & micro-interactions
+   ========================================================================== */
+
+/* Subtle row hover lift */
+table.list tbody tr {
+  transition: box-shadow var(--transition);
+}
+table.list tbody tr:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+/* Button press feedback */
+.button:active,
+input[type="submit"]:active,
+button:active {
+  transform: scale(0.98);
+}
+
+/* Card hover effect */
+.dashboard-stat-card,
+.ticket-property-card {
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+.dashboard-stat-card:hover,
+.ticket-property-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-1px);
+}
+
+/* Fade-in for content after page load */
+@keyframes content-fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+#pjax-container > #content {
+  animation: content-fade-in 200ms ease-out;
+}
+
+/* Respect reduced motion (overrides tokens.css for PJAX-specific) */
+@media (prefers-reduced-motion: reduce) {
+  .dialog,
+  .ui-dialog,
+  #overlay,
+  .ui-widget-overlay,
+  .dashboard-stat-card,
+  .ticket-property-card,
+  table.list tbody tr,
+  #pjax-container > #content,
+  .skeleton {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
   }
 }

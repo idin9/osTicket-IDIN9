@@ -70,7 +70,7 @@ if (osTicket::is_ie())
             $useModernUI = false;
     }
     if ($useModernUI) { ?>
-    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/tokens.css" media="all">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>css/tokens.css" media="all">
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/scp.css" media="all">
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/dashboard.css" media="all">
     <?php } ?>
@@ -85,6 +85,7 @@ if (osTicket::is_ie())
     ?>
 </head>
 <body>
+<nav id="skip-link"><a href="#pjax-container"><?php echo __('Skip to content'); ?></a></nav>
 <div id="container">
     <?php
     if($ost->getError())
@@ -94,7 +95,7 @@ if (osTicket::is_ie())
     elseif($ost->getNotice())
         echo sprintf('<div id="notice_bar">%s</div>', $ost->getNotice());
     ?>
-    <div id="header">
+    <header id="header">
         <p id="info" class="pull-right no-pjax"><?php echo sprintf(__('Welcome, %s.'), '<strong>'.$thisstaff->getFirstName().'</strong>'); ?>
            <?php
             if($thisstaff->isAdmin() && !defined('ADMINPAGE')) { ?>
@@ -109,7 +110,8 @@ if (osTicket::is_ie())
             <span class="valign-helper"></span>
             <img src="<?php echo ROOT_PATH ?>scp/logo.php?<?php echo strtotime($cfg->lastModified('staff_logo_id')); ?>" alt="osTicket &mdash; <?php echo __('Customer Support System'); ?>"/>
         </a>
-    </div>
+    </header>
+    <button class="nav-toggle" aria-label="<?php echo __('Toggle navigation'); ?>" aria-expanded="false">☰</button>
     <div id="pjax-container" class="<?php if ($_POST) echo 'no-pjax'; ?>">
 <?php } else {
     header('X-PJAX-Version: ' . GIT_VERSION);
@@ -124,18 +126,20 @@ if (osTicket::is_ie())
     } ?>
     <title><?php echo ($ost && ($title=$ost->getPageTitle()))?$title:'osTicket :: '.__('Staff Control Panel'); ?></title><?php
 } # endif X_PJAX ?>
+    <nav aria-label="<?php echo __('Main navigation'); ?>">
     <ul id="nav">
 <?php include STAFFINC_DIR . "templates/navigation.tmpl.php"; ?>
     </ul>
+    </nav>
     <?php include STAFFINC_DIR . "templates/sub-navigation.tmpl.php"; ?>
 
-        <div id="content">
+        <main id="content">
         <?php if(isset($errors['err'])) { ?>
-            <div id="msg_error"><?php echo $errors['err']; ?></div>
+            <div id="msg_error" role="alert"><?php echo $errors['err']; ?></div>
         <?php }elseif($msg) { ?>
-            <div id="msg_notice"><?php echo $msg; ?></div>
+            <div id="msg_notice" role="status"><?php echo $msg; ?></div>
         <?php }elseif($warn) { ?>
-            <div id="msg_warning"><?php echo $warn; ?></div>
+            <div id="msg_warning" role="alert"><?php echo $warn; ?></div>
         <?php }
         foreach (Messages::getMessages() as $M) { ?>
             <div class="<?php echo strtolower($M->getLevel()); ?>-banner"><?php

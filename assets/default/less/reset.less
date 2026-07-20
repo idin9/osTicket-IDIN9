@@ -1,4 +1,6 @@
-/* Reset / Normalize */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
 html {
   font-size: 100%;
@@ -9,43 +11,21 @@ html {
 
 body {
   margin: 0;
-  font-size: 14px;
-  line-height: 1.231;
+  padding: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--line-height-body);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6, form, fieldset {
+  margin: 0;
   padding: 0;
 }
 
-body,
-input,
-select,
-textarea {
-  font-family: "Helvetica Neue", sans-serif;
-  color: #000;
-}
-
-b,
-strong {
-  font-weight: bold;
-}
-
-blockquote {
-  margin: 1em 40px;
-}
-
-hr {
-  display: block;
-  height: 1px;
-  border: 0;
-  border-top: 1px solid #ccc;
-  margin: 1em 0;
-  padding: 0;
-}
-
-small {
-  font-size: 85%;
-}
-
-ul,
-ol {
+ul, ol {
   margin: 1em 0;
   padding: 0 0 0 30px;
 }
@@ -55,48 +35,26 @@ img {
   vertical-align: middle;
 }
 
-form {
-  margin: 0;
-}
+form { margin: 0 }
+fieldset { border: 0 }
 
-fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
-}
+label { cursor: pointer }
 
-label {
-  cursor: pointer;
-}
-
-input,
-select,
-textarea {
-  font-size: 100%;
+input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
   margin: 0;
   vertical-align: baseline;
-  *vertical-align: middle;
 }
 
-input {
-  line-height: normal;
-  *overflow: visible;
-}
-
-table input {
-  *overflow: auto;
-}
+input { line-height: normal }
 
 input[type="button"],
 input[type="reset"],
 input[type="submit"] {
   cursor: pointer;
   -webkit-appearance: button;
-}
-
-input[type="checkbox"],
-input[type="radio"] {
-  box-sizing: border-box;
 }
 
 textarea {
@@ -110,24 +68,26 @@ table {
   border-spacing: 0;
 }
 
-th,
-td {
-  vertical-align: top;
-}
+th, td { vertical-align: top }
+th { text-align: left; font-weight: normal }
 
-th {
-  text-align: left;
-  font-weight: normal;
-}
+b, strong { font-weight: 600 }
+small { font-size: 85% }
+blockquote { margin: 1em 40px }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-form,
-fieldset {
-  margin: 0;
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 1em 0;
   padding: 0;
 }
+
+/* Fix hardcoded table widths in templates */
+table[width],
+table[width] table {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+td[width] { width: auto !important }

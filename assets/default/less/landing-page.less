@@ -1,195 +1,112 @@
-/* Landing Page */
+/* Landing Page — Z-pattern: search (center) → two CTAs (Hick's Law) → KB articles */
 
 #landing_page {
-  #new_ticket {
-    margin-top: 40px;
-    background: url('../images/new_ticket_icon.png') top left no-repeat;
-    width: 295px;
-    padding-left: 75px;
-  }
+  display: flex;
+  flex-direction: row-reverse;
+  gap: var(--space-6);
+  align-items: flex-start;
 
-  #check_status {
-    margin-top: 40px;
-    background: url('../images/check_status_icon.png') top left no-repeat;
-    width: 295px;
-    padding-left: 75px;
+  > .main-content {
+    flex: 1;
+    min-width: 0;
+
+    .search-form {
+      padding-top: 0;
+      margin-bottom: var(--space-6);
+
+      form {
+        display: flex;
+        gap: var(--space-2);
+        max-width: 600px;
+      }
+
+      .search {
+        flex: 1;
+        min-height: var(--target-min);
+        padding: var(--space-2) var(--space-4);
+      }
+
+      .button {
+        flex-shrink: 0;
+      }
+    }
   }
 }
 
-/* Landing page FAQ */
+/* Two CTAs — card-style, 44px targets (Fitts's / Hick's) */
+.front-page-button {
+  padding: var(--space-4);
+  background: var(--surface-0);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  margin-bottom: var(--space-4);
+  min-width: 180px;
+
+  p {
+    margin: 0;
+  }
+
+  p + p {
+    margin-top: var(--space-3);
+  }
+
+  .button {
+    display: flex;
+    width: 100%;
+    min-height: var(--target-min);
+  }
+}
+
+/* FAQ list on landing */
 #faq {
   clear: both;
-  margin: 0;
-  padding: 5px;
+  margin: var(--space-4) 0;
+  padding: 0;
 
   ol {
-    font-size: 15px;
-    margin-left: 0;
-    padding-left: 0;
-    border-top: 1px solid #ddd;
+    font-size: var(--text-base);
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--border);
 
     li {
       list-style: none;
       margin: 0;
       padding: 0;
-      color: #999;
 
       a {
         display: block;
-        padding: 5px 0;
-        height: auto !important;
-        overflow: hidden;
-        margin: 0;
-        border-bottom: 1px solid #ddd;
-        line-height: 16px;
-        padding-left: 24px;
-        background: url('../images/icons/page.png') 0 50% no-repeat;
+        padding: var(--space-2);
+        line-height: var(--line-height-body);
+        border-bottom: 1px solid var(--border);
+        text-decoration: none;
+        transition: background var(--transition);
       }
-
       a:hover {
-        background-color: #e9f5ff;
+        background: var(--surface-1);
+        text-decoration: underline;
       }
     }
   }
 
   .article-meta {
-    padding: 5px;
-    background: #fafafa;
+    padding: var(--space-2);
+    background: var(--surface-1);
   }
 }
 
-/* KB Landing */
-#kb {
-  margin: 2px 0;
-  padding: 5px;
-  overflow: hidden;
+/* Responsive */
+@media (max-width: 768px) {
+  #landing_page {
+    flex-direction: column;
 
-  > li {
-    padding: 10px;
-    height: auto !important;
-    overflow: hidden;
-    margin: 0;
-    background: url('../images/kb_category_bg.png') bottom left repeat-x;
-    border-bottom: 1px solid #ddd;
-    display: block;
-
-    h4 {
-      span {
-        color: #666;
-      }
-
-      a {
-        font-size: 14px;
-      }
+    > .main-content .search-form form {
+      flex-direction: column;
     }
 
-    > i {
-      display: block;
-      width: 32px;
-      height: 32px;
-      float: left;
-      margin-right: 6px;
-      background: url('../images/kb_large_folder.png') top left no-repeat;
-    }
-  }
-}
-
-.featured-category {
-  margin-top: 10px;
-  width: 49.7%;
-  display: inline-block;
-  box-sizing: border-box;
-  vertical-align: top;
-
-  .category-name {
-    display: inline-block;
-    font-weight: 400;
-    font-size: 120%;
-  }
-
-  i {
-    color: rgba(0, 174, 239, 0.8);
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
-    display: inline-block;
-    vertical-align: middle;
-  }
-}
-
-.article-headline {
-  margin-left: 34px;
-}
-
-.rtl .article-headline {
-  margin-left: 0;
-  margin-right: 34px;
-}
-
-.article-teaser {
-  font-size: 90%;
-  line-height: 1.5em;
-  height: 3em;
-  overflow: hidden;
-}
-
-.article-title {
-  font-weight: 500;
-}
-
-.faq-content .article-title {
-  font-size: 17pt;
-  margin-top: 15px;
-}
-
-/* KB Search */
-#kb-search {
-  padding: 10px 0;
-  overflow: hidden;
-
-  div {
-    clear: both;
-    overflow: hidden;
-    padding-top: 5px;
-  }
-
-  #query {
-    margin: 0;
-    display: inline-block;
-    float: left;
-    width: 200px;
-    margin-right: 5px;
-  }
-
-  #cid {
-    margin: 0;
-    display: inline-block;
-    float: left;
-    width: 200px;
-    margin-right: 5px;
-    position: relative;
-    top: 2px;
-  }
-
-  #topic-id {
-    margin: 0;
-    display: inline-block;
-    float: left;
-    width: 410px;
-  }
-
-  #searchSubmit {
-    margin: 0;
-    display: inline-block;
-    float: left;
-    position: relative;
-    top: 2px;
-  }
-
-  #breadcrumbs {
-    color: #333;
-    margin-bottom: 15px;
-
-    a {
-      color: #555;
+    > .main-content .search-form .search {
+      width: 100%;
     }
   }
 }

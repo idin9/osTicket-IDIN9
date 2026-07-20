@@ -1,13 +1,33 @@
-osTicket
-========
+osTicket-IDIN9
+=============
 <a href="https://osticket.com"><img height="80px" width="80px" src="images/favicon.png"
 align="left" hspace="10" vspace="6"></a>
+
+**osTicket-IDIN9** is a feature fork of osTicket with a modern UX/UI upgrade,
+design token system, extended API, and WCAG 2.2 accessibility enhancements.
+
+Modern theme documentation: [`docs/ui-upgrade/MODERN_THEME.md`](docs/ui-upgrade/MODERN_THEME.md) ·
+Design system reference: [`DESIGN.md`](DESIGN.md) · Upgrade plan: [`docs/ui-upgrade/PLAN.md`](docs/ui-upgrade/PLAN.md)
+
+---
 
 **osTicket** is a widely-used open source support ticket system. It seamlessly
 integrates inquiries created via email, phone and web-based forms into a
 simple easy-to-use multi-user web interface. Manage, organize and archive
 all your support requests and responses in one place while providing your
 customers with accountability and responsiveness they deserve.
+
+### Modern Theme Quick Start
+
+**Staff Panel**: append `?ui=modern` to any SCP page, or enable globally in
+Admin Panel → Settings → System → *Enable modern responsive interface*.
+
+**Client Portal**: the modern responsive theme is enabled by default.
+
+See the [full usage guide](docs/ui-upgrade/MODERN_THEME.md) for details,
+including customization and accessibility notes.
+
+---
 
 How osTicket works for you
 --------------------------

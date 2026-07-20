@@ -36,6 +36,7 @@ if (osTicket::is_ie())
     <meta name="keywords" content="osTicket, Customer support system, support ticket system">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/osticket.css" media="screen">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/tokens.css" media="screen">
     <link rel="stylesheet" href="<?php echo ASSETS_PATH; ?>css/theme.css" media="screen">
     <link rel="stylesheet" href="<?php echo ASSETS_PATH; ?>css/print.css" media="print">
     <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/typeahead.css"
@@ -88,6 +89,7 @@ if (osTicket::is_ie())
     ?>
 </head>
 <body>
+<nav id="skip-link"><a href="#content"><?php echo __('Skip to content'); ?></a></nav>
     <div id="container">
         <?php
         if($ost->getError())
@@ -97,7 +99,7 @@ if (osTicket::is_ie())
         elseif($ost->getNotice())
             echo sprintf('<div class="notice_bar">%s</div>', $ost->getNotice());
         ?>
-        <div id="header">
+        <header id="header">
             <div class="pull-right flush-right">
             <p>
              <?php
@@ -147,9 +149,11 @@ if (($all_langs = Internationalization::getConfiguredSystemLanguages())
                 echo $ost->getConfig()->getTitle(); ?>">
             </a>
         </div>
+        </header>
         <div class="clear"></div>
         <?php
         if($nav){ ?>
+        <nav aria-label="<?php echo __('Main navigation'); ?>">
         <ul id="nav" class="flush-left">
             <?php
             if($nav && ($navs=$nav->getNavLinks()) && is_array($navs)){
@@ -158,17 +162,18 @@ if (($all_langs = Internationalization::getConfiguredSystemLanguages())
                 }
             } ?>
         </ul>
+        </nav>
         <?php
         }else{ ?>
          <hr>
         <?php
         } ?>
-        <div id="content">
+        <main id="content">
 
          <?php if($errors['err']) { ?>
-            <div id="msg_error"><?php echo $errors['err']; ?></div>
+            <div id="msg_error" role="alert"><?php echo $errors['err']; ?></div>
          <?php }elseif($msg) { ?>
-            <div id="msg_notice"><?php echo $msg; ?></div>
+            <div id="msg_notice" role="status"><?php echo $msg; ?></div>
          <?php }elseif($warn) { ?>
-            <div id="msg_warning"><?php echo $warn; ?></div>
+            <div id="msg_warning" role="alert"><?php echo $warn; ?></div>
          <?php } ?>
