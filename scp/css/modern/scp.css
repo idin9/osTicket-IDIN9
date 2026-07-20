@@ -193,18 +193,19 @@ html, body {
 
 #sub_nav {
   display: flex !important;
-  flex-direction: column !important;
-  padding: var(--space-2) 0 !important;
-  background: var(--surface-0) !important;
-  border: 1px solid var(--border) !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  gap: var(--space-1) !important;
+  padding: var(--space-2) var(--space-5) 0 !important;
+  background: var(--nav-bg) !important;
+  border-bottom: 1px solid var(--border) !important;
   border-top: none !important;
-  box-shadow: var(--shadow-sm) !important;
-  min-width: 200px !important;
+  box-shadow: none !important;
 }
 
 #sub_nav > li,
 #sub_nav .active {
-  display: block !important;
+  display: inline-flex !important;
   border: none !important;
   background: transparent !important;
   padding: 0 !important;
@@ -213,20 +214,19 @@ html, body {
 
 #sub_nav > li > a,
 #sub_nav a {
-  display: flex !important;
+  display: inline-flex !important;
   align-items: center !important;
   min-height: var(--target-min) !important;
-  padding: var(--space-2) var(--space-4) !important;
+  padding: var(--space-1) var(--space-3) !important;
   font-size: var(--text-sm) !important;
   font-weight: 500 !important;
   color: var(--text-secondary) !important;
-  border-radius: 0 !important;
+  border-radius: var(--radius-md) !important;
   background: transparent !important;
   border: none !important;
-  border-left: 3px solid transparent !important;
   box-shadow: none !important;
   text-decoration: none !important;
-  transition: background var(--transition), color var(--transition), border-color var(--transition) !important;
+  transition: background var(--transition), color var(--transition) !important;
 }
 
 #sub_nav > li > a:hover,
@@ -241,7 +241,6 @@ html, body {
   background: var(--accent-subtle) !important;
   color: var(--accent) !important;
   font-weight: 600 !important;
-  border-left-color: var(--accent) !important;
   box-shadow: none !important;
 }
 
