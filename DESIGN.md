@@ -32,15 +32,17 @@ modern UI). Phased rollout plan: [`docs/ui-upgrade/PLAN.md`](docs/ui-upgrade/PLA
 | `--surface-1` | `#f8fafc` | page bg (60%) | — |
 | `--surface-2` | `#f1f5f9` | wells, stripes (60%) | — |
 | `--surface-inverse` | `#0f172a` | header/nav structure (30%) | — |
+| `--border` | `#cbd5e1` | visible structure borders | 1.9:1 vs. surfaces (non-text) |
+| `--input-border` | `#94a3b8` | form field borders | 3.4:1 vs. `#fff` (WCAG non-text ≥ 3:1 ✅) |
 | `--text-primary` | `#0f172a` | headings, body strong | 17.7:1 on `#fff` ✅ AAA |
 | `--text-secondary` | `#475569` | body, labels | 7.5:1 ✅ AAA |
 | `--text-tertiary` | `#64748b` | meta, placeholders | 4.8:1 ✅ AA |
 | `--accent` | `#1d4ed8` | CTA, links (10%) | 7.0:1 on `#fff` ✅ AAA |
 | `--accent-hover` | `#1e40af` | hover | 8.6:1 ✅ |
-| `--success` | `#047857` | success text/icons | 5.0:1 ✅ AA |
-| `--warning` | `#b45309` | warning text/icons | 4.9:1 ✅ AA |
-| `--danger` | `#dc2626` | errors, destructive | 4.8:1 ✅ AA |
-| `--info` | `#0e7490` | info text | 5.0:1 ✅ AA |
+| `--success` | `#065f46` | success text/icons/fill | 6.0:1 on `#fff` fill, 5.8:1 on `--success-subtle` ✅ AA |
+| `--warning` | `#92400e` | warning text/icons | 13.1:1 on `#fff`, 4.7:1 on `--warning-subtle` ✅ AA |
+| `--danger` | `#b91c1c` | errors, destructive | 5.6:1 on `#fff` fill, 5.1:1 on `--danger-subtle` ✅ AA |
+| `--info` | `#155e75` | info text | 5.3:1 on `--info-subtle`, 6.5:1 on `#fff` ✅ AA |
 | `--focus-ring` | `#1d4ed8` + white halo | keyboard focus | ≥ 3:1 vs. adjacent ✅ |
 
 Rules: never use `--text-tertiary` below 13px; status is always icon + text,

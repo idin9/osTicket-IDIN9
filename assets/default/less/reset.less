@@ -75,6 +75,18 @@ b, strong { font-weight: 600 }
 small { font-size: 85% }
 blockquote { margin: 1em 40px }
 
+/* Consistent select dropdown */
+select {
+  min-height: var(--target-min);
+  padding-right: var(--space-8);
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23475569' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-3) center;
+  background-size: 12px;
+}
+
 hr {
   display: block;
   height: 1px;

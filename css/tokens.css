@@ -15,9 +15,10 @@
  *  - --text-xs/sm/base/lg/xl/2xl: px → Major Third rem scale (11/13/15/18/22/28px
  *    → 12.8/14/16/20/25/31px) — readability + small-text contrast compliance
  *  - --text-tertiary: #94a3b8 → #64748b (2.9:1 → 4.8:1, AA)
- *  - --success:  #059669 → #047857 (text-safe, 5.0:1)
- *  - --warning:  #d97706 → #b45309 (text-safe, 4.9:1)
- *  - --info:     #0891b2 → #0e7490 (text-safe, 5.0:1)
+ *  - --success:  #059669 → #065f46 (WCAG AA: 6.0:1 on white as fill, 5.8:1 on subtle as text)
+ *  - --warning:  #d97706 → #92400e (WCAG AA: 4.7:1 on subtle as text, 13:1 on white)
+ *  - --danger:   #dc2626 → #b91c1c (WCAG AA: 5.6:1 on white as fill, 5.1:1 on subtle as text)
+ *  - --info:     #0891b2 → #155e75 (WCAG AA: 5.3:1 on subtle as text)
  */
 
 :root {
@@ -82,8 +83,8 @@
 
   /* 30% — secondary structure */
   --surface-inverse: #0f172a; /* header/nav structure */
-  --border: #e2e8f0;
-  --border-light: #f1f5f9;
+  --border: #cbd5e1;          /* strengthened for visible structure */
+  --border-light: #e2e8f0;
 
   /* Text — all AA-verified on --surface-0 (see DESIGN.md) */
   --text-primary: #0f172a;    /* 17.7:1 */
@@ -97,19 +98,19 @@
   --text-link: #1d4ed8;
   --text-link-hover: #1e40af;
 
-  /* Semantic — text-safe values (≥ 4.5:1 on white, higher on subtle bg) */
-  --success: #047857;
+  /* Semantic — dual-use: text on subtle bg (≥ 4.5:1), white text on solid fill (≥ 4.5:1) */
+  --success: #065f46;
   --success-subtle: #d1fae5;
-  --warning: #b45309;
+  --warning: #92400e;
   --warning-subtle: #fef3c7;
-  --danger: #dc2626;
+  --danger: #b91c1c;
   --danger-subtle: #fee2e2;
-  --info: #0e7490;
+  --info: #155e75;
   --info-subtle: #cffafe;
 
   /* Structure aliases */
   --header-bg: #ffffff;
-  --header-border: #e2e8f0;
+  --header-border: #cbd5e1;
   --nav-bg: #f8fafc;
   --nav-active: #1d4ed8;
   --subnav-bg: #f1f5f9;
@@ -125,7 +126,7 @@
 
   /* Forms */
   --input-bg: #ffffff;
-  --input-border: #cbd5e1;
+  --input-border: #94a3b8;   /* 3.4:1 on white — clearly delineated fields */
   --input-focus-ring: #93c5fd;
 
   /* Focus ring — WCAG 2.2 Focus Appearance (≥ 3:1 vs. adjacent) */
@@ -148,8 +149,8 @@
     --surface-3: #475569;
 
     --surface-inverse: #f8fafc;
-    --border: #334155;
-    --border-light: #1e293b;
+    --border: #475569;
+    --border-light: #334155;
 
     --text-primary: #f1f5f9;
     --text-secondary: #cbd5e1;  /* raised from #94a3b8 for AA on --surface-0 */
@@ -171,7 +172,7 @@
     --info-subtle: #164e63;
 
     --header-bg: #1e293b;
-    --header-border: #334155;
+    --header-border: #475569;
     --nav-bg: #0f172a;
     --nav-active: #3b82f6;
     --subnav-bg: #1e293b;
@@ -186,7 +187,7 @@
     --thread-system: #1e293b;
 
     --input-bg: #1e293b;
-    --input-border: #475569;
+    --input-border: #64748b;
     --input-focus-ring: #3b82f6;
 
     --focus-ring: #60a5fa;

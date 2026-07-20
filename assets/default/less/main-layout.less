@@ -71,7 +71,6 @@ body {
 #nav li a {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
   min-height: var(--target-min);
   padding: var(--space-1) var(--space-3);
   font-size: var(--text-sm);
@@ -80,8 +79,6 @@ body {
   text-decoration: none;
   border-radius: var(--radius-full);
   transition: background var(--transition), color var(--transition);
-  background-position: var(--space-3) 50%;
-  background-repeat: no-repeat;
 }
 #nav li a:hover,
 #nav li a.active {
@@ -89,16 +86,21 @@ body {
   color: var(--accent);
   text-decoration: none;
 }
+/* icon nav links — icon sits left of text */
+#nav li a.home,
+#nav li a.kb,
+#nav li a.new,
+#nav li a.status,
+#nav li a.tickets {
+  padding-left: 32px;
+  background-position: var(--space-3) 50%;
+  background-repeat: no-repeat;
+}
 #nav li a.home    { background-image: url('../images/icons/home.png') }
 #nav li a.kb      { background-image: url('../images/icons/kb.png') }
 #nav li a.new     { background-image: url('../images/icons/new.png') }
 #nav li a.status  { background-image: url('../images/icons/status.png') }
 #nav li a.tickets { background-image: url('../images/icons/tix.png') }
-
-#nav li a:not([class]) {
-  padding-left: var(--space-3);
-  background-image: none;
-}
 
 /* Content area */
 #content {
