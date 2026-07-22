@@ -191,12 +191,20 @@ html, body {
   color: var(--accent) !important;
 }
 
+#customQ_nav {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 #sub_nav {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: wrap !important;
   gap: var(--space-1) !important;
-  padding: var(--space-2) var(--space-5) 0 !important;
+  padding: var(--space-2) var(--space-5) var(--space-2) !important;
+  margin: 0 !important;
   background: var(--nav-bg) !important;
   border-bottom: 1px solid var(--border) !important;
   border-top: none !important;
@@ -275,7 +283,7 @@ span.action-button {
   padding: var(--space-2) var(--space-5);
   font-size: var(--text-base);
   font-weight: 600;
-  line-height: 1.4;
+  line-height: var(--line-height-body);
   border: 1px solid transparent;
   border-radius: var(--radius);
   cursor: pointer;
@@ -627,7 +635,7 @@ div.section-break {
 
 #basic_search {
   background: var(--surface-2);
-  margin: calc(-1 * var(--space-6)) calc(-1 * var(--space-6)) var(--space-5);
+  margin: 0 calc(-1 * var(--space-6)) var(--space-5);
   padding: var(--space-3) var(--space-4);
   border-bottom: 1px solid var(--border);
   box-shadow: none;

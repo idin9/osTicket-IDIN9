@@ -303,12 +303,12 @@ a:hover,
   font-size: var(--text-base);
   font-family: inherit;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: var(--line-height-body);
   text-align: center;
   text-decoration: none;
   color: #fff;
   background: var(--accent);
-  border: none;
+  border: 1px solid transparent;
   border-radius: var(--radius);
   cursor: pointer;
   transition: background var(--transition), box-shadow var(--transition);
@@ -851,6 +851,10 @@ body {
   flex: 1;
   min-height: var(--target-min);
   padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius);
+  background: var(--input-bg);
+  font-size: var(--text-base);
 }
 #landing_page > .main-content .search-form .button {
   flex-shrink: 0;
@@ -1254,7 +1258,7 @@ span.required {
   border-radius: var(--radius);
   background: var(--accent);
   color: #fff;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
   font-size: var(--text-base);
   font-weight: 600;
@@ -1313,7 +1317,7 @@ span.required {
 .buttons input[type="submit"] {
   background: var(--accent);
   color: #fff;
-  border: none;
+  border: 1px solid transparent;
 }
 .buttons input[type="submit"]:hover {
   background: var(--accent-hover);
@@ -1694,7 +1698,7 @@ img.avatar {
 #reply p[style*="center"] input[type="submit"] {
   background: var(--accent);
   color: #fff;
-  border: none;
+  border: 1px solid transparent;
 }
 #reply p[style*="center"] input[type="submit"]:hover {
   background: var(--accent-hover);
