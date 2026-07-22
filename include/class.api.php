@@ -85,6 +85,14 @@ class API {
         return ($this->ht['can_update_tickets']);
     }
 
+    function canReadFaq() {
+        return ($this->ht['can_read_faq']);
+    }
+
+    function canManageFaq() {
+        return ($this->ht['can_manage_faq']);
+    }
+
     function getStaffId() {
         return ($this->ht['staff_id']);
     }
@@ -152,6 +160,8 @@ class API {
             .',can_exec_cron='.db_input($vars['can_exec_cron'])
             .',can_read_tickets='.db_input($vars['can_read_tickets'])
             .',can_update_tickets='.db_input($vars['can_update_tickets'])
+            .',can_read_faq='.db_input($vars['can_read_faq'] ?? 0)
+            .',can_manage_faq='.db_input($vars['can_manage_faq'] ?? 0)
             .',staff_id='.db_input($vars['staff_id'] ?: 0)
             .',notes='.db_input(Format::sanitize($vars['notes']));
 

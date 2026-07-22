@@ -9,6 +9,8 @@ CREATE TABLE `%TABLE_PREFIX%api_key` (
   `can_exec_cron` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '1',
   `can_update_tickets` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '1',
   `can_read_tickets` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '1',
+  `can_read_faq` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
+  `can_manage_faq` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
   `staff_id` int(10) unsigned NOT NULL default '0',
   `notes` text,
   `updated` datetime NOT NULL,

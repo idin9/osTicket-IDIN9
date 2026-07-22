@@ -26,8 +26,23 @@ $dispatcher = patterns('',
         url_post("^/tickets/(?P<id>[A-Za-z0-9\-]+)/merge\.(?P<format>xml|json)$", array('api.tickets.php:TicketApiController','postMerge')),
         url('^/tasks/', patterns('',
                 url_post("^cron$", array('api.cron.php:CronApiController', 'execute'))
-         ))
-        );
+         )),
+        // KB (Knowledge Base) API endpoints
+        url('^/kb/', patterns('',
+            // FAQ endpoints
+            url_get("^faqs\.(?P<format>json|xml)$", array('api.kb.php:KbApiController', 'listFaqs')),
+            url_get("^faqs/(?P<id>\d+)\.(?P<format>json|xml)$", array('api.kb.php:KbApiController', 'readFaq')),
+            url_post("^faqs\.(?P<format>json|xml)$", array('api.kb.php:KbApiController', 'createFaq')),
+            url_post("^faqs/(?P<id>\d+)\.(?P<format>json|xml)$", array('api.kb.php:KbApiController', 'updateFaq')),
+            url_delete("^faqs/(?P<id>\d+)\.(?P<format>json|xml)$", array('api.kb.php:KbApiController', 'deleteFaq')),
+            // Category endpoints
+            url_get("^categories\.(?P<format>json|xml)$", array('api.kb.php:KbApiController', 'listCategories')),
+            url_get("^categories/(?P<id>\d+)\.(?P<format>json|xml)$", array('api.kb.php:KbApiController', 'readCategory')),
+            url_post("^categories\.(?P<format>json|xml)$", array('api.kb.php:KbApiController', 'createCategory')),
+            url_post("^categories/(?P<id>\d+)\.(?P<format>json|xml)$", array('api.kb.php:KbApiController', 'updateCategory')),
+            url_delete("^categories/(?P<id>\d+)\.(?P<format>json|xml)$", array('api.kb.php:KbApiController', 'deleteCategory')),
+        ))
+    );
 
 // Send api signal so backend can register endpoints
 Signal::send('api', $dispatcher);
