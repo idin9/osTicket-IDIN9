@@ -76,7 +76,7 @@ html, body {
 
 #nav {
   display: flex !important;
-  justify-content: flex-end !important;
+  justify-content: flex-start !important;
   gap: var(--space-2) !important;
   padding: var(--space-2) var(--space-5) 0 !important;
   background: var(--nav-bg) !important;
@@ -227,7 +227,7 @@ html, body {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: wrap !important;
-  justify-content: flex-end !important;
+  justify-content: flex-start !important;
   gap: var(--space-1) !important;
   padding: var(--space-2) var(--space-5) var(--space-2) !important;
   margin: 0 !important;
