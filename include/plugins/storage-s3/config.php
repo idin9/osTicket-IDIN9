@@ -270,6 +270,12 @@ class S3StoragePluginConfig extends PluginConfig {
                 $__('Endpoint URL is required for this provider'));
         }
 
+        // Check if AWS SDK is loaded
+        if (!class_exists('Aws\S3\S3Client')) {
+            $errors['err'] = $__('AWS SDK library is missing. Please run "php include/plugins/make.php hydrate storage-s3" on the server or use the built storage-s3.phar.');
+            return true;
+        }
+
         // Only attempt a connection if the basics are satisfied.
         if ($secret && !$errors) {
             $s3 = new Aws\S3\S3Client(self::buildClientParams($config, $secret));

@@ -5,8 +5,24 @@ use Aws\S3\Model\MultipartUpload\UploadBuilder;
 use Aws\S3\S3Client;
 use GuzzleHttp\Psr7\Stream;
 require_once INCLUDE_DIR . 'class.json.php';
-require_once 'lib/Aws/functions.php';
-require_once 'lib/GuzzleHttp/functions.php';
+
+// Register autoloader for plugin lib directory
+if (file_exists(__DIR__ . '/lib')) {
+    require_once INCLUDE_DIR . 'UniversalClassLoader.php';
+    if (class_exists('Symfony\Component\ClassLoader\UniversalClassLoader_osTicket')) {
+        $loader = new Symfony\Component\ClassLoader\UniversalClassLoader_osTicket();
+        $loader->registerNamespaceFallbacks(array(__DIR__ . '/lib'));
+        $loader->register();
+    }
+}
+
+// Load helper functions using explicit paths
+if (file_exists(__DIR__ . '/lib/Aws/functions.php')) {
+    require_once __DIR__ . '/lib/Aws/functions.php';
+}
+if (file_exists(__DIR__ . '/lib/GuzzleHttp/functions.php')) {
+    require_once __DIR__ . '/lib/GuzzleHttp/functions.php';
+}
 
 class S3StorageBackend extends FileStorageBackend {
     static $desc;
@@ -245,6 +261,11 @@ class S3StoragePlugin extends Plugin {
     }
 
     function bootstrap() {
+        if (!class_exists('Aws\S3\S3Client')) {
+            // AWS SDK not loaded (plugin unhydrated or missing lib/)
+            return false;
+        }
+
         require_once 'storage.php';
 
         //TODO: This needs to target a specific instance
@@ -258,10 +279,3 @@ class S3StoragePlugin extends Plugin {
         FileStorageBackend::register('3', 'S3StorageBackend');
     }
 }
-
-require_once INCLUDE_DIR . 'UniversalClassLoader.php';
-use Symfony\Component\ClassLoader\UniversalClassLoader_osTicket;
-$loader = new UniversalClassLoader_osTicket();
-$loader->registerNamespaceFallbacks(array(
-    dirname(__file__).'/lib'));
-$loader->register();
