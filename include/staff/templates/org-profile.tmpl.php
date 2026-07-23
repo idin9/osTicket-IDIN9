@@ -140,6 +140,15 @@ if ($ticket && $ticket->getOwnerId() == $user->getId())
                 </td>
             </tr>
             <tr>
+                <td width="180">
+                    <?php echo __('Representative Contact'); ?>:
+                </td>
+                <td>
+                    <input type="checkbox" name="collab-am-flag" value="1" <?php echo $info['collab-am-flag']?'checked="checked"':''; ?>>
+                    <?php echo __('Add Account Manager to all tickets from this organization'); ?>
+                </td>
+            </tr>
+            <tr>
                 <th colspan="2">
                     <?php echo __('Email Domain'); ?>
                     <i class="help-tip icon-question-sign" href="#email_domain"></i>

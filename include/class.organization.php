@@ -42,6 +42,7 @@ class OrganizationModel extends VerySimpleModel {
     const COLLAB_ALL_MEMBERS =      0x0001;
     const COLLAB_PRIMARY_CONTACT =  0x0002;
     const ASSIGN_AGENT_MANAGER =    0x0004;
+    const COLLAB_ACCOUNT_MANAGER =  0x0020;
 
     const SHARE_PRIMARY_CONTACT =   0x0008;
     const SHARE_EVERYBODY =         0x0010;
@@ -100,7 +101,7 @@ class OrganizationModel extends VerySimpleModel {
     }
 
     function autoAddCollabs() {
-        return $this->check(self::COLLAB_ALL_MEMBERS | self::COLLAB_PRIMARY_CONTACT);
+        return $this->check(self::COLLAB_ALL_MEMBERS | self::COLLAB_PRIMARY_CONTACT | self::COLLAB_ACCOUNT_MANAGER);
     }
 
     function autoAddPrimaryContactsAsCollabs() {
@@ -109,6 +110,10 @@ class OrganizationModel extends VerySimpleModel {
 
     function autoAddMembersAsCollabs() {
         return $this->check(self::COLLAB_ALL_MEMBERS);
+    }
+
+    function autoAddAccountManagerAsCollab() {
+        return $this->check(self::COLLAB_ACCOUNT_MANAGER);
     }
 
     function autoAssignAccountManager() {
@@ -236,6 +241,7 @@ implements TemplateVariable, Searchable {
         foreach (array(
                 'collab-all-flag' => Organization::COLLAB_ALL_MEMBERS,
                 'collab-pc-flag' => Organization::COLLAB_PRIMARY_CONTACT,
+                'collab-am-flag' => Organization::COLLAB_ACCOUNT_MANAGER,
                 'assign-am-flag' => Organization::ASSIGN_AGENT_MANAGER,
                 'sharing-primary' => Organization::SHARE_PRIMARY_CONTACT,
                 'sharing-all' => Organization::SHARE_EVERYBODY,
@@ -465,11 +471,14 @@ implements TemplateVariable, Searchable {
         if ($auditCollabPc = $this->autoFlagChanged($this->autoAddPrimaryContactsAsCollabs(),
             $vars['collab-pc-flag']))
                 $key = 'collab-pc-flag';
+        if ($auditCollabAm = $this->autoFlagChanged($this->autoAddAccountManagerAsCollab(),
+            $vars['collab-am-flag']))
+                $key = 'collab-am-flag';
         if ($auditAssignAm = $this->autoFlagChanged($this->autoAssignAccountManager(),
             $vars['assign-am-flag']))
                 $key = 'assign-am-flag';
 
-        if ($auditCollabAll || $auditCollabPc || $auditAssignAm) {
+        if ($auditCollabAll || $auditCollabPc || $auditCollabAm || $auditAssignAm) {
             $type = array('type' => 'edited', 'key' => $key);
             Signal::send('object.edited', $this, $type);
         }
@@ -504,6 +513,7 @@ implements TemplateVariable, Searchable {
         foreach (array(
                 'collab-all-flag' => Organization::COLLAB_ALL_MEMBERS,
                 'collab-pc-flag' => Organization::COLLAB_PRIMARY_CONTACT,
+                'collab-am-flag' => Organization::COLLAB_ACCOUNT_MANAGER,
                 'assign-am-flag' => Organization::ASSIGN_AGENT_MANAGER,
         ) as $ck=>$flag) {
             if ($vars[$ck])

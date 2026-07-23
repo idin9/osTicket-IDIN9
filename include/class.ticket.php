@@ -4417,6 +4417,7 @@ implements RestrictedAccess, Threadable, Searchable {
         if ($org && $org->autoAddCollabs()) {
             $pris = $org->autoAddPrimaryContactsAsCollabs();
             $members = $org->autoAddMembersAsCollabs();
+            $am = $org->autoAddAccountManagerAsCollab();
             $settings = array('isactive' => true);
             $collabs = array();
             foreach ($org->allMembers() as $u) {
@@ -4424,6 +4425,29 @@ implements RestrictedAccess, Threadable, Searchable {
                 if ($members || ($pris && $u->isPrimaryContact())) {
                     if ($c = $ticket->addCollaborator($u, $settings, $_errors)) {
                         $collabs[] = (string) $c;
+                    }
+                }
+            }
+            if ($am && ($mgr = $org->getAccountManager())) {
+                $_errors = array();
+                if ($mgr instanceof Staff) {
+                    if (!($mgrUser = User::lookup(array('email' => $mgr->getEmail())))) {
+                        $mgrUser = User::fromVars(array('name' => $mgr->getName(), 'email' => $mgr->getEmail()));
+                    }
+                    if ($mgrUser && ($c = $ticket->addCollaborator($mgrUser, $settings, $_errors))) {
+                        $collabs[] = (string) $c;
+                    }
+                } elseif ($mgr instanceof Team) {
+                    foreach ($mgr->getMembers() as $member) {
+                        $_errors = array();
+                        if ($member instanceof Staff) {
+                            if (!($mUser = User::lookup(array('email' => $member->getEmail())))) {
+                                $mUser = User::fromVars(array('name' => $member->getName(), 'email' => $member->getEmail()));
+                            }
+                            if ($mUser && ($c = $ticket->addCollaborator($mUser, $settings, $_errors))) {
+                                $collabs[] = (string) $c;
+                            }
+                        }
                     }
                 }
             }
