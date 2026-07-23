@@ -152,10 +152,11 @@ class S3StorageBackend extends FileStorageBackend {
         // expire based on ttl (if given), otherwise expire at midnight
         $now = time();
         $ttl = $ttl ? $now + $ttl : ($now + 86400 - ($now % 86400));
+        $key = $this->resolveExistingKey();
         Http::redirect($this->getSignedRequest(
             $this->client->getCommand('GetObject', [
-                'Bucket' => static::$config['bucket'],
-                'Key'    => self::getKey(),
+                'Bucket' => $this->getBucket(),
+                'Key'    => $key,
                 'ResponseContentDisposition' => sprintf("%s; %s;",
                     $disposition,
                     Http::getDispositionFilename($this->meta->getName())),
@@ -164,17 +165,22 @@ class S3StorageBackend extends FileStorageBackend {
     }
 
     function unlink() {
-        try {
-            $this->client->deleteObject(array(
-                'Bucket' => static::$config['bucket'],
-                'Key'    => self::getKey()
-            ));
-            return true;
+        $keys = $this->getCandidateKeys();
+        $bucket = $this->getBucket();
+        $success = false;
+        foreach ($keys as $key) {
+            try {
+                $this->client->deleteObject(array(
+                    'Bucket' => $bucket,
+                    'Key'    => $key
+                ));
+                $success = true;
+            }
+            catch (S3Exception $e) {
+                // Ignore if key was not found under one candidate
+            }
         }
-        catch (S3Exception $e) {
-            throw new IOException('Unable to remove object: '
-                . (string) $e);
-        }
+        return $success || true;
     }
 
     // Adapted from Aws\S3\StreamWrapper
@@ -213,21 +219,91 @@ class S3StorageBackend extends FileStorageBackend {
         $this->body = new Stream(fopen('php://temp', 'r+'));
     }
 
+    /**
+     * Get bucket name from saved file attrs or fallback to current config
+     */
+    function getBucket() {
+        $attrs = JsonDataParser::parse($this->meta->getAttrs());
+        return ($attrs && isset($attrs['bucket']) && $attrs['bucket'])
+            ? $attrs['bucket']
+            : static::$config['bucket'];
+    }
+
+    /**
+     * Candidate S3 keys to try when retrieving or operating on a file.
+     * Handles key migration, with/without folder prefix, and trim.
+     */
+    function getCandidateKeys($create=false) {
+        if ($create)
+            return array(self::getKey(true));
+
+        $rawKey = $this->meta->getKey();
+        $keys = array();
+
+        // Primary key from saved file attrs
+        $primaryKey = $this->getKey(false);
+        if ($primaryKey)
+            $keys[] = $primaryKey;
+
+        // Candidate using current configured plugin folder
+        $configFolder = trim(static::$config['folder'] ?? '', '/');
+        if ($configFolder)
+            $keys[] = sprintf('%s/%s', $configFolder, $rawKey);
+
+        // Candidate at root (no folder prefix)
+        $keys[] = $rawKey;
+
+        return array_values(array_unique(array_filter($keys)));
+    }
+
+    /**
+     * Check candidates in Wasabi/S3 to locate existing key
+     */
+    function resolveExistingKey() {
+        $candidateKeys = $this->getCandidateKeys();
+        if (count($candidateKeys) <= 1)
+            return $candidateKeys[0] ?? $this->meta->getKey();
+
+        $bucket = $this->getBucket();
+        foreach ($candidateKeys as $key) {
+            try {
+                if ($this->client->doesObjectExist($bucket, $key))
+                    return $key;
+            } catch (Exception $e) {
+                continue;
+            }
+        }
+
+        return $candidateKeys[0];
+    }
+
     protected function getBody($stream=false) {
-        $params = array(
-            'Bucket' => static::$config['bucket'],
-            'Key'    => self::getKey(),
-        );
+        $candidateKeys = $this->getCandidateKeys();
+        $bucket = $this->getBucket();
+        $lastException = null;
 
-        $command = $this->client->getCommand('GetObject', $params);
-        $command['@http']['stream'] = $stream;
-        $result = $this->client->execute($command);
-        $this->body = $result['Body'];
+        foreach ($candidateKeys as $key) {
+            try {
+                $params = array(
+                    'Bucket' => $bucket,
+                    'Key'    => $key,
+                );
 
-        // Wrap the body in a caching entity body if seeking is allowed
-        //if ($this->getOption('seekable') && !$this->body->isSeekable()) {
-        //    $this->body = new CachingStream($this->body);
-        //}
+                $command = $this->client->getCommand('GetObject', $params);
+                $command['@http']['stream'] = $stream;
+                $result = $this->client->execute($command);
+                $this->body = $result['Body'];
+                return $this->body;
+            } catch (Aws\S3\Exception\NoSuchKeyException $e) {
+                $lastException = $e;
+            } catch (Exception $e) {
+                $lastException = $e;
+            }
+        }
+
+        if ($lastException)
+            throw $lastException;
+
         return $this->body;
     }
 
@@ -235,16 +311,18 @@ class S3StorageBackend extends FileStorageBackend {
         $attrs = $create ? self::getAttrs() : $this->meta->getAttrs();
         $attrs = JsonDataParser::parse($attrs);
 
-        $key = ($attrs && $attrs['folder']) ?
-            sprintf('%s/%s', $attrs['folder'], $this->meta->getKey()) :
-            $this->meta->getKey();
+        $folder = '';
+        if ($attrs && isset($attrs['folder']) && $attrs['folder']) {
+            $folder = trim($attrs['folder'], '/');
+        }
 
-        return $key;
+        $rawKey = $this->meta->getKey();
+        return $folder ? sprintf('%s/%s', $folder, $rawKey) : $rawKey;
     }
 
     function getAttrs() {
         $bucket = static::$config['bucket'];
-        $folder = (static::$config['folder'] ? static::$config['folder'] : '');
+        $folder = trim(static::$config['folder'] ?? '', '/');
         $attr = JsonDataEncoder::encode(array('bucket' => $bucket, 'folder' => $folder));
 
         return $attr;

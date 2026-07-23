@@ -96,6 +96,10 @@ if (osTicket::is_ie())
         echo sprintf('<div id="notice_bar">%s</div>', $ost->getNotice());
     ?>
     <header id="header">
+        <a href="<?php echo ROOT_PATH ?>scp/index.php" class="no-pjax" id="logo">
+            <span class="valign-helper"></span>
+            <img src="<?php echo ROOT_PATH ?>scp/logo.php?<?php echo strtotime($cfg->lastModified('staff_logo_id')); ?>" alt="osTicket &mdash; <?php echo __('Customer Support System'); ?>"/>
+        </a>
         <p id="info" class="pull-right no-pjax"><?php echo sprintf(__('Welcome, %s.'), '<strong>'.$thisstaff->getFirstName().'</strong>'); ?>
            <?php
             if($thisstaff->isAdmin() && !defined('ADMINPAGE')) { ?>
@@ -106,10 +110,6 @@ if (osTicket::is_ie())
             | <a href="<?php echo ROOT_PATH ?>scp/profile.php"><?php echo __('Profile'); ?></a>
             | <a href="<?php echo ROOT_PATH ?>scp/logout.php?auth=<?php echo $ost->getLinkToken(); ?>" class="no-pjax"><?php echo __('Log Out'); ?></a>
         </p>
-        <a href="<?php echo ROOT_PATH ?>scp/index.php" class="no-pjax" id="logo">
-            <span class="valign-helper"></span>
-            <img src="<?php echo ROOT_PATH ?>scp/logo.php?<?php echo strtotime($cfg->lastModified('staff_logo_id')); ?>" alt="osTicket &mdash; <?php echo __('Customer Support System'); ?>"/>
-        </a>
     </header>
     <button class="nav-toggle" aria-label="<?php echo __('Toggle navigation'); ?>" aria-expanded="false">☰</button>
     <div id="pjax-container" class="<?php if ($_POST) echo 'no-pjax'; ?>">
