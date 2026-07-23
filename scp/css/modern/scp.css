@@ -196,6 +196,25 @@ html, body {
   width: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
+  /* Override jb-overflowmenu plugin's fixed 35px height (classic .jb-overflowmenu).
+     Modern tabs are 44px tall, so the container must size to content. */
+  height: auto !important;
+  min-height: 0 !important;
+}
+
+/* The jb-overflowmenu plugin adds .jb-overflowmenu-menu-primary +
+   .jb-overflowmenu-helper-postion to #sub_nav, forcing position:absolute and
+   height:30px (classic). With 44px tabs that overflows onto #content.
+   Release it back into normal flow so the container wraps the tabs. */
+#sub_nav.jb-overflowmenu-menu-primary,
+#sub_nav.jb-overflowmenu-helper-postion {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  height: auto !important;
+  overflow: visible !important;
 }
 
 #sub_nav {
