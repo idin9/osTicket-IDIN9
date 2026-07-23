@@ -1,8 +1,27 @@
 <?php
 if(!defined('OSTADMININC') || !$thisstaff || !$thisstaff->isAdmin()) die('Access Denied');
 
-$commit = GIT_VERSION != '$git' ? GIT_VERSION : (
-    @shell_exec('git rev-parse HEAD | cut -b 1-8') ?: '?');
+$commit = '?';
+if (GIT_VERSION != '$git') {
+    $commit = GIT_VERSION;
+} elseif (function_exists('shell_exec')) {
+    $commit = @shell_exec('git rev-parse HEAD | cut -b 1-8') ?: '?';
+} else {
+    // Fallback when shell_exec is disabled in php.ini
+    $git_dir = ROOT_DIR . '.git';
+    if (is_dir($git_dir) && is_readable($git_dir . '/HEAD')) {
+        $head = trim((string)@file_get_contents($git_dir . '/HEAD'));
+        if (strpos($head, 'ref: ') === 0) {
+            $ref_file = $git_dir . '/' . trim(substr($head, 5));
+            if (is_readable($ref_file)) {
+                $hash = trim((string)@file_get_contents($ref_file));
+                if ($hash) $commit = substr($hash, 0, 8);
+            }
+        } elseif (strlen($head) >= 8 && ctype_xdigit(substr($head, 0, 8))) {
+            $commit = substr($head, 0, 8);
+        }
+    }
+}
 
 $extensions = array(
         'gd' => array(
