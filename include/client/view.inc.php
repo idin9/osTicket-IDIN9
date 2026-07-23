@@ -121,7 +121,7 @@ foreach (DynamicFormEntry::forTicket($ticket->getId()) as $i=>$form) {
 foreach ($sections as $i=>$answers) {
     ?>
         <table class="custom-data" cellspacing="0" cellpadding="4" width="100%" border="0">
-        <tr><td colspan="2" class="headline flush-left"><?php echo $forms[$i]; ?></th></tr>
+        <tr><td colspan="2" class="headline flush-left"><?php echo $forms[$i]; ?></td></tr>
 <?php foreach ($answers as $A) {
     list($v, $a) = $A; ?>
         <tr>
@@ -155,11 +155,11 @@ if ($blockReply = $ticket->isChild() && $ticket->getMergeType() != 'visual')
 
 <div class="clear" style="padding-bottom:10px;"></div>
 <?php if($errors['err']) { ?>
-    <div id="msg_error"><?php echo $errors['err']; ?></div>
+    <div id="msg_error" role="alert"><?php echo $errors['err']; ?></div>
 <?php }elseif($msg) { ?>
-    <div id="msg_notice"><?php echo $msg; ?></div>
+    <div id="msg_notice" role="status"><?php echo $msg; ?></div>
 <?php }elseif($warn) { ?>
-    <div id="msg_warning"><?php echo $warn; ?></div>
+    <div id="msg_warning" role="alert"><?php echo $warn; ?></div>
 <?php }
 if ((!$ticket->isClosed() || $ticket->isReopenable()) && !$blockReply) { ?>
 <form id="reply" action="tickets.php?id=<?php echo $ticket->getId();

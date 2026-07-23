@@ -245,20 +245,20 @@ if ($closedTickets) {?>
             $thisclient->getId() != $T['user_id'] ? $isCollab = true : $isCollab = false;
             ?>
             <tr id="<?php echo $T['ticket_id']; ?>">
-                <td>
+                <td data-label="<?php echo __('Ticket #'); ?>">
                 <a class="Icon <?php echo strtolower($T['source']); ?>Ticket" title="<?php echo $T['user__default_email__address']; ?>"
                     href="tickets.php?id=<?php echo $T['ticket_id']; ?>"><?php echo $ticketNumber; ?></a>
                 </td>
-                <td><?php echo Format::date($T['created']); ?></td>
-                <td><?php echo $status; ?></td>
-                <td>
+                <td data-label="<?php echo __('Create Date'); ?>"><?php echo Format::date($T['created']); ?></td>
+                <td data-label="<?php echo __('Status'); ?>"><?php echo $status; ?></td>
+                <td data-label="<?php echo __('Subject'); ?>">
                   <?php if ($isCollab) {?>
                     <div style="max-height: 1.2em; max-width: 320px;" class="link truncate" href="tickets.php?id=<?php echo $T['ticket_id']; ?>"><i class="icon-group"></i> <?php echo $subject; ?></div>
                   <?php } else {?>
                     <div style="max-height: 1.2em; max-width: 320px;" class="link truncate" href="tickets.php?id=<?php echo $T['ticket_id']; ?>"><?php echo $subject; ?></div>
                     <?php } ?>
                 </td>
-                <td><span class="truncate"><?php echo $dept; ?></span></td>
+                <td data-label="<?php echo __('Department'); ?>"><span class="truncate"><?php echo $dept; ?></span></td>
             </tr>
         <?php
         }

@@ -100,6 +100,12 @@ if (osTicket::is_ie())
             echo sprintf('<div class="notice_bar">%s</div>', $ost->getNotice());
         ?>
         <header id="header">
+            <a class="pull-left" id="logo" href="<?php echo ROOT_PATH; ?>index.php"
+            title="<?php echo __('Support Center'); ?>">
+                <span class="valign-helper"></span>
+                <img src="<?php echo ROOT_PATH; ?>logo.php" border=0 alt="<?php
+                echo $ost->getConfig()->getTitle(); ?>">
+            </a>
             <div class="pull-right flush-right">
             <p>
              <?php
@@ -142,13 +148,11 @@ if (($all_langs = Internationalization::getConfiguredSystemLanguages())
 } ?>
             </p>
             </div>
-            <a class="pull-left" id="logo" href="<?php echo ROOT_PATH; ?>index.php"
-            title="<?php echo __('Support Center'); ?>">
-                <span class="valign-helper"></span>
-                <img src="<?php echo ROOT_PATH; ?>logo.php" border=0 alt="<?php
-                echo $ost->getConfig()->getTitle(); ?>">
-            </a>
-        </div>
+            <?php if($nav) { ?>
+            <button class="client-nav-toggle" aria-label="<?php echo __('Toggle navigation'); ?>" aria-expanded="false" onclick="var n=document.getElementById('nav');if(n){n.classList.toggle('open');this.setAttribute('aria-expanded',n.classList.contains('open'));}">
+                <i class="icon-reorder"></i>
+            </button>
+            <?php } ?>
         </header>
         <div class="clear"></div>
         <?php
@@ -157,8 +161,11 @@ if (($all_langs = Internationalization::getConfiguredSystemLanguages())
         <ul id="nav" class="flush-left">
             <?php
             if($nav && ($navs=$nav->getNavLinks()) && is_array($navs)){
-                foreach($navs as $name =>$nav) {
-                    echo sprintf('<li><a class="%s %s" href="%s">%s</a></li>%s',$nav['active']?'active':'',$name,(ROOT_PATH.$nav['href']),$nav['desc'],"\n");
+                foreach($navs as $name =>$navItem) {
+                    $activeClass = $navItem['active'] ? 'active' : '';
+                    $ariaCurrent = $navItem['active'] ? 'aria-current="page"' : '';
+                    echo sprintf('<li><a class="%s %s" href="%s" %s>%s</a></li>%s',
+                        $activeClass, $name, (ROOT_PATH.$navItem['href']), $ariaCurrent, $navItem['desc'], "\n");
                 }
             } ?>
         </ul>

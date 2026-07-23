@@ -18,6 +18,15 @@ a:hover, .link:hover {
 }
 .link { cursor: pointer }
 
+/* WCAG 2.2 — Focus Appearance (2.4.13) global focus ring */
+:focus-visible {
+  outline: 3px solid var(--accent) !important;
+  outline-offset: 2px !important;
+}
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+  border-radius: var(--radius-sm);
+}
+
 /* Helpers */
 .centered { text-align: center }
 .clear { clear: both }
@@ -285,23 +294,26 @@ table.custom-data .headline {
   background: var(--surface-0);
 }
 
-/* Row/Grid */
+/* Row/Grid — Modern Flexbox layout */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-bottom: var(--space-4);
+}
 .span4 {
-  display: inline-block;
-  width: 29.5%;
-  margin: 0 1%;
-  vertical-align: top;
+  flex: 0 0 calc(33.333% - var(--space-3));
+  min-width: 260px;
 }
 .span8 {
-  display: inline-block;
-  width: 66%;
-  margin: 0 1%;
-  vertical-align: top;
+  flex: 1 1 calc(66.666% - var(--space-3));
+  min-width: 300px;
 }
 
 @media (max-width: 768px) {
   .span4,
   .span8 {
+    flex: 1 1 100%;
     width: 100%;
     margin: 0 0 var(--space-4);
   }

@@ -9,7 +9,7 @@ html, body {
 
 #container {
   width: 95%;
-  max-width: 1200px;
+  max-width: var(--content-max, 1600px);
   margin: 0 auto 20px;
   position: relative;
 }
@@ -672,7 +672,7 @@ div.section-break {
 .sticky.bar.fixed {
   position: fixed;
   width: 100% !important;
-  max-width: 1200px;
+  max-width: var(--content-max, 1600px);
   box-shadow: var(--shadow);
   padding: var(--space-2) var(--space-5);
   box-sizing: border-box;

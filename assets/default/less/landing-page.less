@@ -1,8 +1,7 @@
-/* Landing Page — Z-pattern: search (center) → two CTAs (Hick's Law) → KB articles */
+/* Landing Page — Modern flex/grid layout with spacious main content */
 
 #landing_page {
   display: flex;
-  flex-direction: row-reverse;
   gap: var(--space-6);
   align-items: flex-start;
 
@@ -17,21 +16,133 @@
       form {
         display: flex;
         gap: var(--space-2);
-        max-width: 600px;
+        max-width: 100%;
       }
 
       .search {
         flex: 1;
         min-height: var(--target-min);
-        padding: var(--space-2) var(--space-4);
+        padding: var(--space-3) var(--space-4);
         border: 1px solid var(--input-border);
         border-radius: var(--radius);
         background: var(--input-bg);
         font-size: var(--text-base);
+        transition: border-color var(--transition), box-shadow var(--transition);
+
+        &:focus {
+          border-color: var(--accent);
+          box-shadow: 0 0 0 3px var(--input-focus-ring);
+          outline: none;
+        }
       }
 
       .button {
         flex-shrink: 0;
+        padding: var(--space-2) var(--space-6);
+        font-weight: 600;
+      }
+    }
+
+    .thread-body {
+      line-height: var(--line-height-body);
+      font-size: var(--text-base);
+      color: var(--text-primary);
+      margin-bottom: var(--space-6);
+
+      h1 {
+        font-size: var(--text-3xl);
+        font-weight: 700;
+        margin-bottom: var(--space-4);
+        color: var(--text-primary);
+      }
+      p {
+        margin-bottom: var(--space-4);
+        color: var(--text-secondary);
+      }
+    }
+  }
+
+  > .sidebar {
+    width: 320px;
+    flex-shrink: 0;
+  }
+}
+
+/* Featured KB Articles Sub-Section (inside .main-content) */
+.featured-kb-section {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-light);
+
+  h2 {
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .featured-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .featured-category.front-page {
+    padding: var(--space-4);
+    background: var(--surface-0);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+
+    &:hover {
+      box-shadow: var(--shadow);
+      border-color: var(--accent);
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      margin-bottom: var(--space-3);
+      padding-bottom: var(--space-2);
+      border-bottom: 1px solid var(--border-light);
+
+      i {
+        color: var(--accent);
+        font-size: var(--text-xl);
+      }
+
+      .category-name {
+        font-size: var(--text-lg);
+        font-weight: 600;
+        color: var(--text-primary);
+      }
+    }
+
+    .article-headline {
+      margin-bottom: var(--space-3);
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      .article-title a {
+        font-weight: 500;
+        font-size: var(--text-base);
+        color: var(--text-link);
+        text-decoration: underline;
+
+        &:hover {
+          color: var(--text-link-hover);
+        }
+      }
+
+      .article-teaser {
+        font-size: var(--text-sm);
+        color: var(--text-secondary);
+        margin-top: var(--space-1);
+        line-height: var(--line-height-body);
       }
     }
   }
@@ -39,40 +150,56 @@
 
 /* Two CTAs — card-style, 44px targets (Fitts's / Hick's) */
 .front-page-button {
-  padding: var(--space-4);
+  padding: var(--space-5);
   background: var(--surface-0);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-sm);
   margin-bottom: var(--space-4);
-  min-width: 180px;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent);
+  }
 
   p {
     margin: 0;
+    color: var(--text-secondary);
+    font-size: var(--text-sm);
+    line-height: var(--line-height-body);
   }
 
   p + p {
-    margin-top: var(--space-3);
+    margin-top: var(--space-4);
   }
 
   .button {
     display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
     min-height: var(--target-min);
+    font-size: var(--text-base);
+    font-weight: 600;
   }
 }
 
 /* FAQ list on landing */
 #faq {
   clear: both;
-  margin: var(--space-4) 0;
+  margin: var(--space-6) 0;
   padding: 0;
 
   ol {
     font-size: var(--text-base);
     margin: 0;
     padding: 0;
-    border-top: 1px solid var(--border);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--surface-0);
 
     li {
       list-style: none;
@@ -81,22 +208,30 @@
 
       a {
         display: block;
-        padding: var(--space-2);
+        padding: var(--space-3) var(--space-4);
         line-height: var(--line-height-body);
-        border-bottom: 1px solid var(--border);
+        border-bottom: 1px solid var(--border-light);
         text-decoration: none;
+        color: var(--text-primary);
         transition: background var(--transition);
+
+        &:hover {
+          background: var(--surface-1);
+          color: var(--text-link);
+        }
       }
-      a:hover {
-        background: var(--surface-1);
-        text-decoration: underline;
+
+      &:last-child a {
+        border-bottom: none;
       }
     }
   }
 
   .article-meta {
-    padding: var(--space-2);
+    padding: var(--space-2) var(--space-4);
     background: var(--surface-1);
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
   }
 }
 
@@ -104,6 +239,10 @@
 @media (max-width: 768px) {
   #landing_page {
     flex-direction: column;
+
+    > .sidebar {
+      width: 100%;
+    }
 
     > .main-content .search-form form {
       flex-direction: column;

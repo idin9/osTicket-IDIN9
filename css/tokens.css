@@ -66,7 +66,7 @@
   --transition: 150ms ease;
 
   /* ---- Layout ---- */
-  --content-max: 1200px;
+  --content-max: 1600px;
   --bp-mobile: 480px;
   --bp-tablet: 768px;
   --bp-desktop: 1024px;

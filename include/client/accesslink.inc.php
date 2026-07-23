@@ -23,14 +23,14 @@ else
     <div class="login-box">
     <div><strong><?php echo Format::htmlchars($errors['login']); ?></strong></div>
     <div>
-        <label for="email"><?php echo __('Email Address'); ?>:
-        <input id="email" placeholder="<?php echo __('e.g. john.doe@osticket.com'); ?>" type="text"
-            name="lemail" size="30" value="<?php echo $email; ?>" class="nowarn"></label>
+        <label for="email"><?php echo __('Email Address'); ?></label>
+        <input id="email" placeholder="<?php echo __('e.g. john.doe@osticket.com'); ?>" type="email"
+            name="lemail" size="30" value="<?php echo $email; ?>" class="nowarn" required>
     </div>
     <div>
-        <label for="ticketno"><?php echo __('Ticket Number'); ?>:
+        <label for="ticketno"><?php echo __('Ticket Number'); ?></label>
         <input id="ticketno" type="text" name="lticket" placeholder="<?php echo __('e.g. 051243'); ?>"
-            size="30" value="<?php echo $ticketid; ?>" class="nowarn"></label>
+            size="30" value="<?php echo $ticketid; ?>" class="nowarn" required>
     </div>
     <p>
         <input class="btn" type="submit" value="<?php echo $button; ?>">
