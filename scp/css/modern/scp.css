@@ -1582,82 +1582,136 @@ button:active {
 }
 
 /* ================= Dark mode: catch-all overrides ================= */
-/* Classic scp.css hardcodes many background: #fff / color: #000 on panes
- * that the modern CSS doesn't explicitly target. This block catches them
- * so every pane is readable in dark mode.
- */
+/* ================= Dark mode: elevation-aware overrides ================= */
+:root[data-theme="dark"],
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    html, body, #container, #header, #subheader,
-    #content, #footer, .has_more,
-    #ticketTable, #ticketTable table,
-    div.sticky.bar, .sticky.bar.opaque,
-    .dialog, .ui-dialog,
-    .dialog fieldset, .dialog fieldset input,
-    #overlay, .ui-widget-overlay,
-    .warning-banner,
-    .infoTable, .infoTable th,
-    .ticket_info, .custom-data,
-    .custom-data th, .custom-data td,
-    ul.tabs.clean li.active,
-    #response_options, #response_options input, #response_options textarea,
-    #reply,
-    td .richtext, .richtext, .richtext-body,
-    .popup,
-    select[multiple], select, input, textarea, button,
-    .action-button {
-      background-color: var(--surface-0) !important;
-      background: var(--surface-0) !important;
-    }
-
-    html, body, #container, #header, #subheader,
-    #content, #footer, .has_more,
-    #ticketTable, #ticketTable table,
-    #ticketTable th, #ticketTable td, #ticketTable th a,
-    div.sticky.bar, div.sticky.bar h2,
-    .dialog, .ui-dialog,
-    .dialog fieldset, .dialog fieldset input,
-    .warning-banner,
-    .faded, .muted, .small,
-    .infoTable th,
-    .ticket_info th, .ticket_info td,
-    .custom-data th, .custom-data td,
-    ul.tabs.clean li.active, ul.tabs.clean li.active a,
-    #response_options, #response_options input, #response_options textarea,
-    #reply, #reply h2,
-    td .richtext, .richtext, .richtext-body,
-    .popup, .popup h2,
-    .tooltip,
-    select[multiple],
-    span.error,
-    .thread-entry .header .title,
-    .thread-entry .thread-body {
+    /* Base canvas */
+    html, body {
+      background-color: var(--surface-base) !important;
       color: var(--text-primary) !important;
     }
 
-    .faded, .muted, td .faded,
-    span.nohighlight,
-    .thread-event .description,
-    .action-button, .action-button span, .action-button a {
+    /* Primary containers & cards (Level 0) */
+    #container, #content,
+    .dialog, .ui-dialog, .popup,
+    #reply, .card, .ticket-property-card {
+      background-color: var(--surface-0) !important;
+      border-color: var(--border) !important;
+      color: var(--text-primary) !important;
+    }
+
+    /* Elevated headers, bars & wells (Level 1) */
+    #header, #subheader, #nav, #subnav,
+    div.sticky.bar, .sticky.bar.opaque,
+    #basic_search, .search.well,
+    .infoTable th, table.list thead th, #ticketTable th,
+    .thread-entry .header,
+    #footer {
+      background-color: var(--surface-1) !important;
+      border-color: var(--border) !important;
+      color: var(--text-primary) !important;
+    }
+
+    /* Inputs, Selects & Textareas */
+    select, input[type="text"], input[type="password"],
+    input[type="email"], input[type="number"], input[type="search"],
+    textarea, select[multiple] {
+      background-color: var(--input-bg) !important;
+      color: var(--text-primary) !important;
+      border-color: var(--input-border) !important;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      border-color: var(--accent) !important;
+      box-shadow: 0 0 0 3px var(--input-focus-ring) !important;
+    }
+
+    /* Redactor WYSIWYG Editor */
+    .redactor-box {
+      background-color: var(--surface-0) !important;
+      border-color: var(--input-border) !important;
+    }
+    .redactor-toolbar {
+      background-color: var(--surface-1) !important;
+      border-bottom-color: var(--border) !important;
+    }
+    .redactor-toolbar a {
       color: var(--text-secondary) !important;
     }
+    .redactor-editor, .redactor-editor div, .redactor-editor p {
+      background-color: var(--surface-0) !important;
+      color: var(--text-primary) !important;
+    }
 
-    .dialog, .ui-dialog,
-    .dialog fieldset, .dialog fieldset input,
-    #response_options, #response_options input, #response_options textarea,
-    #reply, td .richtext, .richtext,
-    select, input, textarea, .popup,
-    .sticky.bar, .sticky.bar.opaque {
+    /* Action buttons & links */
+    .action-button, .white.button, .link.button {
+      background-color: var(--surface-1) !important;
+      color: var(--text-secondary) !important;
       border-color: var(--border) !important;
     }
-
-    #ticketTable tr.alt td,
-    #ticketTable tbody tr:nth-child(2n+1) td {
-      background: var(--table-stripe) !important;
+    .action-button:hover, .white.button:hover, .link.button:hover {
+      background-color: var(--surface-2) !important;
+      color: var(--text-primary) !important;
+      border-color: var(--text-link) !important;
+    }
+    .action-button span, .action-button a, .action-button i {
+      color: inherit !important;
     }
 
+    /* Tables & Rows */
+    table.list td, #ticketTable td,
+    .ticket_info td, .custom-data td {
+      color: var(--text-primary) !important;
+      border-color: var(--border-light) !important;
+    }
+    table.list tbody tr:nth-child(2n+1) td,
+    #ticketTable tr.alt td {
+      background-color: var(--table-stripe) !important;
+    }
+    table.list tbody tr:hover td,
     #ticketTable tbody tr:hover td {
-      background: var(--table-row-hover) !important;
+      background-color: var(--table-row-hover) !important;
+    }
+
+    /* Thread entries */
+    .thread-entry .thread-body {
+      background-color: var(--surface-0) !important;
+      color: var(--text-primary) !important;
+      border-color: var(--border) !important;
+    }
+    .thread-entry.message .header {
+      background-color: var(--surface-1) !important;
+    }
+    .thread-entry.response .header {
+      background-color: var(--accent-subtle) !important;
+    }
+    .thread-entry.note .header {
+      background-color: var(--warning-subtle) !important;
+    }
+
+    /* Typography & Muted text */
+    label, th, b, strong, h1, h2, h3, h4, h5, h6 {
+      color: var(--text-primary) !important;
+    }
+    .faded, .muted, td .faded, span.faded,
+    .thread-event .description,
+    span.nohighlight {
+      color: var(--text-tertiary) !important;
+    }
+    a {
+      color: var(--text-link);
+    }
+    a:hover {
+      color: var(--text-link-hover);
+    }
+
+    /* Dropdowns & Popups (Level 2/3) */
+    .dropdown-menu, .tip_content, .ui-autocomplete,
+    .select2-dropdown, .select2-container--default .select2-results__option {
+      background-color: var(--surface-2) !important;
+      color: var(--text-primary) !important;
+      border-color: var(--border) !important;
     }
   }
 }
