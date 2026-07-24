@@ -86,7 +86,7 @@ $first = true;
 foreach ($groups as $g=>$desc) {
     $data = $report->getTabularData($g); ?>
     <div class="tab_content <?php echo (!$first) ? 'hidden' : ''; ?>" id="<?php echo Format::slugify($g); ?>">
-    <table class="dashboard-stats table"><tbody><tr>
+    <table class="dashboard-stats table"><thead><tr>
 <?php
     foreach ($data['columns'] as $j=>$c) {
       ?>
@@ -136,7 +136,7 @@ foreach ($groups as $g=>$desc) {
         ?></th>
 <?php
     } ?>
-    </tr></tbody>
+    </tr></thead>
     <tbody>
 <?php
     foreach ($data['data'] as $i=>$row) {

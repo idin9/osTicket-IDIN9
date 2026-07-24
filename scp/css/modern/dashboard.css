@@ -1,8 +1,64 @@
-#content .dashboard-stats {
+#content div.dashboard-stats,
+#content .dashboard-stat-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: var(--space-4);
   margin-bottom: var(--space-6);
+}
+
+/* Dashboard Statistics Table */
+table.dashboard-stats {
+  display: table !important;
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin-bottom: var(--space-6);
+  text-align: right;
+  background: var(--surface-0);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+table.dashboard-stats thead th,
+table.dashboard-stats tbody:first-child th {
+  padding: var(--space-3) var(--space-3);
+  background: var(--table-header-bg, var(--surface-1));
+  font-size: var(--text-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--text-secondary);
+  border-bottom: 2px solid var(--border);
+}
+
+table.dashboard-stats th.flush-left,
+table.dashboard-stats td.flush-left {
+  text-align: left !important;
+}
+
+table.dashboard-stats tbody td,
+table.dashboard-stats tbody th {
+  padding: var(--space-3) var(--space-3);
+  border-bottom: 1px solid var(--border-light);
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  font-weight: normal;
+}
+
+table.dashboard-stats tbody tr:last-child td,
+table.dashboard-stats tbody tr:last-child th {
+  border-bottom: none;
+}
+
+table.dashboard-stats tbody tr:hover td,
+table.dashboard-stats tbody tr:hover th {
+  background-color: var(--table-row-hover, var(--surface-2)) !important;
+}
+
+table.dashboard-stats tbody tr:nth-child(even) td,
+table.dashboard-stats tbody tr:nth-child(even) th {
+  background-color: var(--table-stripe, var(--surface-1));
 }
 
 #content .dashboard-stats .dashboard-stat-card,
