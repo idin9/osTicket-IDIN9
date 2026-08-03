@@ -78,6 +78,10 @@ class API {
     }
 
     function canReadTickets() {
+        // Fallback to can_update_tickets when the can_read_tickets column
+        // has not been migrated yet (backward compatibility)
+        if (!array_key_exists('can_read_tickets', $this->ht))
+            return ($this->ht['can_update_tickets']);
         return ($this->ht['can_read_tickets']);
     }
 
@@ -86,10 +90,18 @@ class API {
     }
 
     function canReadFaq() {
+        // Fallback to can_read_tickets when the can_read_faq column has not
+        // been migrated yet (backward compatibility)
+        if (!array_key_exists('can_read_faq', $this->ht))
+            return $this->canReadTickets();
         return ($this->ht['can_read_faq']);
     }
 
     function canManageFaq() {
+        // Fallback to can_update_tickets when the can_manage_faq column has not
+        // been migrated yet (backward compatibility)
+        if (!array_key_exists('can_manage_faq', $this->ht))
+            return ($this->ht['can_update_tickets']);
         return ($this->ht['can_manage_faq']);
     }
 
@@ -147,6 +159,19 @@ class API {
         return ($id && is_numeric($id) && ($k= new API($id)) && $k->getId()==$id)?$k:null;
     }
 
+    static function getAvailableColumns() {
+        static $columns = null;
+        if ($columns === null) {
+            $columns = array();
+            if (($res = db_query('SHOW COLUMNS FROM '.API_KEY_TABLE))
+                    && db_num_rows($res)) {
+                while ($row = db_fetch_array($res))
+                    $columns[] = $row['Field'];
+            }
+        }
+        return $columns;
+    }
+
     static function save($id, $vars, &$errors) {
 
         if(!$id && (!$vars['ipaddr'] || !Validator::is_ip($vars['ipaddr'])))
@@ -154,15 +179,20 @@ class API {
 
         if($errors) return false;
 
+        $cols = self::getAvailableColumns();
         $sql=' updated=NOW() '
             .',isactive='.db_input($vars['isactive'])
-            .',can_create_tickets='.db_input($vars['can_create_tickets'])
-            .',can_exec_cron='.db_input($vars['can_exec_cron'])
-            .',can_read_tickets='.db_input($vars['can_read_tickets'])
-            .',can_update_tickets='.db_input($vars['can_update_tickets'])
-            .',can_read_faq='.db_input($vars['can_read_faq'] ?? 0)
-            .',can_manage_faq='.db_input($vars['can_manage_faq'] ?? 0)
-            .',staff_id='.db_input($vars['staff_id'] ?: 0)
+            .',can_create_tickets='.db_input($vars['can_create_tickets'] ?? 0)
+            .',can_exec_cron='.db_input($vars['can_exec_cron'] ?? 0);
+        if (in_array('can_read_tickets', $cols))
+            $sql .= ',can_read_tickets='.db_input($vars['can_read_tickets'] ?? 0);
+        if (in_array('can_update_tickets', $cols))
+            $sql .= ',can_update_tickets='.db_input($vars['can_update_tickets'] ?? 0);
+        if (in_array('can_read_faq', $cols))
+            $sql .= ',can_read_faq='.db_input($vars['can_read_faq'] ?? 0);
+        if (in_array('can_manage_faq', $cols))
+            $sql .= ',can_manage_faq='.db_input($vars['can_manage_faq'] ?? 0);
+        $sql .= ',staff_id='.db_input($vars['staff_id'] ?: 0)
             .',notes='.db_input(Format::sanitize($vars['notes']));
 
         if($id) {

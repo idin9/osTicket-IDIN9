@@ -43,6 +43,7 @@ class OrganizationModel extends VerySimpleModel {
     const COLLAB_PRIMARY_CONTACT =  0x0002;
     const ASSIGN_AGENT_MANAGER =    0x0004;
     const COLLAB_ACCOUNT_MANAGER =  0x0020;
+    const COLLAB_SALES_REP =        0x0040;
 
     const SHARE_PRIMARY_CONTACT =   0x0008;
     const SHARE_EVERYBODY =         0x0010;
@@ -101,7 +102,7 @@ class OrganizationModel extends VerySimpleModel {
     }
 
     function autoAddCollabs() {
-        return $this->check(self::COLLAB_ALL_MEMBERS | self::COLLAB_PRIMARY_CONTACT | self::COLLAB_ACCOUNT_MANAGER);
+        return $this->check(self::COLLAB_ALL_MEMBERS | self::COLLAB_PRIMARY_CONTACT | self::COLLAB_ACCOUNT_MANAGER | self::COLLAB_SALES_REP);
     }
 
     function autoAddPrimaryContactsAsCollabs() {
@@ -114,6 +115,30 @@ class OrganizationModel extends VerySimpleModel {
 
     function autoAddAccountManagerAsCollab() {
         return $this->check(self::COLLAB_ACCOUNT_MANAGER);
+    }
+
+    function autoAddSalesRepAsCollab() {
+        return $this->check(self::COLLAB_SALES_REP);
+    }
+
+    function getSalesRepEmail() {
+        if ($this->extra) {
+            $extra = JsonDataParser::parse($this->extra);
+            if (is_array($extra) && isset($extra['sales_rep_email']))
+                return $extra['sales_rep_email'];
+        }
+        return '';
+    }
+
+    function setSalesRepEmail($email) {
+        $extra = $this->extra ? JsonDataParser::parse($this->extra) : array();
+        if (!is_array($extra))
+            $extra = array();
+        if ($email)
+            $extra['sales_rep_email'] = $email;
+        else
+            unset($extra['sales_rep_email']);
+        $this->set('extra', $extra ? JsonDataEncoder::encode($extra) : null);
     }
 
     function autoAssignAccountManager() {
@@ -242,6 +267,7 @@ implements TemplateVariable, Searchable {
                 'collab-all-flag' => Organization::COLLAB_ALL_MEMBERS,
                 'collab-pc-flag' => Organization::COLLAB_PRIMARY_CONTACT,
                 'collab-am-flag' => Organization::COLLAB_ACCOUNT_MANAGER,
+                'collab-sales-rep-flag' => Organization::COLLAB_SALES_REP,
                 'assign-am-flag' => Organization::ASSIGN_AGENT_MANAGER,
                 'sharing-primary' => Organization::SHARE_PRIMARY_CONTACT,
                 'sharing-all' => Organization::SHARE_EVERYBODY,
@@ -249,6 +275,7 @@ implements TemplateVariable, Searchable {
             if ($this->check($flag))
                 $base[$ck] = true;
         }
+        $base['sales_rep_email'] = $this->getSalesRepEmail();
         return $base;
     }
 
@@ -398,6 +425,10 @@ implements TemplateVariable, Searchable {
             }
         }
 
+        if ($vars['sales_rep_email']
+                && !Validator::is_email($vars['sales_rep_email']))
+            $errors['sales_rep_email'] = __('Enter a valid email address');
+
         if ($vars['manager']) {
             switch ($vars['manager'][0]) {
             case 's':
@@ -466,19 +497,22 @@ implements TemplateVariable, Searchable {
         }
 
         if ($auditCollabAll = $this->autoFlagChanged($this->autoAddMembersAsCollabs(),
-            $vars['collab-all-flag']))
+            $vars['collab-all-flag'] ?? false))
                 $key = 'collab-all-flag';
         if ($auditCollabPc = $this->autoFlagChanged($this->autoAddPrimaryContactsAsCollabs(),
-            $vars['collab-pc-flag']))
+            $vars['collab-pc-flag'] ?? false))
                 $key = 'collab-pc-flag';
         if ($auditCollabAm = $this->autoFlagChanged($this->autoAddAccountManagerAsCollab(),
-            $vars['collab-am-flag']))
+            $vars['collab-am-flag'] ?? false))
                 $key = 'collab-am-flag';
+        if ($auditCollabSalesRep = $this->autoFlagChanged($this->autoAddSalesRepAsCollab(),
+            $vars['collab-sales-rep-flag'] ?? false))
+                $key = 'collab-sales-rep-flag';
         if ($auditAssignAm = $this->autoFlagChanged($this->autoAssignAccountManager(),
-            $vars['assign-am-flag']))
+            $vars['assign-am-flag'] ?? false))
                 $key = 'assign-am-flag';
 
-        if ($auditCollabAll || $auditCollabPc || $auditCollabAm || $auditAssignAm) {
+        if ($auditCollabAll || $auditCollabPc || $auditCollabAm || $auditCollabSalesRep || $auditAssignAm) {
             $type = array('type' => 'edited', 'key' => $key);
             Signal::send('object.edited', $this, $type);
         }
@@ -505,18 +539,19 @@ implements TemplateVariable, Searchable {
         }
 
         $sharingPrimary = $this->sharingFlagChanged($this->shareWithPrimaryContacts(),
-            $vars['sharing'], 'sharing-primary');
+            $vars['sharing'] ?? null, 'sharing-primary');
         $sharingEverybody = $this->sharingFlagChanged($this->shareWithEverybody(),
-            $vars['sharing'], 'sharing-all');
+            $vars['sharing'] ?? null, 'sharing-all');
 
         // Set flags
         foreach (array(
                 'collab-all-flag' => Organization::COLLAB_ALL_MEMBERS,
                 'collab-pc-flag' => Organization::COLLAB_PRIMARY_CONTACT,
                 'collab-am-flag' => Organization::COLLAB_ACCOUNT_MANAGER,
+                'collab-sales-rep-flag' => Organization::COLLAB_SALES_REP,
                 'assign-am-flag' => Organization::ASSIGN_AGENT_MANAGER,
         ) as $ck=>$flag) {
-            if ($vars[$ck])
+            if ($vars[$ck] ?? false)
                 $this->setStatus($flag);
             else
                 $this->clearStatus($flag);
@@ -526,11 +561,11 @@ implements TemplateVariable, Searchable {
                 'sharing-primary' => Organization::SHARE_PRIMARY_CONTACT,
                 'sharing-all' => Organization::SHARE_EVERYBODY,
         ) as $ck=>$flag) {
-            if (($sharingPrimary || $sharingEverybody) && $vars['sharing'] == $ck) {
+            if (($sharingPrimary || $sharingEverybody) && ($vars['sharing'] ?? null) == $ck) {
                 $type = array('type' => 'edited', 'key' => 'sharing');
                 Signal::send('object.edited', $this, $type);
             }
-            if ($vars['sharing'] == $ck)
+            if (($vars['sharing'] ?? null) == $ck)
                 $this->setStatus($flag);
             else
                 $this->clearStatus($flag);
@@ -539,7 +574,8 @@ implements TemplateVariable, Searchable {
         // Set staff and primary contacts
         $this->set('domain', $vars['domain']);
         $this->set('manager', $vars['manager'] ?: '');
-        if ($vars['contacts'] && is_array($vars['contacts'])) {
+        $this->setSalesRepEmail($vars['sales_rep_email']);
+        if (!empty($vars['contacts']) && is_array($vars['contacts'])) {
             foreach ($this->allMembers() as $u) {
                 $u->setPrimaryContact(array_search($u->id, $vars['contacts']) !== false);
                 $u->save();

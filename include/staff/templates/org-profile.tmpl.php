@@ -149,6 +149,20 @@ if ($ticket && $ticket->getOwnerId() == $user->getId())
                 </td>
             </tr>
             <tr>
+                <td width="180">
+                    <?php echo __('Sales Representative'); ?>:
+                </td>
+                <td>
+                    <input type="checkbox" name="collab-sales-rep-flag" value="1" <?php echo $info['collab-sales-rep-flag']?'checked="checked"':''; ?>>
+                    <?php echo __('Add Sales Representative to all tickets from this organization'); ?>
+                    <br>
+                    <input type="text" size="40" name="sales_rep_email"
+                        value="<?php echo $info['sales_rep_email']; ?>"
+                        placeholder="<?php echo __('sales@example.com'); ?>">
+                    <br/><span class="error"><?php echo $errors['sales_rep_email']; ?></span>
+                </td>
+            </tr>
+            <tr>
                 <th colspan="2">
                     <?php echo __('Email Domain'); ?>
                     <i class="help-tip icon-question-sign" href="#email_domain"></i>

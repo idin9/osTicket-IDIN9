@@ -4418,6 +4418,7 @@ implements RestrictedAccess, Threadable, Searchable {
             $pris = $org->autoAddPrimaryContactsAsCollabs();
             $members = $org->autoAddMembersAsCollabs();
             $am = $org->autoAddAccountManagerAsCollab();
+            $sr = $org->autoAddSalesRepAsCollab();
             $settings = array('isactive' => true);
             $collabs = array();
             foreach ($org->allMembers() as $u) {
@@ -4449,6 +4450,21 @@ implements RestrictedAccess, Threadable, Searchable {
                             }
                         }
                     }
+                }
+            }
+            if ($sr && ($repEmail = $org->getSalesRepEmail())) {
+                $_errors = array();
+                // Support "Name <email>" or plain email format
+                $repName = null;
+                if (preg_match('/^\s*(.*?)\s*<([^>]+@[^>]+)>\s*$/', $repEmail, $m)) {
+                    $repName = trim($m[1]) ?: null;
+                    $repEmail = trim($m[2]);
+                }
+                if (!($srUser = User::lookup(array('email' => $repEmail)))) {
+                    $srUser = User::fromVars(array('name' => $repName ?: $repEmail, 'email' => $repEmail));
+                }
+                if ($srUser && ($c = $ticket->addCollaborator($srUser, $settings, $_errors))) {
+                    $collabs[] = (string) $c;
                 }
             }
             //TODO: Can collaborators add others?

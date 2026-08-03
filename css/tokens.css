@@ -9,6 +9,9 @@
  *  - Color:      60-30-10 (neutral surfaces / slate structure / one accent)
  *  - WCAG 2.2:   every text/semantic color ≥ 4.5:1 on its surface,
  *                focus ring tokens, 44px target minimum, reduced motion
+ *  - Theming:    dark / light / system via `data-theme` attribute on <html>
+ *                using the light-dark() function + color-scheme. No explicit
+ *                data-theme (or data-theme="system") follows the OS.
  *
  * Intentional changes vs. the legacy scp/css/modern/tokens.css values
  * (kept token NAMES identical for backward compatibility):
@@ -56,10 +59,6 @@
   --radius-lg: 10px;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
-
   /* ---- Interaction (Fitts's Law / WCAG 2.2 Target Size) ---- */
   --target-min: 44px;   /* preferred minimum for interactive targets */
   --target-aa: 24px;    /* absolute WCAG 2.2 AA floor */
@@ -72,10 +71,32 @@
   --bp-desktop: 1024px;
 }
 
+/*
+ * Theme control.
+ *
+ *  - data-theme="light"  → force light
+ *  - data-theme="dark"   → force dark
+ *  - data-theme="system" or no attribute → follow prefers-color-scheme
+ *
+ * `color-scheme` tells the UA to render native controls (inputs, selects,
+ * checkboxes, scrollbars, date pickers) in the active scheme — this fixes the
+ * "dark mode but white native controls" readability issue at the browser level.
+ */
+:root {
+  color-scheme: light dark;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
 /* ================= Light theme (default) ================= */
 :root,
 [data-theme="light"] {
   /* 60% — dominant neutral surfaces */
+  --surface-base: #ffffff;
   --surface-0: #ffffff;
   --surface-1: #f8fafc;
   --surface-2: #f1f5f9;
@@ -141,7 +162,68 @@
 }
 
 /* ================= Dark theme (Elevation & High-Contrast science) ================= */
-:root[data-theme="dark"],
+[data-theme="dark"] {
+  /* Surface Elevation Scale (11% -> 15% -> 20% -> 26%) */
+  --surface-base: #0b0f19;      /* canvas background */
+  --surface-0: #111827;         /* cards, primary containers, input bg */
+  --surface-1: #1f2937;         /* elevated headers, wells, table headers, sticky bars */
+  --surface-2: #374151;         /* table row hover, elevated cards, dropdown items */
+  --surface-3: #4b5563;         /* modals, dialogs, popovers, tooltips */
+
+  --surface-inverse: #f9fafb;
+  --border: #374151;            /* visible structure borders */
+  --border-light: #4b5563;      /* inner dividers */
+
+  --text-primary: #f9fafb;      /* 98% lightness - high contrast AAA */
+  --text-secondary: #e5e7eb;    /* 90% lightness - body text & labels AA */
+  --text-tertiary: #9ca3af;     /* 65% lightness - meta, placeholders (4.8:1 on surface-0) */
+
+  --accent: #3b82f6;            /* desaturated accessible blue */
+  --accent-hover: #60a5fa;
+  --accent-subtle: #1e3a8a;     /* brand-tinted active surface */
+  --text-link: #60a5fa;         /* high-contrast link text */
+  --text-link-hover: #93c5fd;
+
+  --success: #34d399;           /* emerald text/icon */
+  --success-subtle: #064e3b;    /* dark emerald fill */
+  --warning: #fbbf24;           /* amber text/icon */
+  --warning-subtle: #78350f;    /* dark amber fill */
+  --danger: #f87171;            /* red text/icon */
+  --danger-subtle: #7f1d1d;     /* dark red fill */
+  --info: #38bdf8;              /* sky blue text/icon */
+  --info-subtle: #0c4a6e;       /* dark sky blue fill */
+
+  --header-bg: #1f2937;
+  --header-border: #374151;
+  --nav-bg: #111827;
+  --nav-active: #3b82f6;
+  --subnav-bg: #1f2937;
+
+  --table-header-bg: #1f2937;
+  --table-row-hover: #374151;
+  --table-stripe: #182234;
+
+  --thread-message: #1e293b;
+  --thread-response: #1e3a5f;
+  --thread-note: #713f12;
+  --thread-system: #1f2937;
+
+  --input-bg: #111827;
+  --input-border: #4b5563;
+  --input-focus-ring: #3b82f6;
+
+  --focus-ring: #60a5fa;
+
+  --dialog-overlay: rgba(0, 0, 0, 0.75);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+
+  --skeleton-base: #374151;
+  --skeleton-shine: #1f2937;
+}
+
+/* System dark mode (no explicit data-theme, or data-theme="system") */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     /* Surface Elevation Scale (11% -> 15% -> 20% -> 26%) */

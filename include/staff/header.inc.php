@@ -5,6 +5,16 @@ header("Content-Security-Policy: frame-ancestors ".$cfg->getAllowIframes()."; sc
 $title = ($ost && ($title=$ost->getPageTitle()))
     ? $title : ('osTicket :: '.__('Staff Control Panel'));
 
+// Theme (dark/light/system): URL param > cookie > default (follow system)
+$theme = 'system';
+if (isset($_GET['theme']) && in_array($_GET['theme'], array('dark', 'light', 'system'))) {
+    $theme = $_GET['theme'];
+    setcookie('ost_theme', $theme, time() + 86400 * 365, '/');
+} elseif (isset($_COOKIE['ost_theme'])
+        && in_array($_COOKIE['ost_theme'], array('dark', 'light', 'system'))) {
+    $theme = $_COOKIE['ost_theme'];
+}
+
 if (!isset($_SERVER['HTTP_X_PJAX'])) { ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html<?php
@@ -15,6 +25,8 @@ if (($lang = Internationalization::getCurrentLanguage())
 if ($lang) {
     echo ' lang="' . Internationalization::rfc1766($lang) . '"';
 }
+if ($theme != 'system')
+    echo ' data-theme="' . $theme . '"';
 
 // Dropped IE Support Warning
 if (osTicket::is_ie())
@@ -100,6 +112,41 @@ if (osTicket::is_ie())
             <span class="valign-helper"></span>
             <img src="<?php echo ROOT_PATH ?>scp/logo.php?<?php echo strtotime($cfg->lastModified('staff_logo_id')); ?>" alt="osTicket &mdash; <?php echo __('Customer Support System'); ?>"/>
         </a>
+        <?php if ($useModernUI) { ?>
+        <div id="theme-switcher" class="no-pjax" role="group" aria-label="<?php echo __('Color theme'); ?>">
+            <button type="button" class="theme-btn<?php echo $theme == 'light' ? ' active' : ''; ?>"
+                data-theme-target="light" aria-pressed="<?php echo $theme == 'light' ? 'true' : 'false'; ?>"
+                title="<?php echo __('Light'); ?>" aria-label="<?php echo __('Light'); ?>"><i class="icon-sun"></i></button>
+            <button type="button" class="theme-btn<?php echo $theme == 'dark' ? ' active' : ''; ?>"
+                data-theme-target="dark" aria-pressed="<?php echo $theme == 'dark' ? 'true' : 'false'; ?>"
+                title="<?php echo __('Dark'); ?>" aria-label="<?php echo __('Dark'); ?>"><i class="icon-moon"></i></button>
+            <button type="button" class="theme-btn<?php echo $theme == 'system' ? ' active' : ''; ?>"
+                data-theme-target="system" aria-pressed="<?php echo $theme == 'system' ? 'true' : 'false'; ?>"
+                title="<?php echo __('Follow system'); ?>" aria-label="<?php echo __('Follow system'); ?>"><i class="icon-adjust"></i></button>
+        </div>
+        <script type="text/javascript">
+        (function() {
+            var switcher = document.getElementById('theme-switcher');
+            if (!switcher) return;
+            switcher.addEventListener('click', function(e) {
+                var btn = e.target && e.target.closest ? e.target.closest('[data-theme-target]') : null;
+                if (!btn) return;
+                var t = btn.getAttribute('data-theme-target');
+                var root = document.documentElement;
+                if (t === 'system')
+                    root.removeAttribute('data-theme');
+                else
+                    root.setAttribute('data-theme', t);
+                document.cookie = 'ost_theme=' + t + '; path=/; max-age=31536000';
+                switcher.querySelectorAll('[data-theme-target]').forEach(function(b) {
+                    var on = b === btn;
+                    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+                    b.classList.toggle('active', on);
+                });
+            });
+        })();
+        </script>
+        <?php } ?>
         <p id="info" class="pull-right no-pjax"><?php echo sprintf(__('Welcome, %s.'), '<strong>'.$thisstaff->getFirstName().'</strong>'); ?>
            <?php
             if($thisstaff->isAdmin() && !defined('ADMINPAGE')) { ?>
