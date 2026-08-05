@@ -1,3 +1,14 @@
+osTicket v1.18.4.16 — Bug Fix
+===========================================
+
+### Fixes
+* Fix image paste / attach on Wasabi S3: `sendRedirectUrl()` no longer
+  calls `resolveExistingKey()` (which makes `doesObjectExist` HEAD requests)
+  on every image-download request, restoring clipboard paste and image-icon
+  upload for the Post Reply form. Candidate-key resolution is retained in
+  `getBody()` and `unlink()` for migrated files.
+
+
 osTicket v1.18.4.14 — Modern UX/UI Upgrade
 ===========================================
 

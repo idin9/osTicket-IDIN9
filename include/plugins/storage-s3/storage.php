@@ -152,11 +152,10 @@ class S3StorageBackend extends FileStorageBackend {
         // expire based on ttl (if given), otherwise expire at midnight
         $now = time();
         $ttl = $ttl ? $now + $ttl : ($now + 86400 - ($now % 86400));
-        $key = $this->resolveExistingKey();
         Http::redirect($this->getSignedRequest(
             $this->client->getCommand('GetObject', [
                 'Bucket' => $this->getBucket(),
-                'Key'    => $key,
+                'Key'    => self::getKey(),
                 'ResponseContentDisposition' => sprintf("%s; %s;",
                     $disposition,
                     Http::getDispositionFilename($this->meta->getName())),
