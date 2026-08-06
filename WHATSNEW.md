@@ -1,3 +1,14 @@
+osTicket v1.18.4.17 — Bug Fix
+===========================================
+
+### Fixes
+* Fix clipboard image paste CSRF failure: Redactor's `clipboardUpload` option
+  was set to a URL string, which caused paste uploads to bypass `imageUploadData`
+  (containing the CSRF token). Changed to `clipboardUpload: true` so paste
+  uploads reuse the `imageUpload` URL and include the CSRF token, resolving the
+  "Valid CSRF Token Required" error displayed as a broken image.
+
+
 osTicket v1.18.4.16 — Bug Fix
 ===========================================
 

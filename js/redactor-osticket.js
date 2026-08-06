@@ -57,7 +57,7 @@
         else if (this.$textarea.hasClass('draft')) {
             // Just upload the file. A draft will be created automatically
             // and will be configured locally in the afterUpateDraft()
-            this.opts.clipboardUpload =
+            this.opts.clipboardUpload = true;
             this.opts.imageUpload = this.autoCreateUrl + '/attach';
             this.opts.imageCaption = false;
         }
@@ -79,7 +79,7 @@
     _setup: function (draft_id) {
         this.opts.draftId = draft_id;
         this.opts.autosave = 'ajax.php/draft/' + draft_id;
-        this.opts.clipboardUpload =
+        this.opts.clipboardUpload = true;
         this.opts.imageUpload =
             'ajax.php/draft/' + draft_id + '/attach';
         this.opts.imageCaption = false;
@@ -198,7 +198,7 @@
                 self.app.statusbar.remove('draft');
                 self.app.source.setCode(self.opts.draftOriginal || '');
                 self.opts.autosave = self.autoCreateUrl;
-                self.opts.clipboardUpload =
+                self.opts.clipboardUpload = true;
                 self.opts.imageUpload = self.autoCreateUrl + '/attach';
                 self.opts.imageCaption = false;
                 self.deleteButton.hide();
