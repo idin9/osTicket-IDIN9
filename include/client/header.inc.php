@@ -15,7 +15,7 @@ if (($lang = Internationalization::getCurrentLanguage())) {
 }
 ?>
 <!DOCTYPE html>
-<html<?php
+<html data-theme="light"<?php
 if ($lang
         && ($info = Internationalization::getLanguageInfo($lang))
         && (@$info['direction'] == 'rtl'))

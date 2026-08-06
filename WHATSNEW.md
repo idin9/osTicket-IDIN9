@@ -1,3 +1,13 @@
+osTicket v1.18.4.21 — Bug Fix
+===========================================
+
+### Fixes
+* Client portal now defaults to the light theme: `<html>` is rendered with
+  `data-theme="light"` so the portal no longer follows the OS `prefers-color-scheme`
+  (which rendered dark for users on dark-mode devices). This matches the staff
+  panel default introduced in v1.18.4.19.
+
+
 osTicket v1.18.4.20 — Bug Fix
 ===========================================
 
