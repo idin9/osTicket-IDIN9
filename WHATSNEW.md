@@ -1,3 +1,16 @@
+osTicket v1.18.4.19 — Improvement
+===========================================
+
+### Changes
+* Staff Control Panel theme now defaults to light instead of following the
+  system preference. The dark/light/system switcher still overrides the
+  default via cookie.
+* The "Follow system" theme option now actually follows the OS preference:
+  it resolves `prefers-color-scheme` on load and on live OS changes, instead
+  of dropping the `data-theme` attribute (which the modern stylesheet treats
+  as dark mode unconditionally).
+
+
 osTicket v1.18.4.18 — Bug Fix
 ===========================================
 

@@ -5,8 +5,8 @@ header("Content-Security-Policy: frame-ancestors ".$cfg->getAllowIframes()."; sc
 $title = ($ost && ($title=$ost->getPageTitle()))
     ? $title : ('osTicket :: '.__('Staff Control Panel'));
 
-// Theme (dark/light/system): URL param > cookie > default (follow system)
-$theme = 'system';
+// Theme (dark/light/system): URL param > cookie > default (light)
+$theme = 'light';
 if (isset($_GET['theme']) && in_array($_GET['theme'], array('dark', 'light', 'system'))) {
     $theme = $_GET['theme'];
     setcookie('ost_theme', $theme, time() + 86400 * 365, '/');
@@ -82,6 +82,23 @@ if (osTicket::is_ie())
             $useModernUI = false;
     }
     if ($useModernUI) { ?>
+    <script type="text/javascript">
+    (function() {
+        var root = document.documentElement,
+            mq = window.matchMedia('(prefers-color-scheme: dark)');
+        var themeCookie = function() {
+            var m = document.cookie.match(/(?:^|; )ost_theme=([^;]*)/);
+            return m && m[1];
+        };
+        var resolve = function() {
+            if (themeCookie() === 'system')
+                root.setAttribute('data-theme', mq.matches ? 'dark' : 'light');
+        };
+        resolve();
+        if (mq.addEventListener) mq.addEventListener('change', resolve);
+        else if (mq.addListener) mq.addListener(resolve);
+    })();
+    </script>
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>css/tokens.css" media="all">
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/scp.css" media="all">
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/dashboard.css" media="all">
@@ -133,10 +150,12 @@ if (osTicket::is_ie())
                 if (!btn) return;
                 var t = btn.getAttribute('data-theme-target');
                 var root = document.documentElement;
-                if (t === 'system')
-                    root.removeAttribute('data-theme');
-                else
-                    root.setAttribute('data-theme', t);
+                var resolved = t;
+                if (t === 'system') {
+                    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+                    resolved = mq.matches ? 'dark' : 'light';
+                }
+                root.setAttribute('data-theme', resolved);
                 document.cookie = 'ost_theme=' + t + '; path=/; max-age=31536000';
                 switcher.querySelectorAll('[data-theme-target]').forEach(function(b) {
                     var on = b === btn;
