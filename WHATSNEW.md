@@ -1,3 +1,13 @@
+osTicket v1.18.4.20 — Bug Fix
+===========================================
+
+### Fixes
+* Cache-bust `redactor-osticket.js` by appending the version as a query
+  parameter (`?v=...`) in both the staff and client pages. Browsers caching
+  the old script kept hitting the inline-image CSRF failure even after
+  deploying v1.18.4.18; the editor script now refreshes with every release.
+
+
 osTicket v1.18.4.19 — Improvement
 ===========================================
 
