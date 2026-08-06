@@ -1,12 +1,26 @@
+osTicket v1.18.4.18 — Bug Fix
+===========================================
+
+### Fixes
+* Fix image paste / image-icon upload "Valid CSRF Token Required" failure:
+  the Redactor 3 core reads the `imageData` option (not the Redactor II-era
+  `imageUploadData` name) when building upload requests, so the CSRF token
+  was never included in inline image uploads. Since the CSRF security patch
+  began enforcing token checks on all state-changing requests (including
+  file-only multipart POSTs), every clipboard paste and image-icon upload
+  was rejected with 400. The editor config now passes the token via
+  `imageData`, restoring clipboard paste, drag-and-drop, and image-icon
+  uploads for both staff and client portals.
+
+
 osTicket v1.18.4.17 — Bug Fix
 ===========================================
 
 ### Fixes
-* Fix clipboard image paste CSRF failure: Redactor's `clipboardUpload` option
-  was set to a URL string, which caused paste uploads to bypass `imageUploadData`
-  (containing the CSRF token). Changed to `clipboardUpload: true` so paste
-  uploads reuse the `imageUpload` URL and include the CSRF token, resolving the
-  "Valid CSRF Token Required" error displayed as a broken image.
+* Normalize Redactor `clipboardUpload` option to `true` in the draft plugin
+  (previously set to a URL string). Note: the option is not consumed by the
+  Redactor 3.5.2 core; the actual paste-upload CSRF failure is resolved in
+  v1.18.4.18.
 
 
 osTicket v1.18.4.16 — Bug Fix
