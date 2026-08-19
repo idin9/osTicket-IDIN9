@@ -118,6 +118,22 @@ $info=Format::htmlchars(($errors && $_POST)?$_POST:$info, true);
             </td>
         </tr>
         <tr>
+            <td colspan=2 style="padding-left:5px">
+                <label>
+                    <input type="checkbox" name="can_read_faq" value="1" <?php echo $info['can_read_faq']?'checked="checked"':''; ?> >
+                    <?php echo __('Can Read Knowledge Base <em>(Read, List FAQs &amp; Categories)</em>');?>
+                </label>
+            </td>
+        </tr>
+        <tr>
+            <td colspan=2 style="padding-left:5px">
+                <label>
+                    <input type="checkbox" name="can_manage_faq" value="1" <?php echo $info['can_manage_faq']?'checked="checked"':''; ?> >
+                    <?php echo __('Can Manage Knowledge Base <em>(Create, Update, Delete FAQs &amp; Categories)</em>');?>
+                </label>
+            </td>
+        </tr>
+        <tr>
             <td width="150">
                 <?php echo __('Mapped Staff');?>:
             </td>

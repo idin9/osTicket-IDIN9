@@ -11,8 +11,13 @@ API keys must have the following permissions enabled:
 - `can_read_tickets` — Read tickets and list non-closed tickets
 - `can_update_tickets` — Update existing tickets, post replies, and post internal notes
 - `can_exec_cron` — Execute cron tasks
+- `can_read_faq` — Read and list KB FAQs and categories
+- `can_manage_faq` — Create, update, and delete KB FAQs and categories
 
 For ticket updates, replies, and internal notes, the API key **must be associated with a staff member** via the **Mapped Staff** dropdown in the admin panel (`Admin Panel → Manage → API Keys → Edit`).
+
+KB write operations (create/update/delete) also require the key to be associated
+with a staff member via **Mapped Staff**.
 
 ### IP Restriction
 
@@ -30,7 +35,9 @@ When editing an API key in the admin panel:
 
 1. **Can Read Tickets** checkbox — grants permission to call `read` and `list` endpoints
 2. **Can Update Tickets** checkbox — grants permission to call `update`, `reply`, and `note` endpoints
-3. **Mapped Staff** dropdown — selects which staff member the API acts as (required for update/reply/note endpoints)
+3. **Can Read Knowledge Base** checkbox — grants permission to call KB `read` and `list` endpoints
+4. **Can Manage Knowledge Base** checkbox — grants permission to call KB `create`, `update`, and `delete` endpoints
+5. **Mapped Staff** dropdown — selects which staff member the API acts as (required for update/reply/note endpoints and all KB write endpoints)
 
 Both checkboxes and the staff dropdown are available on the **Add** and **Edit** API Key forms.
 
@@ -50,6 +57,15 @@ ALTER TABLE `%TABLE_PREFIX%api_key`
 ALTER TABLE `%TABLE_PREFIX%api_key`
   ADD COLUMN `can_read_tickets` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' AFTER `can_update_tickets`;
 ```
+
+For the KB API permissions, run the idempotent PHP migration from the project root:
+
+```
+php setup/scripts/migrate-kb-api.php
+```
+
+This adds the `can_read_faq` and `can_manage_faq` columns to the `api_key` table.
+Fresh installations get these columns automatically from the installer schema.
 
 Replace `%TABLE_PREFIX%` with your actual table prefix (default is `ost_`).
 
@@ -351,6 +367,125 @@ Merges one or more duplicate tickets into the specified target ticket. The targe
 ```
 200
 202407-0043
+```
+
+---
+
+### 8. Knowledge Base API
+
+Full CRUD for KB FAQs and categories. Write operations (`create`, `update`, `delete`)
+require an API key with **Can Manage Knowledge Base** enabled **and** a mapped staff member.
+Read operations require **Can Read Knowledge Base**.
+
+#### 8.1 KB FAQ endpoints
+
+```
+GET    /api/kb/faqs.(json|xml)          List all FAQ articles
+GET    /api/kb/faqs/<id>.(json|xml)     Read a single FAQ article
+POST   /api/kb/faqs.(json|xml)          Create a new FAQ article
+POST   /api/kb/faqs/<id>.(json|xml)     Update an existing FAQ article
+DELETE /api/kb/faqs/<id>.(json|xml)     Delete an FAQ article
+```
+
+**FAQ fields:**
+
+| Field | Type | Create | Update | Description |
+|---|---|---|---|---|
+| `question` | string | Yes | No | FAQ question / title |
+| `answer` | string | Yes | No | FAQ answer body |
+| `category_id` | int | Yes | No | Owning KB category ID |
+| `ispublished` | int | No | No | Visibility: `1` public, `2` staff-only, `3` private (`FAQ::VISIBILITY_*`) |
+| `keywords` | string | No | No | Search keywords |
+| `notes` | string | No | No | Internal notes |
+| `topics` | array | No | No | Help topic IDs to associate |
+
+**Create FAQ request body (JSON):**
+```json
+{
+  "question": "How do I reset my password?",
+  "answer": "Go to Login → Forgot your password? and follow the instructions.",
+  "category_id": 2,
+  "ispublished": 1,
+  "keywords": "password reset",
+  "notes": "",
+  "topics": [1, 3]
+}
+```
+
+**Create response:** `201 Created`
+```json
+{
+  "faq_id": 15,
+  "question": "How do I reset my password?"
+}
+```
+
+**Update FAQ request body (JSON):** all fields optional; omitted fields keep
+their current values.
+```json
+{
+  "question": "How do I reset my account password?",
+  "answer": "Updated answer body.",
+  "category_id": 3
+}
+```
+
+**Update response:** `200 OK` — returns `faq_id` and updated `question`.
+
+**Delete response:** `200 OK`
+```json
+{
+  "deleted": 15
+}
+```
+
+#### 8.2 KB Category endpoints
+
+```
+GET    /api/kb/categories.(json|xml)            List all categories
+GET    /api/kb/categories/<id>.(json|xml)       Read a category (+ children + FAQs)
+POST   /api/kb/categories.(json|xml)            Create a new category
+POST   /api/kb/categories/<id>.(json|xml)       Update an existing category
+DELETE /api/kb/categories/<id>.(json|xml)       Delete a category
+```
+
+**Category fields:**
+
+| Field | Type | Create | Update | Description |
+|---|---|---|---|---|
+| `name` | string | Yes | No | Category name |
+| `description` | string | No | No | Category description |
+| `ispublic` | int | No | No | Visibility: `1` public, `2` staff-only, `3` private (`Category::VISIBILITY_*`) |
+| `pid` | int | No | No | Parent category ID (0 = top-level) |
+| `notes` | string | No | No | Internal notes |
+
+**Create category request body (JSON):**
+```json
+{
+  "name": "Networking",
+  "description": "Articles about networks, VPN and Wi-Fi.",
+  "ispublic": 1,
+  "pid": 0,
+  "notes": ""
+}
+```
+
+**Create response:** `201 Created`
+```json
+{
+  "category_id": 8,
+  "name": "Networking"
+}
+```
+
+**Update category request body (JSON):** all fields optional; omitted fields keep
+their current values.
+
+**Delete response:** `200 OK`
+```json
+{
+  "deleted": 8
+}
 ```
 
 ---
