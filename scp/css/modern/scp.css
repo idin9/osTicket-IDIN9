@@ -1819,3 +1819,190 @@ button:active {
       border-color: var(--border) !important;
     }
   }
+
+/* ==========================================================================
+   Systemic control normalization
+   Uniform heights / padding / radius for form controls & buttons, flex
+   alignment for filter bars & action groups, focus-ring cleanup, redactor
+   toolbar and sub-navigation fixes.
+   ========================================================================== */
+
+:root {
+  --control-height: 38px;
+  --control-radius: 6px;
+  --control-padding: 8px 12px;
+  --focus-ring-soft: rgba(29, 78, 216, 0.15);
+}
+:root[data-theme="dark"] {
+  --focus-ring-soft: rgba(96, 165, 250, 0.28);
+}
+
+/* ---- 1. Form control normalization -------------------------------- */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+select,
+.btn {
+  height: var(--control-height) !important;
+  min-height: var(--control-height) !important;
+  padding: var(--control-padding) !important;
+  border-radius: var(--control-radius) !important;
+  box-sizing: border-box !important;
+  vertical-align: middle !important;
+  font-size: var(--text-sm) !important;
+  line-height: 1.2 !important;
+}
+
+/* Keep the custom chevron clear of the text on <select> */
+select {
+  padding-right: 34px !important;
+  background-position: right 12px center !important;
+}
+
+/* Multi-line selects must keep their natural height */
+select[multiple],
+select[size] {
+  height: auto !important;
+  min-height: var(--control-height) !important;
+  padding: var(--control-padding) !important;
+}
+
+/* ---- 2. Focus-ring cleanup ----------------------------------------- */
+/* Replace the thick browser / token outline with a soft ring on text
+   fields. Form controls use border-color + box-shadow only. */
+input:focus,
+select:focus,
+textarea:focus,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--focus-ring-soft, rgba(29, 78, 216, 0.15)) !important;
+}
+
+/* Preserve the red focus indication on error fields */
+input.error:focus,
+textarea.error:focus,
+select.error:focus,
+input.error:focus-visible,
+select.error:focus-visible,
+textarea.error:focus-visible {
+  border-color: var(--danger) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2) !important;
+}
+
+/* ---- 3. Button sizing & padding standard --------------------------- */
+.button,
+.btn,
+input[type="submit"],
+input[type="button"],
+button,
+.action-button,
+a.action-button,
+span.action-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--control-height);
+  min-height: var(--control-height);
+  padding: 0 16px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  line-height: 1;
+  border-radius: var(--control-radius);
+  box-sizing: border-box;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* Dropdown-trigger action buttons: label first, caret at the end */
+.action-button[data-dropdown] {
+  justify-content: flex-start;
+}
+.action-button[data-dropdown] i.icon-caret-down {
+  order: 2;
+  margin-left: auto;
+  float: none;
+}
+
+/* ---- 4. Flex alignment for filter bars & action groups -------------- */
+.filter-group,
+.form-actions,
+.buttons,
+#basic_search .pull-right,
+#basic_search div.pull-right,
+.sticky.bar .pull-right,
+.sticky.bar .pull-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Release the fixed 25px inline height on the queue filter bar so the
+   sort / quick-filter controls can sit on the shared 38px line */
+#basic_search div.pull-right {
+  height: auto !important;
+  flex-wrap: wrap;
+}
+
+/* Attached search bar matches the uniform control height */
+#basic_search .attached.input {
+  height: var(--control-height) !important;
+}
+
+/* ---- 5. Rich text editor toolbar ----------------------------------- */
+.redactor-toolbar {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 4px !important;
+  padding: 6px 8px !important;
+}
+.redactor-toolbar a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: auto !important;
+  min-height: var(--target-aa) !important;
+  padding: 4px 10px !important;
+  margin: 0 !important;
+}
+
+/* ---- 6. Sub-navigation cleanup -------------------------------------- */
+/* Strip stray prefix characters / markers and align inline items with
+   flexbox */
+#sub_nav {
+  align-items: center !important;
+}
+#sub_nav > li,
+#customQ_nav .jb-overflowmenu-menu-primary li.item {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px;
+}
+#sub_nav li,
+#customQ_nav li {
+  list-style: none !important;
+}
+#sub_nav li::before,
+#customQ_nav li::before,
+#sub_nav a::before,
+#customQ_nav a::before,
+#sub_nav li::marker,
+#customQ_nav li::marker {
+  content: none !important;
+}
+
+/* Hide the "-" placeholder queue counts until populated by JS */
+#sub_nav .faded-more,
+#customQ_nav .faded-more {
+  display: none !important;
+}
