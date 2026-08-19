@@ -46,7 +46,7 @@ if (osTicket::is_ie())
     <![endif]-->
     <script type="text/javascript" src="<?php echo ROOT_PATH; ?>js/jquery-3.7.0.min.js"></script>
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>css/thread.css" media="all">
-    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/scp.css" media="all">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/scp.css?v=<?php echo MAJOR_VERSION; ?>" media="all">
     <link rel="stylesheet" href="<?php echo ROOT_PATH; ?>css/redactor.css" media="screen">
     <link rel="stylesheet" href="<?php echo ROOT_PATH ?>css/typeahead.css" media="screen">
     <link type="text/css" href="<?php echo ROOT_PATH; ?>css/ui-lightness/jquery-ui-1.13.2.custom.min.css"
@@ -99,9 +99,9 @@ if (osTicket::is_ie())
         else if (mq.addListener) mq.addListener(resolve);
     })();
     </script>
-    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>css/tokens.css" media="all">
-    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/scp.css" media="all">
-    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/dashboard.css" media="all">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>css/tokens.css?v=<?php echo MAJOR_VERSION; ?>" media="all">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/scp.css?v=<?php echo MAJOR_VERSION; ?>" media="all">
+    <link rel="stylesheet" href="<?php echo ROOT_PATH ?>scp/css/modern/dashboard.css?v=<?php echo MAJOR_VERSION; ?>" media="all">
     <?php } ?>
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="<?php echo ROOT_PATH ?>images/oscar-favicon-32x32.png" sizes="32x32" />

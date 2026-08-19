@@ -1,3 +1,15 @@
+osTicket v1.18.4.24 — Bug Fix
+===========================================
+
+### Fixes
+* Cache-bust the staff theme stylesheets (`scp/css/scp.css`, `css/tokens.css`,
+  `scp/css/modern/*.css`) with a `?v=MAJOR_VERSION` query parameter. Browsers
+  were serving the cached CSS for up to 4 hours after deployment, so the
+  systemic UI fixes (uniform 38px controls/buttons, soft focus rings, flex
+  filter/action bars, redactor toolbar and sub-nav cleanup) didn't appear
+  until the browser cache expired.
+
+
 osTicket v1.18.4.21 — Bug Fix
 ===========================================
 
