@@ -1,14 +1,3 @@
-osTicket v1.18.4.30 — Improvement
-===========================================
-
-### UI / Layout
-* Propagated the Tasks Kanban board's full component language (the `.kanban-*`
-  styles) to the generic staff content components, using it as the reference
-  design: 8px card/panel radius, a subtle 1px/3px shadow, a `surface-1` well &
-  table-header surface, 6px input radius, and an accent focus ring. Values are
-  token-based so both light and dark themes stay correct.
-
-
 osTicket v1.18.4.29 — Improvement
 ===========================================
 
