@@ -325,7 +325,9 @@ html, body {
   border: 1px solid var(--border);
   border-top: none;
   border-bottom: none;
-  padding: var(--space-6);
+  /* Align content padding to the Tasks Kanban board module (15px vertical /
+     18px horizontal), used as the reference layout for component alignment. */
+  padding: 15px 18px;
 }
 
 #footer {

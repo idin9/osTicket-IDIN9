@@ -1,3 +1,12 @@
+osTicket v1.18.4.29 — Improvement
+===========================================
+
+### UI / Layout
+* Aligned the main content area (`#content`) padding in the modern staff UI to
+  the Tasks Kanban board module's layout rhythm (15px vertical / 18px
+  horizontal), used as the reference for component alignment across pages.
+
+
 osTicket v1.18.4.28 — Bug Fix
 ===========================================
 
