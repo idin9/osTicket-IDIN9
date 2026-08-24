@@ -1,3 +1,13 @@
+osTicket v1.18.4.28 — Bug Fix
+===========================================
+
+### Tasks Kanban Board
+* Removed a duplicate, orphaned `KanbanApiController` class that another commit
+  had placed in `include/api.kanban.php`. The controller lives in `api/kanban.php`
+  (wired into `api/http.php`), so the include/ copy was never loaded and only
+  risked a fatal "Cannot redeclare class" if both were ever included.
+
+
 osTicket v1.18.4.27 — Improvement
 ===========================================
 
