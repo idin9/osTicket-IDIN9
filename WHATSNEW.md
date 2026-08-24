@@ -1,3 +1,14 @@
+osTicket v1.18.4.26 — Bug Fix
+===========================================
+
+### Knowledge Base / Tickets API Fixes
+* `POST /kb/faqs.json` and FAQ creation now store the supplied `keywords`
+  (trimmed), instead of hard-coding a single space.
+* `GET /kb/faqs/{id}.json` now returns the `keywords` field on read.
+* `POST /tickets/{id}/reply.json` honors the `alert` request flag and passes
+  it through to `Ticket::postReply`.
+
+
 osTicket v1.18.4.25 — Feature
 ===========================================
 

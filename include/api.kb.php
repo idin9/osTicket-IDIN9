@@ -105,7 +105,7 @@ class KbApiController extends ApiController {
         $faq->category = $category;
         $faq->ispublished = $vars['ispublished'];
         $faq->notes = Format::sanitize($vars['notes']);
-        $faq->keywords = ' ';
+        $faq->keywords = trim($vars['keywords'] ?? '') ?: ' ';
 
         if (!$faq->save())
             return $this->exerr(500, __('Unable to create FAQ article'));
@@ -141,6 +141,7 @@ class KbApiController extends ApiController {
             'category_id' => $data['category_id'] ?? $faq->getCategoryId(),
             'ispublished' => isset($data['ispublished']) ? $data['ispublished'] : $faq->ispublished,
             'notes' => $data['notes'] ?? $faq->getNotes(),
+            'keywords' => $data['keywords'] ?? $faq->getKeywords(),
             'topics' => $data['topics'] ?? $faq->getHelpTopicsIds(),
         );
 

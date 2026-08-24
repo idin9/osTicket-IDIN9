@@ -393,7 +393,7 @@ class FAQ extends VerySimpleModel {
         $this->category = $category;
         $this->ispublished = $vars['ispublished'];
         $this->notes = Format::sanitize($vars['notes']);
-        $this->keywords = ' ';
+        $this->keywords = trim($vars['keywords'] ?? '') ?: ' ';
 
         if (!$this->save())
             return false;

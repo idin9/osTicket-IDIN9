@@ -265,7 +265,8 @@ class TicketApiController extends ApiController {
         $data['response'] = $data['message'];
 
         $errors = array();
-        if ($ticket->postReply($data, $errors))
+        $alert = isset($data['alert']) ? (bool) $data['alert'] : true;
+        if ($ticket->postReply($data, $errors, $alert))
             $this->response(201, $ticket->getNumber());
         else
             $this->exerr(400, Format::array_implode("\n", "\n", $errors));
