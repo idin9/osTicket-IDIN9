@@ -50,20 +50,19 @@ class Kanban {
     static function laneOf(Task $T) {
         if ($T->isClosed())
             return 'closed';
-        if ($T->hasFlag(TaskModel::KANBAN_VERIFYING))
+        if (($T->flags & TaskModel::KANBAN_VERIFYING))
             return 'verifying';
-        if ($T->hasFlag(TaskModel::KANBAN_DOING))
+        if (($T->flags & TaskModel::KANBAN_DOING))
             return 'doing';
         return 'open';
     }
 
     static function setLane(Task $T, $lane) {
-        $T->clearFlag(TaskModel::KANBAN_DOING);
-        $T->clearFlag(TaskModel::KANBAN_VERIFYING);
+        $T->flags = ($T->flags & ~TaskModel::KANBAN_DOING & ~TaskModel::KANBAN_VERIFYING);
         if ($lane == 'doing')
-            $T->setFlag(TaskModel::KANBAN_DOING);
+            $T->flags = ($T->flags | TaskModel::KANBAN_DOING);
         elseif ($lane == 'verifying')
-            $T->setFlag(TaskModel::KANBAN_VERIFYING);
+            $T->flags = ($T->flags | TaskModel::KANBAN_VERIFYING);
     }
 
     static function getBoard($filters=array(), $staff=null) {
@@ -198,10 +197,10 @@ class Kanban {
         return array(
             'id' => $T->getId(),
             'number' => $T->getNumber(),
-            'title' => $T->getTitle(),
+            'title' => (string) $T->getTitle(),
             'status' => self::laneOf($T),
             'assignee' => $assignee,
-            'dept' => $dept ? $dept->getName() : '',
+            'dept' => $dept ? (string) $dept->getName() : '',
             'dept_id' => $T->getDeptId(),
             'due' => $duedate ? Format::datetime($duedate) : '',
             'isoverdue' => $T->isOverdue(),
@@ -223,8 +222,7 @@ class Kanban {
                 return array('error' => __('Unable to change task status.'));
         }
 
-        if ($flag == 'open')
-            self::setLane($task, $status);
+        if ($flag == 'open') { self::setLane($task, $status); $task->save(); }
 
         if ($assignee) {
             $errors = array();
