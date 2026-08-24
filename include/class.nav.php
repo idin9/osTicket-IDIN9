@@ -156,6 +156,7 @@ class StaffNav {
             switch(strtolower($k)){
                 case 'tasks':
                     $subnav[]=array('desc'=>__('Tasks'), 'href'=>'tasks.php', 'iconclass'=>'Ticket', 'droponly'=>true);
+                    $subnav[]=array('desc'=>__('Kanban'), 'href'=>'tasks.php?a=kanban', 'iconclass'=>'Ticket');
                     break;
                 case 'dashboard':
                     $subnav[]=array('desc'=>__('Dashboard'),'href'=>'dashboard.php','iconclass'=>'logs');

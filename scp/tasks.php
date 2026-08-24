@@ -159,6 +159,9 @@ $open_name = _P('queue-name',
     /* This is the name of the open tasks queue */
     'Open');
 
+if ($_REQUEST['a'] == 'kanban')
+    $nav->setActiveSubMenu('tasks.php?a=kanban', 'tasks');
+
 $nav->addSubMenu(array('desc'=>$open_name.' ('.number_format($stats['open']).')',
                        'title'=>__('Open Tasks'),
                        'href'=>'tasks.php?status=open',
@@ -227,7 +230,9 @@ if($task) {
             .' '.__('Internal error occurred');
 } else {
 	$inc = 'tasks.inc.php';
-    if ($_REQUEST['a']=='open' &&
+    if ($_REQUEST['a']=='kanban')
+        $inc = 'kanban.inc.php';
+    elseif ($_REQUEST['a']=='open' &&
             $thisstaff->hasPerm(Task::PERM_CREATE, false))
         $inc = 'task-open.inc.php';
     elseif($_REQUEST['a'] == 'export') {

@@ -19,6 +19,7 @@ if(!defined('INCLUDE_DIR')) die('403');
 include_once(INCLUDE_DIR.'class.ticket.php');
 require_once(INCLUDE_DIR.'class.ajax.php');
 require_once(INCLUDE_DIR.'class.task.php');
+require_once(INCLUDE_DIR.'class.kanban.php');
 include_once INCLUDE_DIR . 'class.thread_actions.php';
 
 class TasksAjaxAPI extends AjaxController {
@@ -926,6 +927,62 @@ class TasksAjaxAPI extends AjaxController {
         }
 
         include STAFFINC_DIR . 'templates/task-view.tmpl.php';
+    }
+
+    function kanban() {
+        global $thisstaff;
+
+        $filters = array();
+        foreach (array('status', 'dept_id', 'team_id', 'assignee', 'due',
+                'due_start', 'due_end', 'q') as $f) {
+            if (isset($_GET[$f]) && $_GET[$f] !== '')
+                $filters[$f] = $_GET[$f];
+        }
+
+        $board = Kanban::getBoard($filters, $thisstaff);
+        return $this->json_encode($board);
+    }
+
+    function kanbanFilters() {
+        global $thisstaff;
+
+        $depts = array();
+        foreach (Dept::getActiveDepartments() as $id => $name)
+            $depts[] = array('id' => $id, 'name' => $name);
+
+        $assignees = array();
+        $assignees[] = array('id' => 's'.$thisstaff->getId(),
+            'name' => $thisstaff->getName(), 'type' => 'staff');
+        foreach ($thisstaff->getTeams() as $tid) {
+            if ($team = Team::lookup($tid))
+                $assignees[] = array('id' => 't'.$tid,
+                    'name' => $team->getName(), 'type' => 'team');
+        }
+
+        return $this->json_encode(array(
+            'departments' => $depts,
+            'assignees' => $assignees,
+            'statuses' => Kanban::getStatuses(),
+        ));
+    }
+
+    function kanbanMove() {
+        global $thisstaff;
+
+        $id = @$_POST['id'] ?: @$_POST['task_id'];
+        $status = @$_POST['status'];
+        $assignee = @$_POST['assignee'];
+
+        if (!$id || !$status)
+            Http::response(400, 'Task id and status required');
+
+        $result = Kanban::moveCard($id, $status, $assignee, $thisstaff,
+            @$_POST['comments'] ?: '');
+
+        if (isset($result['error']))
+            Http::response(400, $result['error']);
+
+        return $this->json_encode($result);
     }
 }
 ?>

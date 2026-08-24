@@ -24,8 +24,14 @@ $dispatcher = patterns('',
         url_post("^/tickets/(?P<id>[A-Za-z0-9\-]+)/reply\.(?P<format>xml|json)$", array('api.tickets.php:TicketApiController','postReply')),
         url_post("^/tickets/(?P<id>[A-Za-z0-9\-]+)/note\.(?P<format>xml|json)$", array('api.tickets.php:TicketApiController','postNote')),
         url_post("^/tickets/(?P<id>[A-Za-z0-9\-]+)/merge\.(?P<format>xml|json)$", array('api.tickets.php:TicketApiController','postMerge')),
-        url('^/tasks/', patterns('',
-                url_post("^cron$", array('api.cron.php:CronApiController', 'execute'))
+        url('^/tasks', patterns('',
+                url_post("^/cron$", array('api.cron.php:CronApiController', 'execute')),
+                url_get("^/kanban\.(?P<format>json)$", array('api.kanban.php:KanbanApiController','board')),
+                url_get("^/kanban/statuses\.(?P<format>json)$", array('api.kanban.php:KanbanApiController','statuses')),
+                url_post("^/kanban/move\.(?P<format>json)$", array('api.kanban.php:KanbanApiController','move')),
+                url_post("^\.(?P<format>json)$", array('api.kanban.php:KanbanApiController','createTask')),
+                url_get("^/(?P<id>\d+)\.(?P<format>json)$", array('api.kanban.php:KanbanApiController','readTask')),
+                url_post("^/(?P<id>\d+)\.(?P<format>json)$", array('api.kanban.php:KanbanApiController','updateTask'))
          )),
         // KB (Knowledge Base) API endpoints
         url('^/kb/', patterns('',

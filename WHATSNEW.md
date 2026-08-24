@@ -1,3 +1,24 @@
+osTicket v1.18.4.25 — Feature
+===========================================
+
+### Tasks Kanban Board
+* New **Kanban** submenu under the Tasks tab (`tasks.php?a=kanban`) rendering a
+  drag-and-drop board of task cards grouped by status, with assignee, due date
+  and department shown on each card.
+* Cards are moved between columns via jQuery UI Sortable; dropping reassigns the
+  task's status through `Task::setStatus` and optionally reassigns the agent/team.
+* Board filters for assignee, department, team, due date and free-text search
+  reuse the existing `Task::objects()` visibility constraints.
+* New REST API (`api/kanban.php`, `KanbanApiController`) under the `^/tasks`
+  group: `GET /tasks/kanban.json`, `GET /tasks/kanban/statuses.json`,
+  `POST /tasks/kanban/move.json`, `POST /tasks.json`, `GET /tasks/{id}.json`
+  and `POST /tasks/{id}.json`. Auth is API-key plus existing Task role/Dept
+  checks.
+* MCP server gains Kanban tools (`list_kanban_board`, `list_kanban_columns`,
+  `move_kanban_card`, `create_kanban_task`, `update_kanban_task`) on the
+  `osTicketMCP` client and a board-aware server description.
+
+
 osTicket v1.18.4.24 — Bug Fix
 ===========================================
 

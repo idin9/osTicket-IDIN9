@@ -237,7 +237,10 @@ $dispatcher = patterns('',
         url('^add$', 'add'),
         url('^(?P<tid>\d+)/add', 'add'),
         url('^lookup', 'lookup'),
-        url('^mass/(?P<action>\w+)(?:/(?P<what>\w+))?', 'massProcess')
+        url('^mass/(?P<action>\w+)(?:/(?P<what>\w+))?', 'massProcess'),
+        url_get('^kanban$', 'kanban'),
+        url_get('^kanban/filters$', 'kanbanFilters'),
+        url_post('^kanban/move$', 'kanbanMove')
     )),
     url('^/thread/', patterns('ajax.thread.php:ThreadAjaxAPI',
         url_get('^(?P<tid>\d+)/collaborators/(?P<manage>\d+)/preview$', 'previewCollaborators'),

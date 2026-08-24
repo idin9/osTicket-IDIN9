@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "osticket-mcp"
+version = "1.0.0"
+description = "MCP server exposing the osTicket REST API as AI-agent tools"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=2.0.0",
+    "httpx>=0.28.0",
+]
+
+[project.scripts]
+osticket-mcp = "osticket_mcp.server:main"
+
+[tool.setuptools.packages.find]
+include = ["osticket_mcp*"]
