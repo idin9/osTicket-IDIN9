@@ -1,3 +1,14 @@
+osTicket v1.18.4.27 — Improvement
+===========================================
+
+### Tasks Kanban Board
+* Renamed the `Pending` lane to **Doing** and added a **Verifying** lane, so
+  the board now flows Open → Doing → Verifying → Completed. The open sub-lanes
+  are persisted via spare `KANBAN_DOING` / `KANBAN_VERIFYING` flag bits, so a
+  card's lane survives reloads and moves.
+* The **Completed** column now shows only tasks closed within the last 7 days.
+
+
 osTicket v1.18.4.26 — Bug Fix
 ===========================================
 

@@ -19,14 +19,18 @@ require_once INCLUDE_DIR.'class.forms.php';
 
 class Kanban {
 
-    // Board columns are derived from the Task status model. The data model
-    // stores an open/closed flag; "pending" is exposed as an additional
-    // planning column that maps onto the open state.
+    // Board columns. The data model stores an open/closed flag; the open
+    // state is sub-divided into Open / Doing / Verifying lanes which are
+    // persisted via the spare KANBAN_DOING / KANBAN_VERIFYING flag bits.
     static $STATUSES = array(
-        'open'     => 'Open',
-        'pending'  => 'Pending',
-        'closed'   => 'Completed',
+        'open'      => 'Open',
+        'doing'     => 'Doing',
+        'verifying' => 'Verifying',
+        'closed'    => 'Completed',
     );
+
+    // Completed tasks older than this are hidden from the board.
+    const COMPLETED_DAYS = 7;
 
     static function getStatuses() {
         $statuses = array();
@@ -41,6 +45,25 @@ class Kanban {
 
     static function statusToFlag($status) {
         return strcasecmp($status, 'closed') ? 'open' : 'closed';
+    }
+
+    static function laneOf(Task $T) {
+        if ($T->isClosed())
+            return 'closed';
+        if ($T->hasFlag(TaskModel::KANBAN_VERIFYING))
+            return 'verifying';
+        if ($T->hasFlag(TaskModel::KANBAN_DOING))
+            return 'doing';
+        return 'open';
+    }
+
+    static function setLane(Task $T, $lane) {
+        $T->clearFlag(TaskModel::KANBAN_DOING);
+        $T->clearFlag(TaskModel::KANBAN_VERIFYING);
+        if ($lane == 'doing')
+            $T->setFlag(TaskModel::KANBAN_DOING);
+        elseif ($lane == 'verifying')
+            $T->setFlag(TaskModel::KANBAN_VERIFYING);
     }
 
     static function getBoard($filters=array(), $staff=null) {
@@ -131,7 +154,13 @@ class Kanban {
         }
 
         foreach ($query as $T) {
-            $col = $T->isOpen() ? 'open' : 'closed';
+            $col = self::laneOf($T);
+            if ($col == 'closed') {
+                $closed = $T->closed;
+                if ($closed && strtotime((string) $closed)
+                        < strtotime('-'.self::COMPLETED_DAYS.' days'))
+                    continue;
+            }
             $board[$col]['cards'][] = self::toCard($T);
         }
 
@@ -170,7 +199,7 @@ class Kanban {
             'id' => $T->getId(),
             'number' => $T->getNumber(),
             'title' => $T->getTitle(),
-            'status' => $T->isOpen() ? 'open' : 'closed',
+            'status' => self::laneOf($T),
             'assignee' => $assignee,
             'dept' => $dept ? $dept->getName() : '',
             'dept_id' => $T->getDeptId(),
@@ -193,6 +222,9 @@ class Kanban {
             if (!$task->setStatus($flag, $comments))
                 return array('error' => __('Unable to change task status.'));
         }
+
+        if ($flag == 'open')
+            self::setLane($task, $status);
 
         if ($assignee) {
             $errors = array();
@@ -275,6 +307,8 @@ class Kanban {
                 if (!$task->setStatus($flag))
                     return array('error' => __('Unable to change task status.'));
             }
+            if ($flag == 'open')
+                self::setLane($task, $vars['status']);
         }
 
         if (!empty($vars['assignee'])) {

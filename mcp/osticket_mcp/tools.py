@@ -345,8 +345,8 @@ def build_kanban_tools(client: OsTicketClient) -> list[tuple[str, Any]]:
     ) -> str:
         """Move a Task card to another column (status) and optionally reassign.
 
-        `status` is one of open, pending, or closed. `assignee` is an id like
-        's12' (staff) or 't5' (team)."""
+        `status` is one of open, doing, verifying, or closed. `assignee` is an
+        id like 's12' (staff) or 't5' (team)."""
         return _fmt(
             client.move_kanban_card(
                 task_id,

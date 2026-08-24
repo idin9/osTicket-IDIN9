@@ -114,6 +114,8 @@ class TaskModel extends VerySimpleModel {
 
     const ISOPEN    = 0x0001;
     const ISOVERDUE = 0x0002;
+    const KANBAN_DOING     = 0x0004;
+    const KANBAN_VERIFYING = 0x0008;
 
 
     protected function hasFlag($flag) {

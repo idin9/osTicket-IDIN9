@@ -217,7 +217,10 @@ class OsTicketClient:
         assignee: str | None = None,
         comments: str | None = None,
     ) -> Any:
-        """Move a Task card to another column and optionally reassign it."""
+        """Move a Task card to another column and optionally reassign it.
+
+        `status` is one of open, doing, verifying, or closed.
+        """
         payload: dict[str, Any] = {
             "id": task_id,
             "status": status,
