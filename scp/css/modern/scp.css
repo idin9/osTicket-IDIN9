@@ -297,7 +297,7 @@ html, body {
   font-size: var(--text-sm) !important;
   font-weight: 500 !important;
   color: var(--text-secondary) !important;
-  border-radius: var(--radius-md) !important;
+  border-radius: var(--radius) !important;
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -621,11 +621,11 @@ table.list thead th {
   color: var(--text-secondary);
   font-weight: 600;
   font-size: var(--text-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  text-transform: none;
+  letter-spacing: 0;
   padding: var(--space-3) var(--space-4);
   text-align: left;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 1px solid var(--border);
 }
 
 table.list tbody td {
@@ -635,12 +635,17 @@ table.list tbody td {
   border-bottom: 1px solid var(--border-light);
 }
 
-table.list tbody tr:nth-child(2n+1) td {
-  background: var(--table-stripe);
-}
-
+/* Polaris: separate rows with subtle rules, never zebra striping */
 table.list tbody tr:hover td {
   background: var(--table-row-hover) !important;
+}
+
+/* Ticket queues: sticky, low-ink header (Polaris DataTable) */
+table.list.queue thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--table-header-bg);
 }
 
 .ticket_info {
@@ -702,11 +707,12 @@ div.section-break {
 }
 
 #basic_search {
-  background: var(--surface-2);
-  margin: 0 calc(-1 * var(--space-6)) var(--space-5);
+  background: var(--surface-0);
+  margin: 0 0 var(--space-5);
   padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--border);
-  box-shadow: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 #basic_search form {
@@ -871,9 +877,11 @@ div.section-break {
   padding: 2px var(--space-2);
   font-size: var(--text-xs);
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  text-transform: none;
+  letter-spacing: 0;
   border-radius: var(--radius-full);
+  background: var(--surface-2);
+  color: var(--text-secondary);
 }
 
 .ticket-status.open,
@@ -1770,9 +1778,10 @@ button:active {
       color: var(--text-primary) !important;
       border-color: var(--border-light) !important;
     }
+    /* Polaris: no zebra — rows separated by the border rules above */
     table.list tbody tr:nth-child(2n+1) td,
     #ticketTable tr.alt td {
-      background-color: var(--table-stripe) !important;
+      background-color: var(--surface-0) !important;
     }
     table.list tbody tr:hover td,
     #ticketTable tbody tr:hover td {
