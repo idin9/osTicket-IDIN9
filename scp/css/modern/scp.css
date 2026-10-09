@@ -806,6 +806,11 @@ div.section-break {
   margin: auto;
   width: auto !important;
   max-width: none;
+  /* Floated title/actions otherwise collapse the bar and its bottom border
+     renders above the title. Flex keeps the row's true height. */
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
 }
 
 .configureQ {
@@ -1022,12 +1027,36 @@ div.section-break {
   background: var(--table-row-hover);
 }
 
+/* osTicket uses float-based .pull-right / .pull-left, but this theme makes
+   their parents (buttons, action-buttons, tabs, sticky-bar headers) flex
+   containers — where `float` is ignored and the element collapses to the
+   start. Re-assert the intent with flex order + auto margins, scoped to
+   those flex parents only so ordinary toolbars keep normal flow. */
 .pull-right {
   float: right;
 }
 
 .pull-left {
   float: left;
+}
+
+.button > .pull-right,
+.action-button > .pull-right,
+.sticky.bar .content > .pull-right,
+#sub_nav a > .pull-right,
+#customQ_nav a > .pull-right {
+  float: none;
+  order: 2;
+  margin-left: auto;
+}
+
+.button > .pull-left,
+.action-button > .pull-left,
+.sticky.bar .content > .pull-left,
+#sub_nav a > .pull-left,
+#customQ_nav a > .pull-left {
+  float: none;
+  order: -1;
 }
 
 .flush-right {
@@ -1960,6 +1989,13 @@ span.action-button {
 #basic_search div.pull-right {
   height: auto !important;
   flex-wrap: wrap;
+}
+
+/* Some pages wrap the search form in <div style="height:25px"> (legacy);
+   that clips the 38px normalized input. Release those wrappers too. */
+#basic_search > div[style*="height"] {
+  height: auto !important;
+  min-height: 0 !important;
 }
 
 /* Attached search bar matches the uniform control height */
