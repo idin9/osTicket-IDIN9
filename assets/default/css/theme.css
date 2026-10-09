@@ -970,7 +970,8 @@ body {
 }
 .featured-kb-section .featured-categories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  /* auto-fit (not auto-fill) so a lone category stretches to the full width */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: var(--space-4);
 }
 .featured-kb-section .featured-category.front-page {
@@ -1277,11 +1278,22 @@ body {
   padding: var(--space-3) var(--space-4);
   display: block;
 }
-#ticketForm tbody tr td:first-child {
+/* Leading <hr> in each section is redundant now that each tbody is a card */
+#ticketForm tbody tr td > hr:first-child {
+  display: none;
+}
+#ticketForm tbody tr td:first-child:not(:only-child) {
   width: 25% !important;
   font-weight: 600;
   color: var(--text-secondary);
   font-size: var(--text-sm);
+}
+/* Fields use a single colspan="2" cell — let it fill the card instead of
+   inheriting the 25% label-column width */
+#ticketForm tbody tr td:only-child {
+  width: 100% !important;
+  flex: 1 1 100%;
+  min-width: 0;
 }
 #ticketForm tbody tr td:nth-child(2) {
   width: 75% !important;
@@ -1417,10 +1429,13 @@ span.required {
   min-width: 280px;
   box-shadow: none;
   padding: 0;
+  /* #clientLogin already draws the container border — the inner box border
+     showed as a stray line once the cells wrap */
+  border: none;
 }
 #clientLogin .login-box + div[style*="display:table-cell"] {
   padding-left: var(--space-5);
-  border-left: 1px solid var(--border);
+  border-left: none;
 }
 #clientLogin .instructions {
   display: block;
@@ -1569,7 +1584,7 @@ img.captcha {
     padding-left: 0;
     padding-top: var(--space-4);
     border-left: none;
-    border-top: 1px solid var(--border);
+    border-top: none;
   }
   .buttons {
     flex-direction: column;
